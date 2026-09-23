@@ -1,0 +1,24 @@
+FROM python:3.13-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy backend requirements
+COPY backend/requirements.txt ./backend/requirements.txt
+RUN pip install --no-cache-dir -r ./backend/requirements.txt \
+    && pip install --no-cache-dir asyncpg psycopg2-binary email-validator
+
+# Copy code
+COPY . .
+
+# Run training to ensure model artifact exists
+RUN python ml/train.py
+
+EXPOSE 8000
+
+CMD ["python", "backend/run.py"]

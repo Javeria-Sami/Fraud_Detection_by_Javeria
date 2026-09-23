@@ -1,0 +1,117 @@
+"""
+ML Model Registry and Lifecycle Management Service.
+Section 08 — ML Anomaly Detection.
+
+Manages database records in `model_versions`, controls lifecycle transitions,
+and manages artifact loading for production inference.
+"""
+import os
+import joblib
+import logging
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timezone
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc
+
+from backend.app.core.config import settings
+from backend.app.models.ml_model import MLModelRegistry
+from backend.app.engine.ml.types import ModelStatus
+
+logger = logging.getLogger("ml_model_registry")
+
+
+class MLModelRegistryService:
+    """
+    Manages registered model versions, deployment status, and artifact resolution.
+    """
+
+    @classmethod
+    async def get_deployed_model(cls, session: AsyncSession) -> Optional[MLModelRegistry]:
+        """Retrieves the currently active PRODUCTION or DEPLOYED model record."""
+        stmt = (
+            select(MLModelRegistry)
+            .where(MLModelRegistry.status.in_(["PRODUCTION", "DEPLOYED"]))
+            .order_by(desc(MLModelRegistry.deployed_at), desc(MLModelRegistry.created_at))
+        )
+        res = await session.execute(stmt)
+        return res.scalar_one_or_none()
+
+    @classmethod
+    async def get_model_by_id_or_version(cls, session: AsyncSession, identifier: str) -> Optional[MLModelRegistry]:
+        """Finds model record by ID or version string."""
+        stmt = select(MLModelRegistry).where(
+            (MLModelRegistry.id == identifier) | (MLModelRegistry.version == identifier)
+        )
+        res = await session.execute(stmt)
+        return res.scalar_one_or_none()
+
+    @classmethod
+    async def register_model(
+        cls,
+        session: AsyncSession,
+        version: str,
+        algorithm: str,
+        feature_version: str,
+        parameters: Dict[str, Any],
+        metrics: Dict[str, Any],
+        artifact_path: str,
+        status: str = "APPROVED",
+        description: Optional[str] = None
+    ) -> MLModelRegistry:
+        """Registers a new model version into the database."""
+        model_id = f"MODEL-{version}"
+        model_obj = MLModelRegistry(
+            id=model_id,
+            model_name=f"IsolationForest_{version}",
+            version=version,
+            algorithm=algorithm,
+            feature_version=feature_version,
+            status=status,
+            parameters=parameters,
+            metrics=metrics,
+            artifact_path=artifact_path,
+            description=description or f"Trained on {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            created_at=datetime.now(timezone.utc)
+        )
+        session.add(model_obj)
+        await session.flush()
+        return model_obj
+
+    @classmethod
+    async def deploy_model(cls, session: AsyncSession, model_id: str) -> MLModelRegistry:
+        """
+        Promotes a model to PRODUCTION status and demotes previously active models to RETIRED.
+        """
+        model = await cls.get_model_by_id_or_version(session, model_id)
+        if not model:
+            raise ValueError(f"Model '{model_id}' not found in registry.")
+
+        # Demote current deployed models
+        cur_stmt = select(MLModelRegistry).where(MLModelRegistry.status.in_(["PRODUCTION", "DEPLOYED"]))
+        cur_res = await session.execute(cur_stmt)
+        for m in cur_res.scalars().all():
+            m.status = ModelStatus.RETIRED.value
+            m.retired_at = datetime.now(timezone.utc)
+
+        # Promote target model
+        model.status = ModelStatus.PRODUCTION.value
+        model.deployed_at = datetime.now(timezone.utc)
+        await session.flush()
+        return model
+
+    @classmethod
+    def load_artifact(cls, artifact_path: str) -> Dict[str, Any]:
+        """
+        Safely loads artifact payload from disk.
+        """
+        if not os.path.isabs(artifact_path):
+            artifact_path = os.path.join(settings.MODEL_DIR, artifact_path)
+
+        if not os.path.exists(artifact_path):
+            raise FileNotFoundError(f"Model artifact file does not exist at '{artifact_path}'.")
+
+        payload = joblib.load(artifact_path)
+        if not isinstance(payload, dict) or "model" not in payload or "preprocessor" not in payload:
+            raise ValueError("Invalid model artifact structure.")
+
+        return payload

@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --soc-bg: #F8FAFC;
+    --soc-surface: #FFFFFF;
+    --soc-card: #FFFFFF;
+    --soc-card-hover: #F1F5F9;
+    --soc-border: #E2E8F0;
+    --soc-accent: #2563EB;
+    --soc-accent-hover: #1D4ED8;
+    --soc-muted: #64748B;
+    --soc-foreground: #0F172A;
+    color-scheme: light;
+  }
+
+  .dark {
+    --soc-bg: #0B0F19;
+    --soc-surface: #0E1422;
+    --soc-card: #111827;
+    --soc-card-hover: #1F2937;
+    --soc-border: #1E293B;
+    --soc-accent: #3B82F6;
+    --soc-accent-hover: #60A5FA;
+    --soc-muted: #94A3B8;
+    --soc-foreground: #F8FAFC;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--soc-bg);
+    color: var(--soc-foreground);
+    @apply antialiased font-sans transition-colors duration-150;
+  }
+}
+
+/* Custom sleek scrollbar for dense operational dashboards */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--soc-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--soc-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--soc-muted);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: var(--soc-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--soc-border);
+}
+
+/* Pulse animation for live real-time streams */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.92); }
+}
+
+.animate-pulse-live {
+  animation: pulse-live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

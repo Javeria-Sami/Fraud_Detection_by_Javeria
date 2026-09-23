@@ -1,0 +1,31 @@
+{
+  "model_name": "IsolationForest_AnomalyDetector",
+  "version": "v1.0.0",
+  "algorithm": "Isolation Forest",
+  "feature_version": "v1.0",
+  "features": [
+    "amount",
+    "amount_deviation",
+    "velocity_5m",
+    "velocity_1h",
+    "velocity_24h",
+    "failed_attempts",
+    "is_new_device",
+    "is_unusual_location",
+    "is_high_risk_category",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week"
+  ],
+  "metrics": {
+    "precision": 0.892,
+    "recall": 0.9911,
+    "f1_score": 0.9389,
+    "roc_auc": 0.9993,
+    "evaluated_samples": 2500,
+    "evaluated_at": "2026-09-18T21:37:27.708928+00:00"
+  },
+  "created_at": "2026-09-18T21:37:27.832781+00:00",
+  "artifact_file": "isolation_forest_v1.0.0.joblib",
+  "status": "PRODUCTION"
+}

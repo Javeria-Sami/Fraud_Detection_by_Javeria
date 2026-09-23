@@ -1,0 +1,253 @@
+"""
+Central Fraud Rule Engine Execution Service.
+Section 07 — Rule-Based Fraud Engine.
+
+Responsibilities:
+1. Fetch active rules and their corresponding active versions from the database.
+2. Ensure deterministic execution order and isolated per-rule error boundaries.
+3. Validate configuration without arbitrary code execution.
+4. Execute rules against transaction context and feature snapshots.
+5. Persist audit-ready RuleExecution records linked to exact rule version IDs.
+6. Provide explainable natural language reasons and structured evidence.
+"""
+import time
+import uuid
+import logging
+from datetime import datetime, timezone
+from typing import List, Dict, Any, Tuple, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
+from backend.app.models.rule import FraudRule, FraudRuleVersion, RuleExecution
+from backend.app.engine.rules.types import (
+    RuleEvaluationResult,
+    RuleSeverity,
+    TransactionRuleEvaluationResponse
+)
+from backend.app.engine.rules.registry import RuleRegistry
+
+logger = logging.getLogger("fraud_rule_engine")
+
+
+class FraudRuleEngineService:
+    """
+    Centralized execution coordinator for rule-based fraud detection.
+    """
+
+    @classmethod
+    async def evaluate_transaction_rules(
+        cls,
+        session: AsyncSession,
+        transaction_dict: Dict[str, Any],
+        features: Dict[str, Any],
+        persist_executions: bool = True
+    ) -> TransactionRuleEvaluationResponse:
+        """
+        Main evaluation entry point.
+        Evaluates all active rules against the transaction and feature snapshot.
+        Persists RuleExecution rows in the database if persist_executions is True.
+        """
+        start_time = time.perf_counter()
+        txn_id = transaction_dict.get("id") or transaction_dict.get("transaction_id", f"TXN-{uuid.uuid4().hex[:8].upper()}")
+
+        # 1. Fetch active rules with eager loaded active versions
+        stmt = (
+            select(FraudRule)
+            .where(FraudRule.is_active == True)
+            .options(selectinload(FraudRule.versions))
+            .order_by(FraudRule.priority.asc(), FraudRule.id.asc())
+        )
+        res = await session.execute(stmt)
+        active_rules = res.scalars().all()
+
+        evaluated_results: List[RuleEvaluationResult] = []
+        triggered_results: List[RuleEvaluationResult] = []
+        total_score: float = 0.0
+
+        for rule_model in active_rules:
+            rule_code = rule_model.rule_code or rule_model.id
+            evaluator = RuleRegistry.get(rule_code)
+            if not evaluator:
+                logger.warning("No registered evaluator found for active rule code '%s'. Skipping.", rule_code)
+                continue
+
+            # Resolve active version
+            active_version_obj: Optional[FraudRuleVersion] = None
+            if rule_model.versions:
+                # Find the highest/active version
+                active_versions = [v for v in rule_model.versions if v.is_active]
+                if active_versions:
+                    # Pick active version (e.g. highest version string or latest created)
+                    active_version_obj = sorted(active_versions, key=lambda v: str(v.version), reverse=True)[0]
+
+            if active_version_obj:
+                config = active_version_obj.configuration or {}
+                ver_str = active_version_obj.version or "1.0"
+                ver_id = active_version_obj.id
+                rule_weight = float(active_version_obj.weight if active_version_obj.weight is not None else rule_model.weight)
+            else:
+                config = rule_model.condition_config or {}
+                ver_str = rule_model.version or "1.0"
+                ver_id = None
+                rule_weight = float(rule_model.weight)
+
+            # Map severity
+            sev_str = (rule_model.severity or rule_model.default_severity or "MEDIUM").upper()
+            try:
+                rule_sev = RuleSeverity(sev_str)
+            except ValueError:
+                rule_sev = RuleSeverity.MEDIUM
+
+            # Safe configuration validation
+            try:
+                config = RuleRegistry.validate_configuration(rule_code, config)
+            except Exception as val_err:
+                logger.error("Configuration validation error for rule '%s' (ver: %s): %s", rule_code, ver_str, val_err)
+                # Keep running other rules, record failed configuration
+                error_res = RuleEvaluationResult(
+                    rule_code=evaluator.code,
+                    rule_id=rule_model.id,
+                    rule_version=ver_str,
+                    rule_version_id=ver_id,
+                    name=rule_model.name,
+                    category=rule_model.category,
+                    severity=rule_sev,
+                    triggered=False,
+                    score=0.0,
+                    weight=rule_weight,
+                    reason=f"Invalid rule configuration: {str(val_err)}",
+                    error=str(val_err)
+                )
+                evaluated_results.append(error_res)
+                continue
+
+            # Execute rule with isolated error handling
+            try:
+                eval_res = evaluator.run(
+                    transaction=transaction_dict,
+                    features=features,
+                    configuration=config,
+                    version=ver_str,
+                    rule_id=rule_model.id,
+                    rule_version_id=ver_id,
+                    weight_override=rule_weight,
+                    severity_override=rule_sev
+                )
+            except Exception as rule_err:
+                logger.error("Unexpected error executing rule '%s': %s", rule_code, rule_err, exc_info=True)
+                eval_res = RuleEvaluationResult(
+                    rule_code=evaluator.code,
+                    rule_id=rule_model.id,
+                    rule_version=ver_str,
+                    rule_version_id=ver_id,
+                    name=rule_model.name,
+                    category=rule_model.category,
+                    severity=rule_sev,
+                    triggered=False,
+                    score=0.0,
+                    weight=rule_weight,
+                    reason=f"Execution error: {str(rule_err)}",
+                    error=str(rule_err)
+                )
+
+            evaluated_results.append(eval_res)
+            if eval_res.triggered:
+                triggered_results.append(eval_res)
+                total_score += eval_res.score
+
+        # Persist Rule Executions if requested
+        if persist_executions:
+            for res_item in evaluated_results:
+                # Include structured details for explainability
+                detail_dict = {
+                    "reason": res_item.reason,
+                    "matched_features": res_item.matched_features,
+                    "evidence": res_item.evidence.model_dump() if res_item.evidence else None,
+                    "error": res_item.error
+                }
+                exec_record = RuleExecution(
+                    id=str(uuid.uuid4()),
+                    transaction_id=txn_id,
+                    rule_id=res_item.rule_id or res_item.rule_code,
+                    rule_version_id=res_item.rule_version_id,
+                    triggered=res_item.triggered,
+                    score=res_item.score,
+                    reason=res_item.reason,
+                    execution_time_ms=res_item.execution_time_ms,
+                    points_awarded=res_item.score,
+                    execution_detail=detail_dict,
+                    created_at=datetime.now(timezone.utc)
+                )
+                session.add(exec_record)
+
+        duration = (time.perf_counter() - start_time) * 1000.0
+
+        return TransactionRuleEvaluationResponse(
+            transaction_id=txn_id,
+            total_score=round(total_score, 2),
+            triggered_count=len(triggered_results),
+            total_evaluated_count=len(evaluated_results),
+            triggered_rules=triggered_results,
+            all_rules=evaluated_results,
+            execution_duration_ms=round(duration, 3)
+        )
+
+    @classmethod
+    async def evaluate_rules_legacy_format(
+        cls,
+        session: AsyncSession,
+        transaction_dict: Dict[str, Any],
+        features: Dict[str, Any]
+    ) -> Tuple[List[Dict[str, Any]], float]:
+        """
+        Adapter providing backward-compatibility with the legacy pipeline interface:
+        Returns (list_of_triggered_rules, total_rule_points).
+        """
+        eval_resp = await cls.evaluate_transaction_rules(
+            session=session,
+            transaction_dict=transaction_dict,
+            features=features,
+            persist_executions=False # Pipeline persists them or service persists them
+        )
+
+        legacy_triggered = []
+        for r in eval_resp.triggered_rules:
+            detail = {
+                "explanation": r.reason,
+                "evidence": r.evidence.model_dump() if r.evidence else None,
+                "matched_features": r.matched_features
+            }
+            if r.rule_code in ["HIGH_AMOUNT", "HIGH_TRANSACTION_AMOUNT"]:
+                detail["amount"] = r.matched_features.get("amount")
+                detail["deviation_ratio"] = r.matched_features.get("amount_deviation")
+            elif r.rule_code in ["RAPID_TRANSACTIONS"]:
+                detail["velocity_5m"] = r.matched_features.get("velocity_5m", r.matched_features.get("velocity_1m", 1))
+            elif r.rule_code in ["NEW_DEVICE"]:
+                detail["device_id"] = r.matched_features.get("device_id")
+            elif r.rule_code in ["UNUSUAL_LOCATION"]:
+                detail["geo_hop_speed_kmh"] = r.matched_features.get("geo_hop_speed_kmh")
+            elif r.rule_code in ["UNUSUAL_TIME"]:
+                detail["hour_of_day"] = r.matched_features.get("hour_of_day")
+            elif r.rule_code in ["FAILED_ATTEMPTS"]:
+                detail["failed_attempts"] = r.matched_features.get("failed_attempts")
+            elif r.rule_code in ["SUDDEN_SPENDING_INCREASE"]:
+                detail["velocity_1h"] = r.matched_features.get("velocity_1h")
+            elif r.rule_code in ["MERCHANT_ANOMALY"]:
+                detail["merchant_category"] = r.matched_features.get("merchant_category")
+
+            legacy_triggered.append({
+                "rule_id": r.rule_id or r.rule_code,
+                "rule_code": r.rule_code,
+                "rule_name": r.name,
+                "severity": r.severity.value if hasattr(r.severity, "value") else str(r.severity),
+                "category": r.category,
+                "points": r.score,
+                "score": r.score,
+                "version": r.rule_version,
+                "rule_version_id": r.rule_version_id,
+                "reason": r.reason,
+                "details": detail
+            })
+
+        return legacy_triggered, eval_resp.total_score
