@@ -102,16 +102,36 @@ class MLModelRegistryService:
     @classmethod
     def load_artifact(cls, artifact_path: str) -> Dict[str, Any]:
         """
-        Safely loads artifact payload from disk.
+        Safely loads artifact payload from disk with strict path traversal boundaries and structure validation.
         """
+        if not artifact_path:
+            raise ValueError("Model artifact path cannot be empty.")
+
+        # Path Traversal Guard
+        if ".." in artifact_path:
+            raise PermissionError("Access denied: Path traversal characters are forbidden in model artifact paths.")
+
         if not os.path.isabs(artifact_path):
-            artifact_path = os.path.join(settings.MODEL_DIR, artifact_path)
+            full_path = os.path.join(settings.MODEL_DIR, artifact_path)
+        else:
+            full_path = artifact_path
 
-        if not os.path.exists(artifact_path):
-            raise FileNotFoundError(f"Model artifact file does not exist at '{artifact_path}'.")
+        real_target = os.path.realpath(full_path)
+        real_model_dir = os.path.realpath(settings.MODEL_DIR)
 
-        payload = joblib.load(artifact_path)
+        # Allow artifacts within MODEL_DIR or standard repo ml/saved_models
+        if not (real_target.startswith(real_model_dir) or "saved_models" in real_target):
+            raise PermissionError(f"Access denied: Model artifact path '{artifact_path}' is outside the authorized models directory.")
+
+        if not os.path.exists(real_target):
+            raise FileNotFoundError(f"Model artifact file does not exist at '{real_target}'.")
+
+        if not real_target.endswith(".joblib"):
+            raise ValueError("Invalid artifact format: Only .joblib artifacts are permitted.")
+
+        payload = joblib.load(real_target)
         if not isinstance(payload, dict) or "model" not in payload or "preprocessor" not in payload:
             raise ValueError("Invalid model artifact structure.")
 
         return payload
+

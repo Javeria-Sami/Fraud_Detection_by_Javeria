@@ -19,6 +19,13 @@ COPY . .
 # Run training to ensure model artifact exists
 RUN python ml/train.py
 
+# Create non-root system user for least privilege container execution
+RUN groupadd -r appgroup && useradd -r -g appgroup -d /app -s /sbin/nologin appuser \
+    && chown -R appuser:appgroup /app
+
+USER appuser
+
 EXPOSE 8000
 
 CMD ["python", "backend/run.py"]
+

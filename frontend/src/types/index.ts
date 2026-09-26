@@ -1409,3 +1409,348 @@ export interface MLRetrainingConfig {
   updated_at?: string;
   updated_by?: string;
 }
+
+// ==========================================
+// SECTION 22: ADMIN PANEL TYPES
+// ==========================================
+
+export interface PlatformComponentStatus {
+  name: string;
+  status: 'HEALTHY' | 'DEGRADED' | 'UNAVAILABLE' | 'UNKNOWN';
+  latency_ms?: number | null;
+  details?: string | null;
+  last_checked: string;
+}
+
+export interface PlatformStatusResponse {
+  overall_status: 'HEALTHY' | 'DEGRADED' | 'UNAVAILABLE';
+  components: PlatformComponentStatus[];
+  environment: string;
+  generated_at: string;
+}
+
+export interface PlatformSummary {
+  overall_status: string;
+  database_status: string;
+  api_status: string;
+  ml_service_status: string;
+  rule_engine_status: string;
+  alert_engine_status: string;
+  realtime_event_status: string;
+}
+
+export interface UserSummary {
+  total_users: number;
+  active_users: number;
+  inactive_users: number;
+  admin_count: number;
+  analyst_count: number;
+  viewer_count: number;
+}
+
+export interface DetectionSummary {
+  active_fraud_rules: number;
+  total_fraud_rules: number;
+  active_alert_configs: number;
+  recent_rule_changes: number;
+}
+
+export interface MLSummary {
+  deployed_model_version: string;
+  model_type: string;
+  model_health: string;
+  last_monitoring_run?: string | null;
+  latest_retraining_run?: string | null;
+  total_model_versions: number;
+}
+
+export interface SystemInfo {
+  environment: string;
+  application_name: string;
+  backend_version: string;
+  frontend_version: string;
+  database_version: string;
+}
+
+export interface AdminOverviewResponse {
+  platform: PlatformSummary;
+  users: UserSummary;
+  detection: DetectionSummary;
+  ml: MLSummary;
+  system: SystemInfo;
+  generated_at: string;
+}
+
+export interface AdminUserListItem {
+  id: string;
+  email: string;
+  username: string;
+  full_name: string;
+  role: string;
+  is_active: boolean;
+  is_verified: boolean;
+  created_at?: string | null;
+  updated_at?: string | null;
+  last_login_at?: string | null;
+}
+
+export interface AdminUserListResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  users: AdminUserListItem[];
+}
+
+export interface AdminUserAuditActivity {
+  id: string;
+  action: string;
+  target_entity: string;
+  target_id?: string | null;
+  timestamp: string;
+  details?: string | null;
+}
+
+export interface AdminUserDetailResponse {
+  id: string;
+  email: string;
+  username: string;
+  full_name: string;
+  role: string;
+  role_description?: string | null;
+  is_active: boolean;
+  is_verified: boolean;
+  created_at?: string | null;
+  updated_at?: string | null;
+  last_login_at?: string | null;
+  effective_permissions: string[];
+  is_customer: boolean;
+  customer_risk_score?: number | null;
+  customer_risk_tier?: string | null;
+  recent_activity: AdminUserAuditActivity[];
+}
+
+export interface UserStatusUpdateRequest {
+  is_active: boolean;
+  reason?: string;
+}
+
+export interface UserRoleUpdateRequest {
+  role: string;
+  reason?: string;
+}
+
+export interface AdminUserCreateRequest {
+  email: string;
+  username: string;
+  full_name: string;
+  password: string;
+  role?: string;
+  is_active?: boolean;
+}
+
+export interface PermissionItem {
+  id: string;
+  name: string;
+  category: string;
+  description?: string | null;
+}
+
+export interface RoleDetailResponse {
+  id: string;
+  name: string;
+  description?: string | null;
+  user_count: number;
+  permission_count: number;
+  permissions: string[];
+}
+
+export interface RolePermissionMatrixEntry {
+  permission_name: string;
+  permission_description?: string | null;
+  category: string;
+  granted_roles: Record<string, boolean>;
+}
+
+export interface PermissionMatrixResponse {
+  roles: string[];
+  matrix: RolePermissionMatrixEntry[];
+}
+
+export interface AdminSettingItem {
+  key: string;
+  category: string;
+  type: string;
+  value: any;
+  default_value: any;
+  description: string;
+  is_sensitive: boolean;
+  allowed_values?: string[] | null;
+  min_value?: number | null;
+  max_value?: number | null;
+  updated_by?: string | null;
+  updated_at?: string | null;
+}
+
+export interface AdminSettingsListResponse {
+  categories: string[];
+  settings: AdminSettingItem[];
+}
+
+export interface AdminSettingUpdateRequest {
+  value: any;
+  reason?: string;
+}
+
+// ==========================================
+// SECTION 23: AUDIT LOGGING TYPES
+// ==========================================
+
+export interface AuditLog {
+  id: string;
+  actor_user_id?: string | null;
+  actor_email: string;
+  actor_role: string;
+  actor_type?: string;
+  action: string;
+  target_entity: string;
+  resource_type: string;
+  target_id: string;
+  resource_id: string;
+  status: string;
+  outcome: string;
+  severity: 'INFO' | 'WARNING' | 'HIGH' | 'CRITICAL';
+  source: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  request_id?: string | null;
+  correlation_id?: string | null;
+  session_id?: string | null;
+  diff_old?: Record<string, any> | null;
+  diff_new?: Record<string, any> | null;
+  details?: string | null;
+  error_message?: string | null;
+  metadata?: Record<string, any> | null;
+  created_at?: string | null;
+  timestamp?: string | null;
+}
+
+export interface AuditLogListResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  items: AuditLog[];
+}
+
+export interface AuditStatsResponse {
+  total_events: number;
+  events_today: number;
+  high_critical_count: number;
+  failed_denied_count: number;
+  admin_actions_count: number;
+  action_breakdown: Record<string, number>;
+  severity_breakdown: Record<string, number>;
+  outcome_breakdown: Record<string, number>;
+  generated_at: string;
+}
+
+export interface AuditLogFilterParams {
+  query?: string;
+  action?: string;
+  resource_type?: string;
+  resource_id?: string;
+  actor_email?: string;
+  actor_role?: string;
+  actor_type?: string;
+  severity?: string;
+  outcome?: string;
+  source?: string;
+  request_id?: string;
+  date_from?: string;
+  date_to?: string;
+  page?: number;
+  page_size?: number;
+  sort_by?: string;
+  sort_order?: string;
+}
+
+// ---------------------------------------------------------------------------
+// SECTION 24 — NOTIFICATION SYSTEM TYPES
+// ---------------------------------------------------------------------------
+
+export type NotificationSeverityType = 'INFO' | 'WARNING' | 'HIGH' | 'CRITICAL';
+export type NotificationPriorityType = 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
+export type NotificationCategoryType = 'SECURITY_ALERTS' | 'CASE_UPDATES' | 'MODEL_MONITORING' | 'ADMIN_SYSTEM';
+export type NotificationChannelType = 'IN_APP' | 'EMAIL' | 'WEBHOOK';
+
+export interface NotificationDeliveryItem {
+  id: string;
+  channel: string;
+  status: string;
+  attempt_count: number;
+  last_attempt_at: string;
+  delivered_at?: string;
+  failure_reason?: string;
+  provider_reference?: string;
+}
+
+export interface NotificationItem {
+  id: string;
+  recipient_user_id: string;
+  notification_type: string;
+  category: NotificationCategoryType;
+  title: string;
+  message: string;
+  severity: NotificationSeverityType;
+  priority: NotificationPriorityType;
+  source_type?: string;
+  source_id?: string;
+  delivery_status: string;
+  read_at?: string | null;
+  dismissed_at?: string | null;
+  expires_at?: string | null;
+  metadata_json?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+  deliveries?: NotificationDeliveryItem[];
+}
+
+export interface NotificationListResponse {
+  items: NotificationItem[];
+  total: number;
+  page: number;
+  page_size: number;
+  unread_count: number;
+}
+
+export interface UnreadCountResponse {
+  unread_count: number;
+  critical_count: number;
+  high_count: number;
+}
+
+export interface NotificationPreferenceItem {
+  category: string;
+  channel: string;
+  enabled: boolean;
+  is_mandatory: boolean;
+  label?: string;
+  description?: string;
+}
+
+export interface NotificationPreferencesResponse {
+  preferences: NotificationPreferenceItem[];
+}
+
+export interface NotificationFilterParams {
+  unread_only?: boolean;
+  category?: string;
+  severity?: string;
+  priority?: string;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}
+
+
+

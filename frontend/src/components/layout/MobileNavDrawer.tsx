@@ -15,7 +15,8 @@ import {
   Settings,
   History,
   Shield,
-  Palette
+  Palette,
+  ShieldCheck
 } from 'lucide-react';
 
 export interface MobileNavDrawerProps {
@@ -40,6 +41,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
   ];
 
   const adminItems = [
+    { label: 'Admin Overview', path: '/admin', icon: ShieldCheck, access: 'admin' },
     { label: 'Fraud Rules Engine', path: '/admin/rules', icon: Sliders, access: 'admin' },
     { label: 'User & Role Access', path: '/admin/users', icon: Users, access: 'admin' },
     { label: 'Risk Thresholds', path: '/admin/settings', icon: Settings, access: 'admin' },

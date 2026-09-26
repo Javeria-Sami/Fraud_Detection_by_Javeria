@@ -4,15 +4,19 @@ Real-Time Fraud & Anomaly Detection Platform - Main FastAPI Application.
 import os
 import json
 import uuid
+import logging
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone, timedelta
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import select
 
 from backend.app.core.config import settings
 from backend.app.core.database import engine, Base, AsyncSessionLocal
 from backend.app.core.security import get_password_hash
+from backend.app.core.logging import setup_structured_logging, get_logger
+from backend.app.core.telemetry.middleware import TelemetryMiddleware
 from backend.app.models.user import User, Role
 from backend.app.models.rule import FraudRule
 from backend.app.models.audit_log import SystemSetting
@@ -38,6 +42,16 @@ from backend.app.api.v1.websocket import router as ws_router
 from backend.app.api.v1.search import router as search_router
 from backend.app.api.v1.ml_monitoring import router as ml_monitoring_router
 from backend.app.api.v1.ml_retraining import router as ml_retraining_router
+from backend.app.api.v1.notifications import router as notifications_router
+from backend.app.api.v1.health import router as health_router
+from backend.app.api.v1.observability import router as observability_router
+
+# Initialize structured logging engine
+setup_structured_logging(
+    level=os.getenv("LOG_LEVEL", "INFO"),
+    json_format=os.getenv("LOG_JSON_FORMAT", "true").lower() in ("true", "1", "yes"),
+    service_name=settings.PROJECT_NAME
+)
 
 async def seed_initial_database():
     """Seeds default roles, users, rules, devices, merchants, risk scores, alerts, cases, and settings."""
@@ -60,6 +74,8 @@ async def lifespan(app: FastAPI):
     # Teardown
     await engine.dispose()
 
+logger = logging.getLogger("fraudshield_api")
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -67,16 +83,84 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Middleware
+# ---------------------------------------------------------------------------
+# Section 25: Security Hardening Middleware
+# ---------------------------------------------------------------------------
+
+@app.middleware("http")
+async def security_hardening_middleware(request: Request, call_next):
+    # 1. Request Body Size Limiter (Protect against Denial of Service / Memory Exhaustion)
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > settings.MAX_REQUEST_BODY_BYTES:
+                return JSONResponse(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    content={"detail": "Request payload exceeds maximum allowed size (10 MB)."}
+                )
+        except (ValueError, TypeError):
+            pass
+
+    # 2. Execute Request
+    response: Response = await call_next(request)
+
+    # 3. HTTP Security Headers (Defense-in-Depth)
+    if settings.SECURE_HEADERS_ENABLED:
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=()"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "img-src 'self' data: https:; "
+            "script-src 'self' 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "font-src 'self'; "
+            "connect-src 'self' ws: wss: http: https:; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self';"
+        )
+
+    return response
+
+
+# ---------------------------------------------------------------------------
+# Global Safe Exception Handler (Prevent Raw Stack Traces / Schema Leakage)
+# ---------------------------------------------------------------------------
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_ref = str(uuid.uuid4())[:8]
+    logger.error("Unhandled exception [ref=%s] on %s %s: %s", error_ref, request.method, request.url.path, str(exc), exc_info=True)
+    
+    # Do not leak internal tracebacks, SQL statements, or file paths
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "detail": "An internal server error occurred. Please contact the SOC security team if this persists.",
+            "error_reference": error_ref
+        }
+    )
+
+
+# Telemetry & Request Correlation Middleware
+app.add_middleware(TelemetryMiddleware)
+
+# CORS Middleware (Hardened with explicit origins)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.BACKEND_CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
+
 # Mount API Routers
+app.include_router(health_router)  # Mounted at root /health, /health/live, /health/ready
+app.include_router(health_router, prefix=settings.API_V1_STR)
+app.include_router(observability_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(transactions_router, prefix=settings.API_V1_STR)
 app.include_router(alerts_router, prefix=settings.API_V1_STR)
@@ -89,17 +173,8 @@ app.include_router(ml_retraining_router, prefix=settings.API_V1_STR)
 app.include_router(risk_router, prefix=settings.API_V1_STR)
 app.include_router(admin_router, prefix=settings.API_V1_STR)
 app.include_router(audit_router, prefix=settings.API_V1_STR)
+app.include_router(notifications_router, prefix=settings.API_V1_STR)
 app.include_router(simulator_router, prefix=settings.API_V1_STR)
 app.include_router(search_router, prefix=settings.API_V1_STR)
 app.include_router(ws_router, prefix=settings.API_V1_STR)
 app.include_router(ws_router) # Also mount directly at /ws/live for convenience
-
-@app.get("/health", tags=["Health"])
-async def health_check():
-    return {
-        "status": "healthy",
-        "service": settings.PROJECT_NAME,
-        "version": settings.VERSION,
-        "active_ml_model": MLEngine._model_version,
-        "timestamp": datetime.now(timezone.utc).isoformat()
-    }

@@ -33,7 +33,76 @@ logger = logging.getLogger("fraud_rule_engine")
 class FraudRuleEngineService:
     """
     Centralized execution coordinator for rule-based fraud detection.
+    Optimized with high-performance in-memory caching and safe invalidation.
     """
+    _cached_rules: Optional[List[Dict[str, Any]]] = None
+    _cache_timestamp: float = 0.0
+    _CACHE_TTL: float = 5.0  # 5-second TTL prevents DB thrashing under high-throughput ingestion
+
+    @classmethod
+    def invalidate_cache(cls) -> None:
+        """Invalidates in-memory active rule cache (called on rule config updates/activations)."""
+        cls._cached_rules = None
+        cls._cache_timestamp = 0.0
+        logger.debug("FraudRuleEngineService active rules cache invalidated.")
+
+    @classmethod
+    async def _get_active_rule_configs(cls, session: AsyncSession) -> List[Dict[str, Any]]:
+        """Fetch active rule configurations, utilizing cache if fresh."""
+        now = time.time()
+        if cls._cached_rules is not None and (now - cls._cache_timestamp) < cls._CACHE_TTL:
+            return cls._cached_rules
+
+        stmt = (
+            select(FraudRule)
+            .where(FraudRule.is_active == True)
+            .options(selectinload(FraudRule.versions))
+            .order_by(FraudRule.priority.asc(), FraudRule.id.asc())
+        )
+        res = await session.execute(stmt)
+        active_rules = res.scalars().all()
+
+        parsed_rules: List[Dict[str, Any]] = []
+        for rule_model in active_rules:
+            rule_code = rule_model.rule_code or rule_model.id
+            active_version_obj: Optional[FraudRuleVersion] = None
+            if rule_model.versions:
+                active_versions = [v for v in rule_model.versions if v.is_active]
+                if active_versions:
+                    active_version_obj = sorted(active_versions, key=lambda v: str(v.version), reverse=True)[0]
+
+            if active_version_obj:
+                config = dict(active_version_obj.configuration or {})
+                ver_str = active_version_obj.version or "1.0"
+                ver_id = active_version_obj.id
+                rule_weight = float(active_version_obj.weight if active_version_obj.weight is not None else rule_model.weight)
+            else:
+                config = dict(rule_model.condition_config or {})
+                ver_str = rule_model.version or "1.0"
+                ver_id = None
+                rule_weight = float(rule_model.weight)
+
+            sev_str = (rule_model.severity or rule_model.default_severity or "MEDIUM").upper()
+            try:
+                rule_sev = RuleSeverity(sev_str)
+            except ValueError:
+                rule_sev = RuleSeverity.MEDIUM
+
+            parsed_rules.append({
+                "rule_id": rule_model.id,
+                "rule_code": rule_code,
+                "name": rule_model.name,
+                "category": rule_model.category,
+                "config": config,
+                "version": ver_str,
+                "version_id": ver_id,
+                "weight": rule_weight,
+                "severity": rule_sev
+            })
+
+        cls._cached_rules = parsed_rules
+        cls._cache_timestamp = now
+        return parsed_rules
 
     @classmethod
     async def evaluate_transaction_rules(
@@ -51,67 +120,41 @@ class FraudRuleEngineService:
         start_time = time.perf_counter()
         txn_id = transaction_dict.get("id") or transaction_dict.get("transaction_id", f"TXN-{uuid.uuid4().hex[:8].upper()}")
 
-        # 1. Fetch active rules with eager loaded active versions
-        stmt = (
-            select(FraudRule)
-            .where(FraudRule.is_active == True)
-            .options(selectinload(FraudRule.versions))
-            .order_by(FraudRule.priority.asc(), FraudRule.id.asc())
-        )
-        res = await session.execute(stmt)
-        active_rules = res.scalars().all()
+        # 1. Fetch active rule configurations via cache
+        active_rules = await cls._get_active_rule_configs(session)
 
         evaluated_results: List[RuleEvaluationResult] = []
         triggered_results: List[RuleEvaluationResult] = []
         total_score: float = 0.0
 
-        for rule_model in active_rules:
-            rule_code = rule_model.rule_code or rule_model.id
+        for r_data in active_rules:
+            rule_code = r_data["rule_code"]
+            rule_id = r_data["rule_id"]
+            name = r_data["name"]
+            category = r_data["category"]
+            config = r_data["config"]
+            ver_str = r_data["version"]
+            ver_id = r_data["version_id"]
+            rule_weight = r_data["weight"]
+            rule_sev = r_data["severity"]
+
             evaluator = RuleRegistry.get(rule_code)
             if not evaluator:
                 logger.warning("No registered evaluator found for active rule code '%s'. Skipping.", rule_code)
                 continue
 
-            # Resolve active version
-            active_version_obj: Optional[FraudRuleVersion] = None
-            if rule_model.versions:
-                # Find the highest/active version
-                active_versions = [v for v in rule_model.versions if v.is_active]
-                if active_versions:
-                    # Pick active version (e.g. highest version string or latest created)
-                    active_version_obj = sorted(active_versions, key=lambda v: str(v.version), reverse=True)[0]
-
-            if active_version_obj:
-                config = active_version_obj.configuration or {}
-                ver_str = active_version_obj.version or "1.0"
-                ver_id = active_version_obj.id
-                rule_weight = float(active_version_obj.weight if active_version_obj.weight is not None else rule_model.weight)
-            else:
-                config = rule_model.condition_config or {}
-                ver_str = rule_model.version or "1.0"
-                ver_id = None
-                rule_weight = float(rule_model.weight)
-
-            # Map severity
-            sev_str = (rule_model.severity or rule_model.default_severity or "MEDIUM").upper()
-            try:
-                rule_sev = RuleSeverity(sev_str)
-            except ValueError:
-                rule_sev = RuleSeverity.MEDIUM
-
             # Safe configuration validation
             try:
-                config = RuleRegistry.validate_configuration(rule_code, config)
+                validated_config = RuleRegistry.validate_configuration(rule_code, config)
             except Exception as val_err:
                 logger.error("Configuration validation error for rule '%s' (ver: %s): %s", rule_code, ver_str, val_err)
-                # Keep running other rules, record failed configuration
                 error_res = RuleEvaluationResult(
                     rule_code=evaluator.code,
-                    rule_id=rule_model.id,
+                    rule_id=rule_id,
                     rule_version=ver_str,
                     rule_version_id=ver_id,
-                    name=rule_model.name,
-                    category=rule_model.category,
+                    name=name,
+                    category=category,
                     severity=rule_sev,
                     triggered=False,
                     score=0.0,
@@ -127,9 +170,9 @@ class FraudRuleEngineService:
                 eval_res = evaluator.run(
                     transaction=transaction_dict,
                     features=features,
-                    configuration=config,
+                    configuration=validated_config,
                     version=ver_str,
-                    rule_id=rule_model.id,
+                    rule_id=rule_id,
                     rule_version_id=ver_id,
                     weight_override=rule_weight,
                     severity_override=rule_sev
@@ -138,11 +181,11 @@ class FraudRuleEngineService:
                 logger.error("Unexpected error executing rule '%s': %s", rule_code, rule_err, exc_info=True)
                 eval_res = RuleEvaluationResult(
                     rule_code=evaluator.code,
-                    rule_id=rule_model.id,
+                    rule_id=rule_id,
                     rule_version=ver_str,
                     rule_version_id=ver_id,
-                    name=rule_model.name,
-                    category=rule_model.category,
+                    name=name,
+                    category=category,
                     severity=rule_sev,
                     triggered=False,
                     score=0.0,

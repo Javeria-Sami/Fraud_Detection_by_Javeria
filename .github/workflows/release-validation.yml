@@ -1,0 +1,51 @@
+name: Release Staging & Artifact Validation
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  # -------------------------------------------------------------------------
+  # 1. Comprehensive Release Gate Validation
+  # -------------------------------------------------------------------------
+  release-verification:
+    name: Full Release Test & Build Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install All Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install pytest-cov ruff
+          cd frontend && npm install && cd ..
+
+      - name: Frontend Production Bundle Validation
+        working-directory: frontend
+        run: |
+          npm run typecheck
+          npm run build
+
+      - name: Execute Complete Multi-Stage Test Suite
+        run: |
+          pytest tests/ -v
+
+      - name: Docker Image Build Validation (Backend & Frontend)
+        run: |
+          docker build -t fraudshield-backend:release-test -f docker/Dockerfile.backend .
+          docker build -t fraudshield-frontend:release-test -f docker/Dockerfile.frontend .

@@ -14,6 +14,7 @@ from backend.app.core.database import get_db
 from backend.app.core.security import get_current_user_payload, require_roles
 from backend.app.core.audit import AuditService
 from backend.app.core.events import ws_manager
+from backend.app.engine.notifications.policy import NotificationPolicyService
 from backend.app.models.case import (
     Case, CaseNote, CaseEvidence, CaseHistory,
     case_alerts, case_transactions
@@ -474,6 +475,16 @@ async def create_case(
         }
     )
 
+    # Trigger Notification Policy Engine
+    try:
+        await NotificationPolicyService.handle_case_event(
+            session=db,
+            case=refreshed,
+            event_type="case.assigned" if refreshed.assigned_to or refreshed.assigned_analyst else "case.updated"
+        )
+    except Exception:
+        pass
+
     return _format_case_response(refreshed)
 
 
@@ -758,6 +769,16 @@ async def update_case_status(
         {"id": case_id, "status": target_status, "previous_status": current_status}
     )
 
+    try:
+        await NotificationPolicyService.handle_case_event(
+            session=db,
+            case=case,
+            event_type="case.escalated" if target_status in ("ESCALATED", "INVESTIGATING") and case.severity == "CRITICAL" else "case.updated",
+            note=status_data.reason_note
+        )
+    except Exception:
+        pass
+
     return _format_case_response(case)
 
 
@@ -819,6 +840,15 @@ async def assign_case(
         case_id,
         {"id": case_id, "assigned_analyst": case.assigned_analyst}
     )
+
+    try:
+        await NotificationPolicyService.handle_case_event(
+            session=db,
+            case=case,
+            event_type="case.assigned"
+        )
+    except Exception:
+        pass
 
     return _format_case_response(case)
 
@@ -1419,5 +1449,15 @@ async def resolve_case(
         case.id,
         {"id": case.id, "status": case.status, "resolution": case.resolution}
     )
+
+    try:
+        await NotificationPolicyService.handle_case_event(
+            session=db,
+            case=case,
+            event_type="case.resolved",
+            note=f"Resolved as {resolve_data.resolution}"
+        )
+    except Exception:
+        pass
 
     return _format_case_response(case)

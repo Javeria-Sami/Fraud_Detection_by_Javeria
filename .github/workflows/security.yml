@@ -1,0 +1,84 @@
+name: Security Scanning & Vulnerability Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly security audit every Sunday midnight
+    - cron: '0 0 * * 0'
+
+jobs:
+  # -------------------------------------------------------------------------
+  # 1. Dependency Vulnerability Auditing
+  # -------------------------------------------------------------------------
+  dependency-audit:
+    name: Dependency Vulnerability Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Python Dependency Audit (pip-audit)
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+          pip install -r backend/requirements.txt
+          pip-audit || true # Non-blocking security warnings
+
+      - name: Frontend Dependency Audit (npm audit)
+        working-directory: frontend
+        run: |
+          npm audit --audit-level=high || true
+
+  # -------------------------------------------------------------------------
+  # 2. Secret & Sensitive Data Scanning
+  # -------------------------------------------------------------------------
+  secret-scan:
+    name: Secret & Credential Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Secret Detection Scanner
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+  # -------------------------------------------------------------------------
+  # 3. Static Application Security Testing (SAST)
+  # -------------------------------------------------------------------------
+  sast-analysis:
+    name: Python SAST Security Analysis (Bandit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Bandit Security Scanner
+        run: |
+          pip install bandit
+          bandit -r backend/ -ll -i -x "backend/tests,*/tests/*" || true

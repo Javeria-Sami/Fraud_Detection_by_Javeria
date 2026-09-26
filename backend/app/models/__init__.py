@@ -31,6 +31,17 @@ from backend.app.models.case import (
 )
 from backend.app.models.risk_profile import UserRiskProfile, DeviceRiskProfile, MerchantRiskProfile
 from backend.app.models.audit_log import AuditLog, SystemSetting
+from backend.app.models.notification import (
+    Notification,
+    NotificationPreference,
+    NotificationDelivery,
+    NotificationType,
+    NotificationCategory,
+    NotificationChannelType,
+    NotificationSeverity,
+    NotificationPriority,
+    DeliveryStatus
+)
 
 __all__ = [
     "Base",
@@ -70,5 +81,15 @@ __all__ = [
     "DeviceRiskProfile",
     "MerchantRiskProfile",
     "AuditLog",
-    "SystemSetting"
+    "SystemSetting",
+    "Notification",
+    "NotificationPreference",
+    "NotificationDelivery",
+    "NotificationType",
+    "NotificationCategory",
+    "NotificationChannelType",
+    "NotificationSeverity",
+    "NotificationPriority",
+    "DeliveryStatus"
 ]
+

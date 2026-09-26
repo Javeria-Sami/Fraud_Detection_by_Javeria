@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Primary Relational Database (PostgreSQL 16 Alpine)
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: fraudshield-prod-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fraudshield_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password required}
+      POSTGRES_DB: ${POSTGRES_DB:-fraudshield_prod}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    networks:
+      - internal_backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fraudshield_app} -d ${POSTGRES_DB:-fraudshield_prod}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2048M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # 2. Production Backend API & ML Ingestion Engine
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: fraudshield-prod-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: "PRODUCTION"
+      DEBUG: "false"
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-4}
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-fraudshield_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-fraudshield_prod}
+      SYNC_DATABASE_URL: postgresql://${POSTGRES_USER:-fraudshield_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-fraudshield_prod}
+      SECRET_KEY: ${SECRET_KEY:?Production JWT secret key required}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-${SECRET_KEY}}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost,http://127.0.0.1}
+      DB_POOL_SIZE: ${DB_POOL_SIZE:-20}
+      DB_MAX_OVERFLOW: ${DB_MAX_OVERFLOW:-10}
+      SECURE_HEADERS_ENABLED: "true"
+      LOG_LEVEL: "INFO"
+      LOG_JSON_FORMAT: "true"
+    volumes:
+      - model_artifacts:/app/ml/saved_models
+    networks:
+      - internal_backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4096M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M
+
+  # ---------------------------------------------------------------------------
+  # 3. High-Performance Nginx Frontend & Reverse Proxy Gateway
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: fraudshield-prod-frontend
+    restart: always
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${PORT:-80}:80"
+    networks:
+      - internal_backend
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # 4. Automated Database Backup Worker
+  # ---------------------------------------------------------------------------
+  db-backup:
+    image: postgres:16-alpine
+    container_name: fraudshield-prod-backup
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER:-fraudshield_app}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-fraudshield_prod}
+    volumes:
+      - db_backups:/backups
+    networks:
+      - internal_backend
+    entrypoint: |
+      /bin/sh -c '
+      while true; do
+        DATE=$$(date +\%Y\%m\%d_\%H\%M\%S)
+        echo "[Backup] Creating PostgreSQL snapshot: backup_$$DATE.sql.gz"
+        pg_dump -h postgres -U $$PGUSER $$PGDATABASE | gzip > /backups/backup_$$DATE.sql.gz
+        find /backups -type f -name "*.sql.gz" -mtime +30 -delete
+        sleep 86400
+      done'
+
+networks:
+  internal_backend:
+    driver: bridge
+
+volumes:
+  postgres_prod_data:
+  model_artifacts:
+  db_backups:

@@ -7,6 +7,20 @@ import {
   RuleSimulationResult,
   RuleExecutionListResult,
   AlertEngineConfigData,
+  AdminOverviewResponse,
+  PlatformStatusResponse,
+  AdminUserListResponse,
+  AdminUserDetailResponse,
+  AdminUserListItem,
+  AdminUserCreateRequest,
+  UserStatusUpdateRequest,
+  UserRoleUpdateRequest,
+  RoleDetailResponse,
+  PermissionItem,
+  PermissionMatrixResponse,
+  AdminSettingsListResponse,
+  AdminSettingItem,
+  AdminSettingUpdateRequest,
 } from '../types';
 
 export interface ListRulesFilterParams {
@@ -59,8 +73,91 @@ export interface UpdateAlertConfigPayload {
   reason?: string;
 }
 
+export interface ListUsersFilterParams {
+  query?: string;
+  role?: string;
+  is_active?: boolean;
+  page?: number;
+  page_size?: number;
+  sort_by?: string;
+  sort_order?: string;
+}
+
 export const adminApi = {
-  // Fraud Rules
+  // 1. Overview & Platform Diagnostics
+  getOverview: async (): Promise<AdminOverviewResponse> => {
+    const res = await apiClient.get<AdminOverviewResponse>('/admin/overview');
+    return res.data;
+  },
+
+  getPlatformStatus: async (): Promise<PlatformStatusResponse> => {
+    const res = await apiClient.get<PlatformStatusResponse>('/admin/platform/status');
+    return res.data;
+  },
+
+  // 2. User Management
+  listUsers: async (params?: ListUsersFilterParams): Promise<AdminUserListResponse> => {
+    const res = await apiClient.get<AdminUserListResponse>('/admin/users', { params });
+    return res.data;
+  },
+
+  getUserDetail: async (userId: string): Promise<AdminUserDetailResponse> => {
+    const res = await apiClient.get<AdminUserDetailResponse>(`/admin/users/${userId}`);
+    return res.data;
+  },
+
+  createUser: async (payload: AdminUserCreateRequest): Promise<AdminUserListItem> => {
+    const res = await apiClient.post<AdminUserListItem>('/admin/users', payload);
+    return res.data;
+  },
+
+  updateUserStatus: async (
+    userId: string,
+    payload: UserStatusUpdateRequest
+  ): Promise<AdminUserListItem> => {
+    const res = await apiClient.patch<AdminUserListItem>(`/admin/users/${userId}/status`, payload);
+    return res.data;
+  },
+
+  updateUserRole: async (
+    userId: string,
+    payload: UserRoleUpdateRequest
+  ): Promise<AdminUserListItem> => {
+    const res = await apiClient.patch<AdminUserListItem>(`/admin/users/${userId}/role`, payload);
+    return res.data;
+  },
+
+  // 3. Roles & Permissions
+  listRoles: async (): Promise<RoleDetailResponse[]> => {
+    const res = await apiClient.get<RoleDetailResponse[]>('/admin/roles');
+    return res.data;
+  },
+
+  listPermissions: async (): Promise<PermissionItem[]> => {
+    const res = await apiClient.get<PermissionItem[]>('/admin/permissions');
+    return res.data;
+  },
+
+  getPermissionMatrix: async (): Promise<PermissionMatrixResponse> => {
+    const res = await apiClient.get<PermissionMatrixResponse>('/admin/permission-matrix');
+    return res.data;
+  },
+
+  // 4. System Settings
+  listSettings: async (): Promise<AdminSettingsListResponse> => {
+    const res = await apiClient.get<AdminSettingsListResponse>('/admin/settings');
+    return res.data;
+  },
+
+  updateSetting: async (
+    key: string,
+    payload: AdminSettingUpdateRequest
+  ): Promise<AdminSettingItem> => {
+    const res = await apiClient.put<AdminSettingItem>(`/admin/settings/${key}`, payload);
+    return res.data;
+  },
+
+  // 5. Fraud Rules (Preserved from Section 19)
   listRules: async (params?: ListRulesFilterParams): Promise<AdminFraudRule[]> => {
     const res = await apiClient.get<AdminFraudRule[]>('/admin/rules', { params });
     return res.data;
@@ -158,7 +255,7 @@ export const adminApi = {
     return res.data;
   },
 
-  // Alert Engine Configuration
+  // 6. Alert Engine Configuration (Preserved from Section 19)
   getAlertConfig: async (): Promise<AlertEngineConfigData> => {
     const res = await apiClient.get<AlertEngineConfigData>('/admin/alerts/config');
     return res.data;

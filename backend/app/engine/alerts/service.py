@@ -13,6 +13,7 @@ from backend.app.models.alert import Alert, AlertSeverity, AlertStatus
 from backend.app.models.transaction import Transaction
 from backend.app.models.risk_score import RiskScore
 from backend.app.core.audit import AuditService
+from backend.app.engine.notifications.policy import NotificationPolicyService
 from backend.app.engine.risk.types import RiskResult, RiskLevel
 from backend.app.engine.alerts.types import AlertDecision, AlertType, AlertSeverity as EngineSeverity, AlertPriority
 from backend.app.engine.alerts.config import AlertEngineConfig, default_alert_config
@@ -135,6 +136,16 @@ class AlertEngineService:
         await session.flush()
         logger.info("Created alert %s for transaction %s (Severity: %s, Score: %.1f)", alert_id, txn_id, decision.severity.value, risk_result.risk_score)
 
+        # Trigger notification policy engine
+        try:
+            await NotificationPolicyService.handle_alert_event(
+                session=session,
+                alert=new_alert,
+                event_type="alert.created"
+            )
+        except Exception as e:
+            logger.error("Error generating notification for alert %s: %s", alert_id, str(e))
+
         return new_alert
 
     @classmethod
@@ -184,5 +195,22 @@ class AlertEngineService:
             diff_new={"status": validated_status, "assigned_to": alert.assigned_to, "case_id": alert.case_id},
             details=note or f"Alert status transitioned from {old_status} to {validated_status}."
         )
+
+        # Trigger notification policy on assignment or resolution
+        try:
+            if assigned_to and assigned_to != alert.assigned_to:
+                await NotificationPolicyService.handle_alert_event(
+                    session=session,
+                    alert=alert,
+                    event_type="alert.assigned"
+                )
+            elif validated_status == "RESOLVED":
+                await NotificationPolicyService.handle_alert_event(
+                    session=session,
+                    alert=alert,
+                    event_type="alert.resolved"
+                )
+        except Exception as e:
+            logger.error("Error generating lifecycle notification for alert %s: %s", alert.id, str(e))
 
         return alert

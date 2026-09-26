@@ -161,5 +161,57 @@ docker-compose up --build
 
 ---
 
+## Documentation
+
+- **User Documentation**: [docs/25_User_Documentation/](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/README.md)
+  - [Getting Started & Navigation](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/01_Getting_Started.md)
+  - [Roles & Permissions Matrix](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/02_Roles_and_Permissions.md)
+  - [Security Operations (SOC) Dashboard](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/03_SOC_Dashboard.md)
+  - [Transaction Explorer & Deep Inspector](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/04_Transaction_Explorer.md)
+  - [Alert Center & Triage](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/05_Alert_Center.md)
+  - [Case Management & Evidence Locker](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/06_Case_Management.md)
+  - [Entity Risk Profiles (User / Device / Merchant)](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/07_Risk_Profiles.md)
+  - [Historical Search & Forensic Querying](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/08_Historical_Search.md)
+  - [Analytics & Visual Insights](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/09_Analytics_and_Insights.md)
+  - [Fraud Rules Administration & Simulation](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/10_Fraud_Rules_Administration.md)
+  - [ML Monitoring & Model Retraining](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/11_ML_Monitoring_and_Retraining.md)
+  - [Notification Center](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/12_Notification_Center.md)
+  - [Admin Panel, Governance & Audit Trail](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/13_Admin_Panel_and_Governance.md)
+  - [Security Best Practices & Privacy](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/14_Security_and_Privacy.md)
+  - [Troubleshooting, Error Guide & FAQ](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/25_User_Documentation/15_Troubleshooting_and_FAQ.md)
+- **Operations & Maintenance Documentation**: [docs/26_Operations/](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/README.md)
+  - [Operations Overview & Governance](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/01_Operations_Overview.md)
+  - [Daily Operations & Checklists](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/02_Daily_Operations.md)
+  - [System Health & Prometheus Monitoring](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/03_Health_Monitoring.md)
+  - [Incident Response & Severity Protocols](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/04_Incident_Response.md)
+  - [Systematic Troubleshooting & RCA](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/05_Troubleshooting.md)
+  - [Database Maintenance & Growth Operations](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/06_Database_Maintenance.md)
+  - [Backup & Disaster Restore Runbooks](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/07_Backup_and_Restore.md)
+  - [Security Maintenance, Secrets & TLS](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/08_Security_Maintenance.md)
+  - [ML Model Operations & Drift (MLOps)](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/09_Model_Operations.md)
+  - [Performance Maintenance & SLOs](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/10_Performance_Maintenance.md)
+  - [Log & Metric Management Standards](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/11_Log_and_Metric_Management.md)
+  - [Release, Upgrade & Update Operations](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/12_Release_and_Update_Operations.md)
+  - [Horizontal & Vertical Scaling](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/13_Scaling.md)
+  - [Disaster Recovery & Catastrophe Playbook](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/14_Disaster_Recovery.md)
+  - [Operational Checklists Suite](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/15_Operational_Checklists.md)
+  - [Emergency Operational Runbooks](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/26_Operations/16_Operational_Runbook.md)
+- **Final System Review (Section 33)**: [docs/27_Final_System_Review/](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/README.md)
+  - [Requirements Traceability Matrix](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/requirements-traceability.md)
+  - [Architecture & Topology Audit](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/architecture-review.md)
+  - [Database & Persistence Integrity](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/database-review.md)
+  - [Security & Vulnerability Audit](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/security-review.md)
+  - [Performance, Latency & Throughput Review](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/performance-review.md)
+  - [Automated Testing & Coverage Review](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/testing-review.md)
+  - [Deployment & Infrastructure Audit](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/deployment-review.md)
+  - [Documentation Accuracy Review](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/documentation-review.md)
+  - [End-to-End Production Scenarios Validation](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/end-to-end-validation.md)
+  - [Issue Register & Technical Debt](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/issue-register.md)
+  - [Final Release Readiness Certification](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/27_Final_System_Review/release-readiness.md)
+- **Technical & Architecture Documentation**: [fraud_detection_platform_documentation/docs/](file:///c:/Users/LENOVO/Documents/GitHub/Fraud_Detection_by_Javeria/fraud_detection_platform_documentation/docs/)
+
+---
+
 ## License
 MIT License.
+

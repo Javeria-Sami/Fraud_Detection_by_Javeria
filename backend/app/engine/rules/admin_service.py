@@ -28,6 +28,7 @@ from backend.app.schemas.rule import (
 from backend.app.engine.rules.registry import RuleRegistry
 from backend.app.engine.rules.validator import RuleConfigValidator, RuleConfigValidationError
 from backend.app.engine.rules.types import RuleSeverity, RuleEvaluationResult
+from backend.app.engine.rules.service import FraudRuleEngineService
 from backend.app.engine.features import FeatureEngineeringService
 from backend.app.core.audit import AuditService
 
@@ -265,6 +266,7 @@ class RuleAdminService:
 
         await db.commit()
         await db.refresh(new_version)
+        FraudRuleEngineService.invalidate_cache()
 
         return FraudRuleVersionResponse(
             id=new_version.id,
@@ -331,6 +333,7 @@ class RuleAdminService:
         )
 
         await db.commit()
+        FraudRuleEngineService.invalidate_cache()
         return await cls.get_rule_detail(db, rule.id)
 
     @classmethod
@@ -378,6 +381,7 @@ class RuleAdminService:
         )
 
         await db.commit()
+        FraudRuleEngineService.invalidate_cache()
         return await cls.get_rule_detail(db, rule.id)
 
     @classmethod

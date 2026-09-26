@@ -13,7 +13,10 @@ import {
   Users,
   Settings,
   History,
-  Palette
+  Palette,
+  ShieldCheck,
+  Bell,
+  Activity
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -27,6 +30,7 @@ export const Sidebar: React.FC = () => {
     { label: 'Alerts Triage', path: '/alerts', icon: AlertTriangle, access: 'all' },
     { label: 'Case Management', path: '/cases', icon: FolderLock, access: 'analyst' },
     { label: '360° Risk Profiles', path: '/risk-profiles', icon: UserCheck, access: 'all' },
+    { label: 'Notification Center', path: '/notifications', icon: Bell, access: 'all' },
     { label: 'Historical Search', path: '/search', icon: History, access: 'all' },
     { label: 'Analytics & Insights', path: '/analytics', icon: BarChart3, access: 'all' },
     { label: 'ML Models & Drift', path: '/models', icon: Cpu, access: 'all' },
@@ -34,6 +38,8 @@ export const Sidebar: React.FC = () => {
   ];
 
   const adminItems = [
+    { label: 'Admin Overview', path: '/admin', icon: ShieldCheck, access: 'admin' },
+    { label: 'Observability & Health', path: '/admin/observability', icon: Activity, access: 'admin' },
     { label: 'Fraud Rules Engine', path: '/admin/rules', icon: Sliders, access: 'admin' },
     { label: 'User & Role Access', path: '/admin/users', icon: Users, access: 'admin' },
     { label: 'Risk Thresholds', path: '/admin/settings', icon: Settings, access: 'admin' },

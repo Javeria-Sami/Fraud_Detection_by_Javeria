@@ -13,7 +13,7 @@ from sqlalchemy.orm import selectinload
 
 from backend.app.core.config import settings
 from backend.app.core.database import get_db
-from backend.app.core.security import require_roles, get_password_hash
+from backend.app.core.security import require_roles, get_password_hash, validate_password_strength
 from backend.app.core.audit import AuditService
 from backend.app.models.user import User, Role, Permission, role_permissions
 from backend.app.models.rule import FraudRule, FraudRuleVersion, RuleExecution
@@ -65,6 +65,7 @@ from backend.app.schemas.profile import SystemSettingResponse, SettingUpdateRequ
 from backend.app.engine.rules.registry import RuleRegistry
 from backend.app.engine.rules.validator import RuleConfigValidator, RuleConfigValidationError
 from backend.app.engine.rules.admin_service import RuleAdminService
+from backend.app.engine.rules.service import FraudRuleEngineService
 from backend.app.engine.alerts.config import AlertConfigService, AlertEngineConfig
 from backend.app.engine.admin.platform_diagnostics import PlatformDiagnosticsService
 from backend.app.engine.admin.settings_registry import AdminSettingsService, SETTINGS_REGISTRY
@@ -386,8 +387,8 @@ async def create_admin_user(
     role_stmt = select(Role).where(Role.name == payload.role.upper().strip())
     role_res = await db.execute(role_stmt)
     role_obj = role_res.scalar_one_or_none()
-    if not role_obj:
-        raise HTTPException(status_code=400, detail=f"Role '{payload.role}' does not exist.")
+    # Validate password strength
+    validate_password_strength(payload.password)
 
     new_user = User(
         id=f"USR-{str(uuid.uuid4())[:8].upper()}",
@@ -723,6 +724,7 @@ async def list_admin_settings(
 
 
 @router.put("/settings/{key}", response_model=AdminSettingItem)
+@router.patch("/settings/{key}", response_model=AdminSettingItem)
 async def update_admin_setting(
     key: str,
     payload: AdminSettingUpdateRequest,
@@ -914,6 +916,7 @@ async def update_fraud_rule(
 
     await db.commit()
     await db.refresh(rule)
+    FraudRuleEngineService.invalidate_cache()
 
     return await RuleAdminService.get_rule_detail(db, rule.id)
 

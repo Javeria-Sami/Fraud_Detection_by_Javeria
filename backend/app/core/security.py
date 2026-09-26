@@ -28,8 +28,10 @@ oauth2_scheme = OAuth2PasswordBearer(
 # ---------------------------------------------------------------------------
 # Rate Limiting Foundation
 # ---------------------------------------------------------------------------
+# Rate Limiting Foundation
+# ---------------------------------------------------------------------------
 class SimpleRateLimiter:
-    """In-memory sliding-window rate limiter for brute-force protection."""
+    """In-memory sliding-window rate limiter for brute-force and resource abuse protection."""
     def __init__(self, max_attempts: int = 10, window_seconds: int = 60):
         self.max_attempts = max_attempts
         self.window_seconds = window_seconds
@@ -44,11 +46,66 @@ class SimpleRateLimiter:
         self.attempts[key].append(now)
         return False
 
+# Specialized rate limiters
 login_rate_limiter = SimpleRateLimiter(max_attempts=15, window_seconds=60)
+api_rate_limiter = SimpleRateLimiter(max_attempts=120, window_seconds=60)
+sensitive_action_rate_limiter = SimpleRateLimiter(max_attempts=20, window_seconds=60)
+
+
+def rate_limit_guard(limiter: SimpleRateLimiter, key_prefix: str = "api"):
+    """FastAPI dependency for endpoint-level sliding-window rate limiting."""
+    async def dependency(request: Request):
+        client_ip = request.client.host if request.client else "unknown"
+        key = f"{key_prefix}:{client_ip}"
+        if limiter.is_rate_limited(key):
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Rate limit exceeded. Please slow down your requests."
+            )
+    return dependency
+
 
 # ---------------------------------------------------------------------------
-# Password Hashing & Constant-Time Verification
+# Password Hardening & Constant-Time Verification
 # ---------------------------------------------------------------------------
+COMMON_WEAK_PASSWORDS = {
+    "password", "password123", "12345678", "admin123", "qwerty123",
+    "letmein123", "welcome1", "fraudshield123", "changeme123"
+}
+
+
+def validate_password_strength(password: str) -> None:
+    """
+    Enforces minimum password strength requirements:
+    - Minimum 8 characters
+    - Contains uppercase, lowercase, digit, or special character
+    - Rejects common dictionary passwords
+    """
+    if not password or len(password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 8 characters long."
+        )
+
+    if password.lower() in COMMON_WEAK_PASSWORDS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password is too common or easily guessable. Please choose a stronger password."
+        )
+
+    has_upper = any(c.isupper() for c in password)
+    has_lower = any(c.islower() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_special = any(not c.isalnum() for c in password)
+
+    categories_count = sum([has_upper, has_lower, has_digit, has_special])
+    if categories_count < 2:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must contain a mix of uppercase, lowercase, digits, or special characters."
+        )
+
+
 def get_password_hash(password: str) -> str:
     """
     Secure password hash using PBKDF2 HMAC-SHA256 with cryptographically secure random salt
@@ -57,6 +114,7 @@ def get_password_hash(password: str) -> str:
     salt = os.urandom(16).hex()
     key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 100000)
     return f"{salt}${key.hex()}"
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
@@ -68,6 +126,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         return hmac.compare_digest(key.hex(), stored_hash)
     except Exception:
         return False
+
 
 # ---------------------------------------------------------------------------
 # JWT Access & Refresh Token Management

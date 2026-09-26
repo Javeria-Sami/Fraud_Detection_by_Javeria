@@ -21,6 +21,7 @@ import {
 import { RoleType } from '../../types';
 import { NotificationPanel } from '../ui/NotificationPanel';
 import { GlobalSearchModal } from '../ui/GlobalSearchModal';
+import { notificationApi } from '../../services/notificationApi';
 
 interface NavbarProps {
   onToggleSimulator: () => void;
@@ -40,6 +41,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  // Fetch unread notification count
+  const refreshUnreadCount = useCallback(async () => {
+    try {
+      const data = await notificationApi.fetchUnreadCount();
+      setUnreadCount(data.unread_count);
+    } catch {
+      // fallback to live alerts length if api error
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshUnreadCount();
+  }, [refreshUnreadCount]);
+
+  // Refresh count when live websocket alerts arrive
+  useEffect(() => {
+    if (liveAlerts.length > 0) {
+      refreshUnreadCount();
+    }
+  }, [liveAlerts, refreshUnreadCount]);
 
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
@@ -148,15 +171,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground relative transition-colors"
             >
               <Bell className="w-4 h-4" />
-              {liveAlerts.length > 0 && (
+              {(unreadCount > 0 || liveAlerts.length > 0) && (
                 <span className="absolute -top-1 -right-1 h-4 min-w-[16px] px-1 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center animate-pulse">
-                  {liveAlerts.length}
+                  {unreadCount > 0 ? unreadCount : liveAlerts.length}
                 </span>
               )}
             </button>
             <NotificationPanel
               isOpen={showNotifications}
               onClose={() => setShowNotifications(false)}
+              onUnreadCountChange={setUnreadCount}
             />
           </div>
 

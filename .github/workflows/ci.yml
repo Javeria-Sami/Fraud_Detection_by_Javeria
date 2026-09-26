@@ -1,0 +1,197 @@
+name: Continuous Integration Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # -------------------------------------------------------------------------
+  # 1. Frontend Quality & Build Verification
+  # -------------------------------------------------------------------------
+  frontend-ci:
+    name: Frontend Quality & Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci || npm install
+
+      - name: TypeScript Type Checking
+        working-directory: frontend
+        run: npm run typecheck
+
+      - name: Frontend Production Bundle Build
+        working-directory: frontend
+        run: npm run build
+
+  # -------------------------------------------------------------------------
+  # 2. Backend Code Quality & Unit/Integration Tests
+  # -------------------------------------------------------------------------
+  backend-ci:
+    name: Backend Quality & Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install ruff pytest-cov
+
+      - name: Code Quality & Linting Check (Ruff)
+        run: |
+          ruff check .
+
+      - name: Execute Backend Test Suite
+        run: |
+          pytest tests/ -v --durations=10
+
+  # -------------------------------------------------------------------------
+  # 3. Database Migration & PostgreSQL Schema Validation
+  # -------------------------------------------------------------------------
+  database-migration-ci:
+    name: Database Migration & Postgres Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_fraudshield
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install Backend & Database Drivers
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run Alembic Database Migrations
+        env:
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_fraudshield
+        run: |
+          alembic upgrade head
+
+      - name: Verify Database Schema via Integration Tests
+        env:
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_fraudshield
+        run: |
+          pytest tests/test_database_schema.py -v
+
+  # -------------------------------------------------------------------------
+  # 4. ML Pipeline, Feature & Model Artifact Validation
+  # -------------------------------------------------------------------------
+  ml-validation-ci:
+    name: ML Anomaly Model & Feature Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Train Baseline Model Artifact (if needed)
+        run: |
+          python ml/train.py
+
+      - name: Run ML Validation Tests
+        run: |
+          pytest tests/test_ml.py tests/test_ml_monitoring_api.py tests/test_ml_retraining_api.py -v
+
+  # -------------------------------------------------------------------------
+  # 5. Application Startup Smoke Test & Health Check
+  # -------------------------------------------------------------------------
+  smoke-test-ci:
+    name: Application Startup Smoke Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [frontend-ci, backend-ci]
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Backend Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Start Application in Background
+        env:
+          ENVIRONMENT: "CI_TESTING"
+          DATABASE_URL: "sqlite+aiosqlite:///./test_smoke.db"
+          SYNC_DATABASE_URL: "sqlite:///./test_smoke.db"
+        run: |
+          python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 &
+          sleep 5
+
+      - name: Query Liveness & Readiness Probes
+        run: |
+          curl -f http://127.0.0.1:8000/health/live || exit 1
+          curl -f http://127.0.0.1:8000/health/ready || exit 1
+          curl -f http://127.0.0.1:8000/health || exit 1

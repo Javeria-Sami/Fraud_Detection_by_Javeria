@@ -153,7 +153,8 @@ class RealtimeConnectionManager:
 
     async def broadcast_envelope(self, envelope: EventEnvelope, topic: Optional[str] = None):
         """
-        Non-blocking fan-out broadcast to all authorized, subscribed WebSocket clients.
+        High-performance concurrent fan-out broadcast to all authorized, subscribed WebSocket clients.
+        Uses asyncio.gather with bounded timeouts so slow clients never block others or the main loop.
         """
         event_type = envelope.event_type
         target_topic = topic or event_type.split(".")[0]
@@ -161,23 +162,36 @@ class RealtimeConnectionManager:
 
         metrics_tracker.record_publish(event_type)
 
-        dead_sockets: List[WebSocket] = []
-        delivery_success_count = 0
-        delivery_failure_count = 0
-
         # Snapshot active sessions
         async with self._lock:
             sessions_snapshot = list(self._sessions.items())
 
-        for ws, session in sessions_snapshot:
-            if session.is_authorized_for_event(event_type, target_topic):
-                try:
-                    await ws.send_text(message_json)
-                    delivery_success_count += 1
-                except Exception as e:
-                    logger.debug("Failed sending event to user %s: %s", session.user_id, str(e))
-                    dead_sockets.append(ws)
-                    delivery_failure_count += 1
+        if not sessions_snapshot:
+            return
+
+        eligible_targets = [
+            (ws, session) for ws, session in sessions_snapshot
+            if session.is_authorized_for_event(event_type, target_topic)
+        ]
+
+        if not eligible_targets:
+            return
+
+        async def _send_to_client(ws: WebSocket, session: ClientSession) -> Optional[WebSocket]:
+            try:
+                # 1.0s timeout per client prevents slow socket head-of-line blocking
+                await asyncio.wait_for(ws.send_text(message_json), timeout=1.0)
+                return None
+            except Exception as e:
+                logger.debug("Failed sending event to user %s: %s", session.user_id, str(e))
+                return ws
+
+        # Run client sends concurrently
+        results = await asyncio.gather(*[_send_to_client(ws, session) for ws, session in eligible_targets], return_exceptions=False)
+
+        dead_sockets: List[WebSocket] = [ws for ws in results if ws is not None]
+        delivery_success_count = len(eligible_targets) - len(dead_sockets)
+        delivery_failure_count = len(dead_sockets)
 
         # Clean up dead sockets
         if dead_sockets:

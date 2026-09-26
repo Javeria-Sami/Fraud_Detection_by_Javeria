@@ -8,14 +8,29 @@ from sqlalchemy.orm import declarative_base
 from backend.app.core.config import settings
 
 # For SQLite, check same thread must be false
-connect_args = {"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {}
+is_sqlite = "sqlite" in settings.DATABASE_URL
+connect_args = {"check_same_thread": False} if is_sqlite else {}
 
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=False,
-    connect_args=connect_args,
-    future=True
-)
+engine_kwargs = {
+    "echo": False,
+    "connect_args": connect_args,
+    "future": True,
+}
+
+# PostgreSQL / MySQL enterprise connection pooling configuration
+if not is_sqlite:
+    engine_kwargs.update({
+        "pool_size": settings.DB_POOL_SIZE,
+        "max_overflow": settings.DB_MAX_OVERFLOW,
+        "pool_recycle": settings.DB_POOL_RECYCLE,
+        "pool_timeout": settings.DB_POOL_TIMEOUT,
+        "pool_pre_ping": settings.DB_POOL_PRE_PING,
+    })
+else:
+    # Enable pre-ping on SQLite to ensure connection validity
+    engine_kwargs["pool_pre_ping"] = settings.DB_POOL_PRE_PING
+
+engine = create_async_engine(settings.DATABASE_URL, **engine_kwargs)
 
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
