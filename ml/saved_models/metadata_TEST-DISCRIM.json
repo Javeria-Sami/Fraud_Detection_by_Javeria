@@ -55,16 +55,16 @@
     "test_samples": 60,
     "anomaly_count": 6,
     "anomaly_percentage": 10.0,
-    "score_mean": 0.2214,
-    "score_std": 0.181,
-    "score_min": 0.0966,
-    "score_max": 0.8097,
-    "score_p25": 0.1278,
-    "score_p50": 0.161,
-    "score_p75": 0.2017,
-    "score_p90": 0.3607,
-    "score_p95": 0.7468,
-    "score_p99": 0.7901,
+    "score_mean": 0.218,
+    "score_std": 0.1811,
+    "score_min": 0.0928,
+    "score_max": 0.8277,
+    "score_p25": 0.1252,
+    "score_p50": 0.1495,
+    "score_p75": 0.195,
+    "score_p90": 0.3589,
+    "score_p95": 0.7068,
+    "score_p99": 0.7937,
     "calibrated_threshold": 0.4,
     "labeled_metrics": {
       "precision": 1.0,
@@ -73,9 +73,9 @@
       "roc_auc": 1.0,
       "labeled_samples": 60
     },
-    "evaluated_at": "2026-09-29T17:42:06.933777+00:00"
+    "evaluated_at": "2026-09-29T18:21:30.425898+00:00"
   },
   "artifact_path": "C:\\Users\\LENOVO\\Documents\\GitHub\\Fraud_Detection_by_Javeria\\ml\\saved_models\\isolation_forest_TEST-DISCRIM.joblib",
   "status": "APPROVED",
-  "created_at": "2026-09-29T17:42:06.995982+00:00"
+  "created_at": "2026-09-29T18:21:30.499585+00:00"
 }

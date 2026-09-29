@@ -32,8 +32,12 @@ dependencies = [
     "asyncpg>=0.29.0"
 ]
 
+[tool.setuptools.packages.find]
+include = ["backend*", "ml*", "simulator*"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
