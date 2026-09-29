@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11"]
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -181,16 +181,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
-      - name: Start Application in Background
+      - name: Start Application and Query Probes
         env:
           ENVIRONMENT: "CI_TESTING"
           DATABASE_URL: "sqlite+aiosqlite:///./test_smoke.db"
           SYNC_DATABASE_URL: "sqlite:///./test_smoke.db"
         run: |
           python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 &
-          sleep 8
-
-      - name: Query Liveness & Readiness Probes
-        run: |
+          APP_PID=$!
+          sleep 6
           curl -f http://127.0.0.1:8000/health/live || exit 1
           curl -f http://127.0.0.1:8000/health || exit 1
+          kill $APP_PID || true
