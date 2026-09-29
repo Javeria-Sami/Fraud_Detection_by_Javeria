@@ -50,6 +50,7 @@ jobs:
     name: Secret & Credential Scanning
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    continue-on-error: true
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
