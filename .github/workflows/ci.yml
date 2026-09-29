@@ -95,7 +95,7 @@ jobs:
           POSTGRES_PASSWORD: test_password
           POSTGRES_DB: test_fraudshield
         ports:
-          - 5432:5432
+          - 5433:5432
         options: >-
           --health-cmd "pg_isready -U test_user"
           --health-interval 5s
@@ -121,15 +121,15 @@ jobs:
 
       - name: Run Alembic Database Migrations
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5433/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5433/test_fraudshield
         run: |
           alembic upgrade head
 
       - name: Verify Database Schema via Integration Tests
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5433/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5433/test_fraudshield
         run: |
           pytest tests/test_database_schema.py -v
 
