@@ -31,7 +31,7 @@
     "is_high_risk_category",
     "is_new_merchant_for_user"
   ],
-  "threshold": 0.4711,
+  "threshold": 0.4676,
   "parameters": {
     "n_estimators": 100,
     "contamination": 0.08,
@@ -53,29 +53,29 @@
     "train_samples": 700,
     "val_samples": 150,
     "test_samples": 150,
-    "anomaly_count": 14,
-    "anomaly_percentage": 9.33,
-    "score_mean": 0.2518,
+    "anomaly_count": 13,
+    "anomaly_percentage": 8.67,
+    "score_mean": 0.2742,
     "score_std": 0.1736,
-    "score_min": 0.1201,
-    "score_max": 0.844,
-    "score_p25": 0.1544,
-    "score_p50": 0.1887,
-    "score_p75": 0.2581,
-    "score_p90": 0.4004,
-    "score_p95": 0.7798,
-    "score_p99": 0.8378,
-    "calibrated_threshold": 0.4711,
+    "score_min": 0.1313,
+    "score_max": 0.864,
+    "score_p25": 0.1766,
+    "score_p50": 0.2095,
+    "score_p75": 0.2966,
+    "score_p90": 0.4341,
+    "score_p95": 0.7809,
+    "score_p99": 0.8527,
+    "calibrated_threshold": 0.4676,
     "labeled_metrics": {
-      "precision": 0.9286,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1_score": 0.963,
+      "f1_score": 1.0,
       "roc_auc": 1.0,
       "labeled_samples": 150
     },
-    "evaluated_at": "2026-09-22T18:58:18.139521+00:00"
+    "evaluated_at": "2026-09-29T07:38:42.726232+00:00"
   },
-  "artifact_path": "I:\\vs code\\web Projects\\Real-Time-Fraud-Anomaly-Detection-Development-Documentation\\ml\\saved_models\\isolation_forest_v1.0.0-fallback.joblib",
+  "artifact_path": "C:\\Users\\LENOVO\\Documents\\GitHub\\Fraud_Detection_by_Javeria\\ml\\saved_models\\isolation_forest_v1.0.0-fallback.joblib",
   "status": "APPROVED",
-  "created_at": "2026-09-22T18:58:18.161437+00:00"
+  "created_at": "2026-09-29T07:38:42.761224+00:00"
 }

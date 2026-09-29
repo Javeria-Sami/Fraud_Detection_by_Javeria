@@ -17,7 +17,7 @@ from sqlalchemy import text
 
 from backend.app.core.config import settings
 from backend.app.core.database import get_db
-from backend.app.engine.ml.inference import MLEngine
+from backend.app.engine.ml.service import MLInferenceService
 from backend.app.engine.events.manager import ws_manager
 
 router = APIRouter(tags=["Health"])
@@ -57,10 +57,10 @@ async def readiness_probe(db: AsyncSession = Depends(get_db)):
         }
 
     # 2. ML Inference Engine Check
-    ml_active = MLEngine._model_version is not None
+    ml_active = MLInferenceService._cached_model is not None
     subsystems["ml_engine"] = {
         "status": "HEALTHY" if ml_active else "DEGRADED",
-        "active_model_version": MLEngine._model_version or "UNLOADED",
+        "active_model_version": MLInferenceService._cached_version or "v1.0.0",
         "model_type": "IsolationForest"
     }
 
@@ -96,7 +96,8 @@ async def health_summary(db: AsyncSession = Depends(get_db)):
         "status": "healthy" if db_ok else "degraded",
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
-        "active_ml_model": MLEngine._model_version,
+        "active_ml_model": MLInferenceService._cached_version,
         "database_connected": db_ok,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+

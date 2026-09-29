@@ -1,7 +1,7 @@
-"""
-Audit Logging API Client.
-Section 23 — Audit Logging.
-"""
+/**
+ * Audit Logging API Client.
+ * Section 23 — Audit Logging.
+ */
 import { apiClient } from './api';
 import {
   AuditLog,

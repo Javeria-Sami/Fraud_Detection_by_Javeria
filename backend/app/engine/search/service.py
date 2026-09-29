@@ -382,6 +382,8 @@ class HistoricalSearchEngine:
             conditions.append(Case.risk_score <= req.risk_max)
         if req.severity and req.severity.upper() != "ALL":
             conditions.append(Case.severity == req.severity.upper())
+        if req.priority and req.priority.upper() != "ALL":
+            conditions.append(Case.priority == req.priority.upper())
         if req.status and req.status.upper() != "ALL":
             conditions.append(Case.status == req.status.upper())
 
@@ -427,6 +429,7 @@ class HistoricalSearchEngine:
                     description=r.description,
                     user_id=r.user_id,
                     severity=r.severity or "MEDIUM",
+                    priority=r.priority or "MEDIUM",
                     status=r.status or "OPEN",
                     assigned_to=r.assigned_to or getattr(r, "assigned_analyst", None),
                     risk_score=float(r.risk_score or 0.0),

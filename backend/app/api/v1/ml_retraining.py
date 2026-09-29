@@ -61,6 +61,7 @@ def _to_run_response(r: ModelRetrainingRun) -> RetrainingRunResponse:
 
 
 @router.post("/run", response_model=RetrainingRunResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/start", response_model=RetrainingRunResponse, status_code=status.HTTP_201_CREATED)
 async def trigger_retraining(
     payload: StartRetrainingRequest,
     db: AsyncSession = Depends(get_db),

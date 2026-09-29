@@ -64,7 +64,8 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
         
     # Pre-load ML Engine
-    MLEngine.get_pipeline()
+    from backend.app.engine.ml.service import MLInferenceService
+    MLInferenceService._ensure_model_loaded()
     
     # Seed Database
     await seed_initial_database()

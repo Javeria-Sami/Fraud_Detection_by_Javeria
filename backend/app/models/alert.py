@@ -16,10 +16,13 @@ class AlertSeverity(str, enum.Enum):
 
 class AlertStatus(str, enum.Enum):
     NEW = "NEW"
+    OPEN = "OPEN"
     ACKNOWLEDGED = "ACKNOWLEDGED"
     INVESTIGATING = "INVESTIGATING"
+    IN_PROGRESS = "IN_PROGRESS"
     RESOLVED = "RESOLVED"
     CLOSED = "CLOSED"
+    DISMISSED = "DISMISSED"
     ESCALATED = "ESCALATED"
 
 class Alert(Base):

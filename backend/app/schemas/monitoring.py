@@ -103,12 +103,19 @@ class MLOpsHealthSummaryResponse(BaseModel):
 
     active_model_id: Optional[str] = None
     active_model_version: Optional[str] = None
-    feature_version: Optional[str] = None
+    model_id: Optional[str] = None
+    model_name: Optional[str] = "Isolation Forest Anomaly Detector"
+    model_version: Optional[str] = None
+    feature_version: Optional[str] = "v1.0"
     health_status: str = "NORMAL"
     health_reason: str = "All telemetry nominal"
+    health_reasons: List[str] = Field(default_factory=list)
     checks_summary: Dict[str, Any] = Field(default_factory=dict)
     last_monitored_at: Optional[str] = None
+    last_monitoring_run: Optional[str] = None
     last_run_id: Optional[str] = None
+    monitoring_window: Dict[str, Any] = Field(default_factory=dict)
+    sample_size: int = 0
     prediction_volume: int = 0
     anomaly_rate_pct: float = 0.0
     p95_latency_ms: float = 0.0
@@ -117,3 +124,7 @@ class MLOpsHealthSummaryResponse(BaseModel):
     critical_features_count: int = 0
     score_psi: float = 0.0
     data_quality_status: str = "NORMAL"
+    metrics: Dict[str, Any] = Field(default_factory=dict)
+    data_quality: Dict[str, Any] = Field(default_factory=dict)
+    drift_summary: Dict[str, Any] = Field(default_factory=dict)
+    ground_truth_performance: Optional[Dict[str, Any]] = None

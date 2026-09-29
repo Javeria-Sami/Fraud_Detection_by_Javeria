@@ -20,7 +20,7 @@ from backend.app.core.database import get_db
 from backend.app.core.security import require_roles
 from backend.app.core.telemetry.metrics import metrics
 from backend.app.core.telemetry.tracer import global_tracer
-from backend.app.engine.ml.inference import MLEngine
+from backend.app.engine.ml.service import MLInferenceService
 from backend.app.engine.events.manager import ws_manager
 
 router = APIRouter(
@@ -81,11 +81,11 @@ async def get_operational_status(db: AsyncSession = Depends(get_db)):
     }
 
     # 4. ML Anomaly Detection Engine
-    ml_active = MLEngine._model_version is not None
+    ml_active = MLInferenceService._cached_model is not None
     subsystems["ml_engine"] = {
         "name": "ML Anomaly Inference",
         "status": "HEALTHY" if ml_active else "DEGRADED",
-        "model_version": MLEngine._model_version or "UNLOADED",
+        "model_version": MLInferenceService._cached_version or "UNLOADED",
         "predictions_total": metrics.ml_predictions_total.get_total(),
         "details": "Scikit-Learn IsolationForest model artifact resident in memory."
     }

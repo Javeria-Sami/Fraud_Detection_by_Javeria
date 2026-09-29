@@ -190,3 +190,90 @@ def evaluate_ground_truth_performance(
             "evaluated_samples": len(predictions_with_labels),
             "metrics": {}
         }
+
+
+def compute_distribution_metrics(
+    data: List[float] | np.ndarray | List[Dict[str, Any]],
+    num_bins: int = 10
+) -> Dict[str, Any]:
+    """
+    Computes distribution summary statistics (count, mean, median, min, max, std, percentiles, histogram)
+    for numeric values, score lists, or prediction dictionaries.
+    """
+    if data is None or len(data) == 0:
+        return {
+            "count": 0,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "std": 0.0,
+            "p10": 0.0,
+            "p25": 0.0,
+            "p50": 0.0,
+            "p75": 0.0,
+            "p90": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "histogram": []
+        }
+
+    if isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict):
+        scores = np.array([p.get("anomaly_score", p.get("score", 0.0)) for p in data], dtype=float)
+    else:
+        scores = np.asarray(data, dtype=float)
+
+    scores = scores[np.isfinite(scores)]
+    total = len(scores)
+    if total == 0:
+        return {
+            "count": 0,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "std": 0.0,
+            "p10": 0.0,
+            "p25": 0.0,
+            "p50": 0.0,
+            "p75": 0.0,
+            "p90": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "histogram": []
+        }
+
+    p10, p25, p50, p75, p90, p95, p99 = np.percentile(scores, [10, 25, 50, 75, 90, 95, 99])
+    min_v, max_v = float(np.min(scores)), float(np.max(scores))
+
+    if min_v == max_v:
+        hist_counts = [total]
+        bin_edges = [min_v, max_v]
+    else:
+        hist_counts, bin_edges = np.histogram(scores, bins=num_bins)
+
+    histogram = []
+    for i in range(len(hist_counts)):
+        histogram.append({
+            "bin_start": round(float(bin_edges[i]), 4),
+            "bin_end": round(float(bin_edges[i + 1]), 4) if i + 1 < len(bin_edges) else round(float(bin_edges[i]), 4),
+            "count": int(hist_counts[i]),
+            "pct": round(float((hist_counts[i] / total) * 100), 2)
+        })
+
+    return {
+        "count": total,
+        "mean": round(float(np.mean(scores)), 4),
+        "median": round(float(p50), 4),
+        "min": round(min_v, 4),
+        "max": round(max_v, 4),
+        "std": round(float(np.std(scores)), 4),
+        "p10": round(float(p10), 4),
+        "p25": round(float(p25), 4),
+        "p50": round(float(p50), 4),
+        "p75": round(float(p75), 4),
+        "p90": round(float(p90), 4),
+        "p95": round(float(p95), 4),
+        "p99": round(float(p99), 4),
+        "histogram": histogram
+    }

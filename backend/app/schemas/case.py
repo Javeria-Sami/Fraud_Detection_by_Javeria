@@ -89,6 +89,7 @@ class CaseCreate(BaseModel):
     description: Optional[str] = None
     user_id: Optional[str] = None
     severity: str = "MEDIUM"
+    priority: str = "MEDIUM"
     assigned_analyst: Optional[str] = None
     related_transaction_ids: List[str] = []
     related_alert_ids: List[str] = []
@@ -98,6 +99,7 @@ class CaseUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     severity: Optional[str] = None
+    priority: Optional[str] = None
     status: Optional[str] = None
     assigned_analyst: Optional[str] = None
 
@@ -127,6 +129,7 @@ class CaseResponse(BaseModel):
     description: Optional[str] = None
     user_id: Optional[str] = None
     severity: str
+    priority: str = "MEDIUM"
     status: str
     assigned_analyst: Optional[str] = None
     assigned_to: Optional[str] = None
@@ -155,6 +158,7 @@ class CaseDetailResponse(BaseModel):
     description: Optional[str] = None
     user_id: Optional[str] = None
     severity: str
+    priority: str = "MEDIUM"
     status: str
     assigned_analyst: Optional[str] = None
     assigned_to: Optional[str] = None

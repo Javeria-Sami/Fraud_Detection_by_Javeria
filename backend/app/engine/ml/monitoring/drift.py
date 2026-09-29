@@ -267,3 +267,65 @@ def evaluate_feature_drift(
         "reference_statistics": ref_stats,
         "current_statistics": curr_stats
     }
+
+
+def detect_feature_drift(
+    feature_name_or_ref: Any,
+    ref_values_or_curr: Any = None,
+    curr_values: Optional[List[Any]] = None,
+    is_categorical: bool = False,
+    psi_warning: float = 0.10,
+    psi_critical: float = 0.25,
+    ks_pvalue_critical: float = 0.01,
+    min_sample_size: int = 15
+) -> Dict[str, Any]:
+    """
+    Evaluates feature drift between baseline reference data and current monitoring data.
+    Supports flexible parameter passing:
+      - detect_feature_drift("feature_name", ref_values, curr_values, ...)
+      - detect_feature_drift(ref_values, curr_values, ...)
+    """
+    if curr_values is not None:
+        return evaluate_feature_drift(
+            feature_name=str(feature_name_or_ref),
+            ref_values=ref_values_or_curr,
+            curr_values=curr_values,
+            is_categorical=is_categorical,
+            psi_warning=psi_warning,
+            psi_critical=psi_critical,
+            ks_pvalue_critical=ks_pvalue_critical,
+            min_sample_size=min_sample_size
+        )
+    elif ref_values_or_curr is not None:
+        if isinstance(feature_name_or_ref, str) and not isinstance(ref_values_or_curr, (list, np.ndarray, tuple)):
+            return evaluate_feature_drift(
+                feature_name=feature_name_or_ref,
+                ref_values=[],
+                curr_values=[],
+                is_categorical=is_categorical,
+                psi_warning=psi_warning,
+                psi_critical=psi_critical,
+                ks_pvalue_critical=ks_pvalue_critical,
+                min_sample_size=min_sample_size
+            )
+        return evaluate_feature_drift(
+            feature_name=feature_name_or_ref if isinstance(feature_name_or_ref, str) else "feature",
+            ref_values=feature_name_or_ref if not isinstance(feature_name_or_ref, str) else [],
+            curr_values=ref_values_or_curr,
+            is_categorical=is_categorical,
+            psi_warning=psi_warning,
+            psi_critical=psi_critical,
+            ks_pvalue_critical=ks_pvalue_critical,
+            min_sample_size=min_sample_size
+        )
+    else:
+        return evaluate_feature_drift(
+            feature_name="feature",
+            ref_values=[],
+            curr_values=feature_name_or_ref if isinstance(feature_name_or_ref, (list, np.ndarray, tuple)) else [],
+            is_categorical=is_categorical,
+            psi_warning=psi_warning,
+            psi_critical=psi_critical,
+            ks_pvalue_critical=ks_pvalue_critical,
+            min_sample_size=min_sample_size
+        )

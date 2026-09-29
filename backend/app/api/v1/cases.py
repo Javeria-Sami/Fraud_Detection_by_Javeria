@@ -35,18 +35,21 @@ router = APIRouter(prefix="/cases", tags=["Case Management"])
 
 # Valid state machine transitions
 ALLOWED_STATUS_TRANSITIONS: Dict[str, List[str]] = {
-    "OPEN": ["INVESTIGATING", "CLOSED"],
-    "INVESTIGATING": ["PENDING", "RESOLVED", "CLOSED"],
-    "PENDING": ["INVESTIGATING", "RESOLVED", "CLOSED"],
-    "RESOLVED": ["CLOSED", "REOPENED", "OPEN", "INVESTIGATING"],
+    "OPEN": ["INVESTIGATING", "IN_PROGRESS", "CLOSED"],
+    "INVESTIGATING": ["PENDING", "IN_PROGRESS", "RESOLVED", "CLOSED", "ESCALATED"],
+    "IN_PROGRESS": ["PENDING", "INVESTIGATING", "RESOLVED", "CLOSED", "ESCALATED"],
+    "PENDING": ["INVESTIGATING", "IN_PROGRESS", "RESOLVED", "CLOSED", "ESCALATED"],
+    "ESCALATED": ["INVESTIGATING", "IN_PROGRESS", "RESOLVED", "CLOSED"],
+    "RESOLVED": ["CLOSED", "REOPENED", "OPEN", "INVESTIGATING", "IN_PROGRESS"],
     "CLOSED": ["REOPENED", "OPEN"],
-    "REOPENED": ["INVESTIGATING", "RESOLVED", "CLOSED"]
+    "REOPENED": ["INVESTIGATING", "IN_PROGRESS", "RESOLVED", "CLOSED"]
 }
 
 SORTABLE_FIELDS = {
     "created_at": Case.created_at,
     "updated_at": Case.updated_at,
     "severity": Case.severity,
+    "priority": Case.priority,
     "status": Case.status,
     "case_id": Case.id,
     "risk_score": Case.risk_score,
@@ -55,6 +58,7 @@ SORTABLE_FIELDS = {
 def _build_case_filter_conditions(
     status_filter: Optional[str] = None,
     severity: Optional[str] = None,
+    priority: Optional[str] = None,
     assigned_analyst: Optional[str] = None,
     user_id: Optional[str] = None,
     search: Optional[str] = None,
@@ -66,6 +70,8 @@ def _build_case_filter_conditions(
         conditions.append(Case.status == status_filter.upper())
     if severity and severity.upper() != "ALL":
         conditions.append(Case.severity == severity.upper())
+    if priority and priority.upper() != "ALL":
+        conditions.append(Case.priority == priority.upper())
     if assigned_analyst:
         if assigned_analyst.upper() == "UNASSIGNED":
             conditions.append(or_(Case.assigned_analyst.is_(None), Case.assigned_analyst == ""))
@@ -106,6 +112,7 @@ def _format_case_response(c: Case) -> CaseResponse:
         description=c.description,
         user_id=c.user_id,
         severity=c.severity,
+        priority=getattr(c, "priority", "MEDIUM") or "MEDIUM",
         status=c.status,
         assigned_analyst=c.assigned_analyst,
         assigned_to=c.assigned_to,
@@ -199,6 +206,7 @@ async def list_cases_paginated(
     page_size: int = Query(25, ge=1, le=100),
     status_filter: Optional[str] = Query(None, alias="status"),
     severity: Optional[str] = None,
+    priority: Optional[str] = None,
     assigned_analyst: Optional[str] = None,
     user_id: Optional[str] = None,
     search: Optional[str] = None,
@@ -215,6 +223,7 @@ async def list_cases_paginated(
     conditions = _build_case_filter_conditions(
         status_filter=status_filter,
         severity=severity,
+        priority=priority,
         assigned_analyst=assigned_analyst,
         user_id=user_id,
         search=search,
@@ -266,6 +275,7 @@ async def list_cases(
     response: Response,
     status_filter: Optional[str] = Query(None, alias="status"),
     severity: Optional[str] = None,
+    priority: Optional[str] = None,
     assigned_analyst: Optional[str] = None,
     user_id: Optional[str] = None,
     search: Optional[str] = None,
@@ -286,6 +296,7 @@ async def list_cases(
     conditions = _build_case_filter_conditions(
         status_filter=status_filter,
         severity=severity,
+        priority=priority,
         assigned_analyst=assigned_analyst,
         user_id=user_id,
         search=search,
@@ -367,6 +378,7 @@ async def create_case(
         description=payload.description,
         user_id=payload.user_id,
         severity=payload.severity.upper(),
+        priority=payload.priority.upper() if getattr(payload, "priority", None) else "MEDIUM",
         status="OPEN",
         assigned_analyst=analyst,
         assigned_to=actor_id,
@@ -594,6 +606,7 @@ async def get_case_detail(
         description=case.description,
         user_id=case.user_id,
         severity=case.severity,
+        priority=getattr(case, "priority", "MEDIUM") or "MEDIUM",
         status=case.status,
         assigned_analyst=case.assigned_analyst,
         assigned_to=case.assigned_to,
@@ -649,6 +662,9 @@ async def update_case(
     if update_data.severity is not None and update_data.severity.upper() != case.severity:
         changes.append(f"Severity: {case.severity} -> {update_data.severity.upper()}")
         case.severity = update_data.severity.upper()
+    if update_data.priority is not None and update_data.priority.upper() != getattr(case, "priority", None):
+        changes.append(f"Priority: {getattr(case, 'priority', 'MEDIUM')} -> {update_data.priority.upper()}")
+        case.priority = update_data.priority.upper()
     if update_data.assigned_analyst is not None and update_data.assigned_analyst != case.assigned_analyst:
         changes.append(f"Assigned Analyst: {case.assigned_analyst} -> {update_data.assigned_analyst}")
         case.assigned_analyst = update_data.assigned_analyst
@@ -682,7 +698,7 @@ async def update_case(
     await ws_manager.broadcast_event(
         "case.updated",
         case_id,
-        {"id": case_id, "title": case.title, "severity": case.severity, "status": case.status, "assigned_analyst": case.assigned_analyst}
+        {"id": case_id, "title": case.title, "severity": case.severity, "priority": getattr(case, "priority", "MEDIUM"), "status": case.status, "assigned_analyst": case.assigned_analyst}
     )
 
     return _format_case_response(case)

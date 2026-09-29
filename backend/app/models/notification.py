@@ -77,6 +77,17 @@ class NotificationPriority(str, enum.Enum):
     URGENT = "URGENT"
 
 
+class NotificationStatus(str, enum.Enum):
+    UNREAD = "UNREAD"
+    READ = "READ"
+    PENDING = "PENDING"
+    QUEUED = "QUEUED"
+    SENT = "SENT"
+    DELIVERED = "DELIVERED"
+    FAILED = "FAILED"
+    DISMISSED = "DISMISSED"
+
+
 class DeliveryStatus(str, enum.Enum):
     PENDING = "PENDING"
     QUEUED = "QUEUED"
@@ -135,7 +146,21 @@ class Notification(Base):
             kwargs["notification_type"] = kwargs.pop("type")
         if "metadata" in kwargs and "metadata_json" not in kwargs:
             kwargs["metadata_json"] = kwargs.pop("metadata")
+        if "status" in kwargs and "delivery_status" not in kwargs:
+            val = kwargs.pop("status")
+            kwargs["delivery_status"] = val.value if hasattr(val, "value") else str(val)
         super().__init__(**kwargs)
+
+    @property
+    def status(self) -> str:
+        if self.read_at is not None:
+            return NotificationStatus.READ.value
+        return self.delivery_status or NotificationStatus.UNREAD.value
+
+    @status.setter
+    def status(self, value):
+        val = value.value if hasattr(value, "value") else str(value)
+        self.delivery_status = val
 
 
 class NotificationPreference(Base):

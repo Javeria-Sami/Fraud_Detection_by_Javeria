@@ -84,11 +84,11 @@ export const Models: React.FC = () => {
         mlRetrainingApi.listRuns(20, 0),
       ]);
 
-      setHealthSummary(healthRes);
-      setMonitoredModels(modelsRes);
-      setDriftResults(driftRes.drift_results || []);
-      setMonitoringRuns(runsRes.runs || []);
-      setRetrainingRuns(retrainRes.runs || []);
+      setHealthSummary(healthRes || null);
+      setMonitoredModels(modelsRes || []);
+      setDriftResults(driftRes?.drift_results || []);
+      setMonitoringRuns(runsRes?.runs || []);
+      setRetrainingRuns(retrainRes?.runs || []);
     } catch (err) {
       console.error('Failed to load MLOps monitoring data:', err);
     } finally {

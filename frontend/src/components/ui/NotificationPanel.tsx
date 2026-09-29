@@ -123,7 +123,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
     } else if (n.source_type === 'CASE' && n.source_id) {
       navigate(`/cases/${n.source_id}`);
     } else if (n.source_type === 'MODEL') {
-      navigate('/admin/models');
+      navigate('/models');
     } else {
       navigate('/notifications');
     }

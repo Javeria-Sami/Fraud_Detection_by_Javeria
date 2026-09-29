@@ -22,6 +22,7 @@ from backend.app.models.alert import Alert, AlertSeverity, AlertStatus
 from backend.app.models.case import (
     Case,
     CaseSeverity,
+    CasePriority,
     CaseStatus,
     CaseNote,
     CaseEvidence,
@@ -40,6 +41,7 @@ from backend.app.models.notification import (
     NotificationChannelType,
     NotificationSeverity,
     NotificationPriority,
+    NotificationStatus,
     DeliveryStatus
 )
 
@@ -71,6 +73,7 @@ __all__ = [
     "AlertStatus",
     "Case",
     "CaseSeverity",
+    "CasePriority",
     "CaseStatus",
     "CaseNote",
     "CaseEvidence",
@@ -90,6 +93,7 @@ __all__ = [
     "NotificationChannelType",
     "NotificationSeverity",
     "NotificationPriority",
+    "NotificationStatus",
     "DeliveryStatus"
 ]
 

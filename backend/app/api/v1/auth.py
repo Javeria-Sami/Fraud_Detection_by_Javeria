@@ -41,13 +41,15 @@ async def login(
     request: Request,
     db: AsyncSession = Depends(get_db)
 ):
-    client_ip = request.client.host if request.client else "unknown"
+    raw_ip = request.headers.get("X-Forwarded-For") or (request.client.host if request.client else "unknown")
+    client_ip = raw_ip.split(",")[0].strip()
     rate_key = f"{client_ip}:{credentials.email.strip().lower()}"
 
     if login_rate_limiter.is_rate_limited(rate_key):
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Too many authentication attempts. Please try again later."
+            detail="Too many authentication attempts. Please try again later.",
+            headers={"Retry-After": str(login_rate_limiter.window_seconds)}
         )
 
     # Search user by email or username with roles & permissions eagerly loaded

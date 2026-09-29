@@ -162,18 +162,18 @@ async def get_admin_overview(
         MLModelRegistryModel.status.in_(["DEPLOYED", "PRODUCTION"])
     ).order_by(MLModelRegistryModel.deployed_at.desc())
     prod_model_res = await db.execute(prod_model_stmt)
-    prod_model = prod_model_res.scalar_one_or_none()
+    prod_model = prod_model_res.scalars().first()
 
     total_models_res = await db.execute(select(func.count(MLModelRegistryModel.id)))
     total_models = total_models_res.scalar() or 0
 
     last_monitoring_stmt = select(ModelMonitoringRun).order_by(ModelMonitoringRun.started_at.desc())
     last_monitoring_res = await db.execute(last_monitoring_stmt)
-    last_monitoring = last_monitoring_res.scalar_one_or_none()
+    last_monitoring = last_monitoring_res.scalars().first()
 
     last_retrain_stmt = select(ModelRetrainingRun).order_by(ModelRetrainingRun.created_at.desc())
     last_retrain_res = await db.execute(last_retrain_stmt)
-    last_retrain = last_retrain_res.scalar_one_or_none()
+    last_retrain = last_retrain_res.scalars().first()
 
     ml_summary = MLSummary(
         deployed_model_version=prod_model.version if prod_model else "v1.0.0-default",

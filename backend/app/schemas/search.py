@@ -80,6 +80,7 @@ class CaseSearchResult(BaseModel):
     description: Optional[str] = None
     user_id: Optional[str] = None
     severity: str = "MEDIUM"
+    priority: str = "MEDIUM"
     status: str = "OPEN"
     assigned_to: Optional[str] = None
     risk_score: float = 0.0

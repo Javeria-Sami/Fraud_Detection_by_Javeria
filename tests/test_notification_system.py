@@ -96,7 +96,7 @@ async def test_policy_alert_notification_creation():
 
         assert len(notifs) > 0
         first_notif = notifs[0]
-        assert firstif_severity := first_notif.severity == NotificationSeverity.CRITICAL.value
+        assert first_notif.severity == NotificationSeverity.CRITICAL.value
         assert first_notif.priority == NotificationPriority.URGENT.value
         assert first_notif.category == NotificationCategory.SECURITY_ALERTS.value
         assert first_notif.source_type == "ALERT"

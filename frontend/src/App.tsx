@@ -147,7 +147,7 @@ export function App() {
                 <Route
                   path="/admin/audit-logs"
                   element={
-                    <ProtectedRoute requiredRole="admin">
+                    <ProtectedRoute requiredRole={['admin', 'analyst']}>
                       <AuditLogs />
                     </ProtectedRoute>
                   }

@@ -7,6 +7,7 @@ model path traversal defense, XSS sanitization, SSRF filters, and safe error han
 import pytest
 import uuid
 import os
+import time
 from httpx import AsyncClient, ASGITransport
 from fastapi import HTTPException
 
@@ -93,8 +94,8 @@ async def test_login_brute_force_rate_limiting():
         rate_key = f"{attacker_ip}:target_brute_force@fraudshield.io"
         
         # Pre-fill limiter
-        for _ in range(16):
-            login_rate_limiter.attempts[rate_key].append(login_rate_limiter.attempts.get(rate_key, [0])[0] if rate_key in login_rate_limiter.attempts else 0)
+        now = time.time()
+        login_rate_limiter.attempts[rate_key] = [now] * 16
 
         res = await client.post(
             "/api/v1/auth/login",

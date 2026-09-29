@@ -11,11 +11,20 @@ from backend.app.core.database import Base
 class CaseStatus(str, enum.Enum):
     OPEN = "OPEN"
     INVESTIGATING = "INVESTIGATING"
+    IN_PROGRESS = "IN_PROGRESS"
     PENDING = "PENDING"
+    ESCALATED = "ESCALATED"
     RESOLVED = "RESOLVED"
     CLOSED = "CLOSED"
+    REOPENED = "REOPENED"
 
 class CaseSeverity(str, enum.Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+class CasePriority(str, enum.Enum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
@@ -48,6 +57,7 @@ class Case(Base):
     description = Column(Text, nullable=True)
     
     severity = Column(String(20), default="MEDIUM", index=True) # LOW, MEDIUM, HIGH, CRITICAL
+    priority = Column(String(20), default="MEDIUM", index=True) # LOW, MEDIUM, HIGH, CRITICAL
     status = Column(String(30), default="OPEN", index=True) # OPEN, INVESTIGATING, PENDING, RESOLVED, CLOSED
     
     assigned_to = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)

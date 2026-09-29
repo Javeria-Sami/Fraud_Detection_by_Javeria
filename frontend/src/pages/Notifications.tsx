@@ -50,6 +50,7 @@ export const Notifications: React.FC = () => {
   const [highCount, setHighCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -68,9 +69,11 @@ export const Notifications: React.FC = () => {
   const loadMetrics = useCallback(async () => {
     try {
       const counts = await notificationApi.fetchUnreadCount();
-      setUnreadCount(counts.unread_count);
-      setCriticalCount(counts.critical_count);
-      setHighCount(counts.high_count);
+      if (counts) {
+        setUnreadCount(counts.unread_count || 0);
+        setCriticalCount(counts.critical_count || 0);
+        setHighCount(counts.high_count || 0);
+      }
     } catch (err) {
       console.error('Failed to load notification metrics:', err);
     }
@@ -82,6 +85,7 @@ export const Notifications: React.FC = () => {
 
     try {
       setLoading(true);
+      setError(null);
       let cat: string | undefined = undefined;
       let unreadOnly = false;
 
@@ -105,11 +109,13 @@ export const Notifications: React.FC = () => {
         page_size: pageSize
       });
 
-      setNotifications(res.items);
-      setTotal(res.total);
-      setUnreadCount(res.unread_count);
-    } catch (err) {
+      setNotifications(res?.items || []);
+      setTotal(res?.total || 0);
+      setUnreadCount(res?.unread_count || 0);
+    } catch (err: any) {
       console.error('Failed to fetch notifications:', err);
+      setError(err?.response?.data?.detail || 'Failed to load notifications from server.');
+      setNotifications([]);
     } finally {
       setLoading(false);
     }
@@ -118,10 +124,16 @@ export const Notifications: React.FC = () => {
   // Load Preferences
   const loadPreferences = useCallback(async () => {
     try {
+      setLoading(true);
+      setError(null);
       const res = await notificationApi.fetchPreferences();
-      setPreferences(res.preferences);
-    } catch (err) {
+      setPreferences(res?.preferences || []);
+    } catch (err: any) {
       console.error('Failed to load notification preferences:', err);
+      setError(err?.response?.data?.detail || 'Failed to load notification preferences.');
+      setPreferences([]);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -677,8 +689,8 @@ export const Notifications: React.FC = () => {
                   mandatoryInApp: false
                 }
               ].map((cat) => {
-                const inAppPref = preferences.find(p => p.category === cat.key && p.channel === 'IN_APP');
-                const emailPref = preferences.find(p => p.category === cat.key && p.channel === 'EMAIL');
+                const inAppPref = (preferences || []).find(p => p.category === cat.key && p.channel === 'IN_APP');
+                const emailPref = (preferences || []).find(p => p.category === cat.key && p.channel === 'EMAIL');
 
                 return (
                   <div key={cat.key} className="p-4 rounded-xl bg-soc-surface border border-soc-border space-y-4">
@@ -867,7 +879,7 @@ export const Notifications: React.FC = () => {
                 </Link>
               ) : selectedNotification.source_type === 'MODEL' ? (
                 <Link
-                  to="/admin/models"
+                  to="/models"
                   onClick={() => setSelectedNotification(null)}
                   className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1 shadow-sm"
                 >

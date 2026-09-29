@@ -11,11 +11,19 @@ from pydantic import BaseModel, Field, ConfigDict
 
 class EventType(str, Enum):
     TRANSACTION_CREATED = "transaction.created"
+    TRANSACTION_INGESTED = "transaction.ingested"
     TRANSACTION_UPDATED = "transaction.updated"
     RISK_CALCULATED = "risk.calculated"
     ALERT_CREATED = "alert.created"
     ALERT_UPDATED = "alert.updated"
     ALERT_RESOLVED = "alert.resolved"
+    ALERT_ESCALATED = "alert.escalated"
+    CASE_CREATED = "case.created"
+    CASE_UPDATED = "case.updated"
+    CASE_ASSIGNED = "case.assigned"
+    CASE_ESCALATED = "case.escalated"
+    CASE_RESOLVED = "case.resolved"
+    NOTIFICATION_CREATED = "notification.created"
     SYSTEM_STATUS = "system.status"
     HEARTBEAT = "system.heartbeat"
 
