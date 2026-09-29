@@ -31,7 +31,7 @@
     "is_high_risk_category",
     "is_new_merchant_for_user"
   ],
-  "threshold": 0.4676,
+  "threshold": 0.4493,
   "parameters": {
     "n_estimators": 100,
     "contamination": 0.08,
@@ -55,17 +55,17 @@
     "test_samples": 150,
     "anomaly_count": 13,
     "anomaly_percentage": 8.67,
-    "score_mean": 0.2742,
-    "score_std": 0.1736,
-    "score_min": 0.1313,
-    "score_max": 0.864,
-    "score_p25": 0.1766,
-    "score_p50": 0.2095,
-    "score_p75": 0.2966,
-    "score_p90": 0.4341,
-    "score_p95": 0.7809,
-    "score_p99": 0.8527,
-    "calibrated_threshold": 0.4676,
+    "score_mean": 0.2481,
+    "score_std": 0.1697,
+    "score_min": 0.1231,
+    "score_max": 0.8355,
+    "score_p25": 0.1542,
+    "score_p50": 0.1868,
+    "score_p75": 0.2478,
+    "score_p90": 0.3687,
+    "score_p95": 0.7453,
+    "score_p99": 0.8269,
+    "calibrated_threshold": 0.4493,
     "labeled_metrics": {
       "precision": 1.0,
       "recall": 1.0,
@@ -73,9 +73,9 @@
       "roc_auc": 1.0,
       "labeled_samples": 150
     },
-    "evaluated_at": "2026-09-29T07:38:42.726232+00:00"
+    "evaluated_at": "2026-09-29T09:59:51.314383+00:00"
   },
   "artifact_path": "C:\\Users\\LENOVO\\Documents\\GitHub\\Fraud_Detection_by_Javeria\\ml\\saved_models\\isolation_forest_v1.0.0-fallback.joblib",
   "status": "APPROVED",
-  "created_at": "2026-09-29T07:38:42.761224+00:00"
+  "created_at": "2026-09-29T09:59:51.360871+00:00"
 }

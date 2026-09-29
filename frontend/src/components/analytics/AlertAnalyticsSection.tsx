@@ -216,10 +216,10 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     data={data.severity_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="50%"
+                    cx="36%"
                     cy="50%"
-                    innerRadius={45}
-                    outerRadius={70}
+                    innerRadius={40}
+                    outerRadius={65}
                     paddingAngle={3}
                   >
                     {data.severity_distribution.map((entry) => (
@@ -234,7 +234,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '4px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.severity_distribution.find((d) => d.label === val);
                       return `${val}: ${item?.count || 0}`;
@@ -268,10 +268,10 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     data={data.status_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="50%"
+                    cx="36%"
                     cy="50%"
-                    innerRadius={45}
-                    outerRadius={70}
+                    innerRadius={40}
+                    outerRadius={65}
                     paddingAngle={3}
                   >
                     {data.status_distribution.map((_, index) => (
@@ -283,7 +283,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '4px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.status_distribution.find((d) => d.label === val);
                       return `${val}: ${item?.count || 0}`;
@@ -315,20 +315,30 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                 <BarChart
                   data={data.top_alert_reasons.slice(0, 5)}
                   layout="vertical"
-                  margin={{ top: 5, right: 20, left: 30, bottom: 5 }}
+                  margin={{ top: 5, right: 15, left: 10, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                  <XAxis type="number" stroke="#64748b" fontSize={10} tickLine={false} />
+                  <XAxis type="number" stroke="#64748b" fontSize={10} tickLine={false} allowDecimals={false} />
                   <YAxis
                     dataKey="label"
                     type="category"
                     stroke="#94a3b8"
-                    fontSize={10}
+                    fontSize={11}
                     tickLine={false}
-                    width={70}
+                    width={110}
+                    tickFormatter={(val: string) => {
+                      if (!val) return '';
+                      return val.length > 15 ? `${val.slice(0, 13)}…` : val;
+                    }}
                   />
-                  <Tooltip contentStyle={customTooltipStyle} />
-                  <Bar dataKey="count" name="Alerts" fill="#8B5CF6" radius={[0, 4, 4, 0]}>
+                  <Tooltip
+                    contentStyle={customTooltipStyle}
+                    formatter={(value: any, name: any, item: any) => [
+                      `${value} alerts`,
+                      item?.payload?.label || 'Reason',
+                    ]}
+                  />
+                  <Bar dataKey="count" name="Alerts" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={16}>
                     {data.top_alert_reasons.slice(0, 5).map((_, index) => (
                       <Cell key={`reason-${index}`} fill={PALETTE[index % PALETTE.length]} />
                     ))}

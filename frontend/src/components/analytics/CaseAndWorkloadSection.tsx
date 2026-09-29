@@ -206,10 +206,10 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                     data={data.resolution_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="50%"
+                    cx="36%"
                     cy="50%"
-                    innerRadius={55}
-                    outerRadius={80}
+                    innerRadius={50}
+                    outerRadius={75}
                     paddingAngle={3}
                   >
                     {data.resolution_distribution.map((entry, index) => (

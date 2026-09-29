@@ -290,7 +290,13 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
                           </span>
                           <span className="text-xs text-white font-medium">{sig.description}</span>
                         </div>
-                        <p className="text-[11px] text-slate-400 font-mono">{sig.evidence}</p>
+                        <p className="text-[11px] text-slate-400 font-mono">
+                          {typeof sig.evidence === 'object' && sig.evidence !== null
+                            ? Object.entries(sig.evidence)
+                                .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${typeof v === 'object' ? JSON.stringify(v) : v}`)
+                                .join(' • ')
+                            : String(sig.evidence || '')}
+                        </p>
                       </div>
                     </div>
                   ))}

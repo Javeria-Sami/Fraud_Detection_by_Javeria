@@ -722,16 +722,19 @@ export interface SearchCountsByCategory {
 }
 
 export interface SearchResponse {
-  query: string;
-  total_results: number;
+  query?: string;
+  total_results?: number;
   execution_time_ms: number;
-  counts_by_category: SearchCountsByCategory;
-  transactions: EntityGroupResult<TransactionSearchResult>;
-  alerts: EntityGroupResult<AlertSearchResult>;
-  cases: EntityGroupResult<CaseSearchResult>;
-  users: EntityGroupResult<UserSearchResult>;
-  devices: EntityGroupResult<DeviceSearchResult>;
-  merchants: EntityGroupResult<MerchantSearchResult>;
+  counts?: SearchCountsByCategory;
+  counts_by_category?: SearchCountsByCategory;
+  transactions?: EntityGroupResult<TransactionSearchResult>;
+  alerts?: EntityGroupResult<AlertSearchResult>;
+  cases?: EntityGroupResult<CaseSearchResult>;
+  users?: EntityGroupResult<UserSearchResult>;
+  devices?: EntityGroupResult<DeviceSearchResult>;
+  merchants?: EntityGroupResult<MerchantSearchResult>;
+  page?: number;
+  page_size?: number;
 }
 
 export interface AutocompleteSuggestion {

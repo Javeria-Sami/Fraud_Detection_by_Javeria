@@ -172,7 +172,7 @@ export const HistoricalSearch: React.FC = () => {
         onChange={handleFilterChange}
         onReset={handleResetFilters}
         onApply={() => executeSearch()}
-        countsByCategory={searchData?.counts_by_category}
+        countsByCategory={searchData?.counts || searchData?.counts_by_category}
       />
 
       {/* Error Banner */}

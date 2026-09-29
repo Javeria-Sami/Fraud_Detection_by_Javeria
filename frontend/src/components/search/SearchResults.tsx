@@ -77,7 +77,18 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     );
   }
 
-  const { counts_by_category } = data;
+  const counts = data.counts || data.counts_by_category || {
+    transactions: 0,
+    alerts: 0,
+    cases: 0,
+    users: 0,
+    devices: 0,
+    merchants: 0,
+    total: 0,
+  };
+
+  const totalResults = data.total_results ?? counts.total ?? 0;
+  const executionTime = data.execution_time_ms ?? 0;
 
   const renderRiskBadge = (score: number, level?: string) => {
     let color = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
@@ -102,14 +113,21 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   };
 
   const tabs: { key: SearchResultsProps['activeTab']; label: string; count: number }[] = [
-    { key: 'all', label: 'All Results', count: data.total_results },
-    { key: 'transactions', label: 'Transactions', count: counts_by_category.transactions },
-    { key: 'alerts', label: 'Alerts', count: counts_by_category.alerts },
-    { key: 'cases', label: 'Cases', count: counts_by_category.cases },
-    { key: 'users', label: 'Users', count: counts_by_category.users },
-    { key: 'devices', label: 'Devices', count: counts_by_category.devices },
-    { key: 'merchants', label: 'Merchants', count: counts_by_category.merchants },
+    { key: 'all', label: 'All Results', count: totalResults },
+    { key: 'transactions', label: 'Transactions', count: counts.transactions || 0 },
+    { key: 'alerts', label: 'Alerts', count: counts.alerts || 0 },
+    { key: 'cases', label: 'Cases', count: counts.cases || 0 },
+    { key: 'users', label: 'Users', count: counts.users || 0 },
+    { key: 'devices', label: 'Devices', count: counts.devices || 0 },
+    { key: 'merchants', label: 'Merchants', count: counts.merchants || 0 },
   ];
+
+  const transactions = data.transactions?.items || [];
+  const alerts = data.alerts?.items || [];
+  const cases = data.cases?.items || [];
+  const users = data.users?.items || [];
+  const devices = data.devices?.items || [];
+  const merchants = data.merchants?.items || [];
 
   return (
     <div className="space-y-4">
@@ -143,24 +161,24 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         </div>
 
         <div className="text-xs text-slate-400 font-mono">
-          Found <span className="font-bold text-slate-200">{data.total_results}</span> results in{' '}
-          <span className="text-cyan-400">{data.execution_time_ms.toFixed(1)}ms</span>
+          Found <span className="font-bold text-slate-200">{totalResults}</span> results in{' '}
+          <span className="text-cyan-400">{executionTime.toFixed(1)}ms</span>
         </div>
       </div>
 
       {/* Results Content */}
       <div className="space-y-6">
         {/* Transactions Section */}
-        {(activeTab === 'all' || activeTab === 'transactions') && data.transactions.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'transactions') && transactions.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-emerald-400" />
-                Transactions ({data.transactions.total})
+                Transactions ({data.transactions?.total || transactions.length})
               </h4>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.transactions.items.map((txn: TransactionSearchResult) => (
+              {transactions.map((txn: TransactionSearchResult) => (
                 <div
                   key={txn.id}
                   onClick={() => navigate(`/transactions/${txn.id}`)}
@@ -203,14 +221,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         )}
 
         {/* Alerts Section */}
-        {(activeTab === 'all' || activeTab === 'alerts') && data.alerts.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'alerts') && alerts.length > 0 && (
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Bell className="w-4 h-4 text-amber-400" />
-              Alerts ({data.alerts.total})
+              Alerts ({data.alerts?.total || alerts.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.alerts.items.map((alr: AlertSearchResult) => (
+              {alerts.map((alr: AlertSearchResult) => (
                 <div
                   key={alr.id}
                   onClick={() => navigate(`/alerts/${alr.id}`)}
@@ -250,14 +268,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         )}
 
         {/* Cases Section */}
-        {(activeTab === 'all' || activeTab === 'cases') && data.cases.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'cases') && cases.length > 0 && (
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-purple-400" />
-              Investigation Cases ({data.cases.total})
+              Investigation Cases ({data.cases?.total || cases.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.cases.items.map((c: CaseSearchResult) => (
+              {cases.map((c: CaseSearchResult) => (
                 <div
                   key={c.id}
                   onClick={() => navigate(`/cases/${c.id}`)}
@@ -299,14 +317,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         )}
 
         {/* Users Section */}
-        {(activeTab === 'all' || activeTab === 'users') && data.users.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'users') && users.length > 0 && (
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <User className="w-4 h-4 text-blue-400" />
-              Users ({data.users.total})
+              Users ({data.users?.total || users.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.users.items.map((u: UserSearchResult) => (
+              {users.map((u: UserSearchResult) => (
                 <div
                   key={u.user_id}
                   onClick={() => navigate(`/risk-profiles?tab=users&id=${u.user_id}`)}
@@ -344,14 +362,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         )}
 
         {/* Devices Section */}
-        {(activeTab === 'all' || activeTab === 'devices') && data.devices.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'devices') && devices.length > 0 && (
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-indigo-400" />
-              Devices ({data.devices.total})
+              Devices ({data.devices?.total || devices.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.devices.items.map((d: DeviceSearchResult) => (
+              {devices.map((d: DeviceSearchResult) => (
                 <div
                   key={d.device_id}
                   onClick={() => navigate(`/risk-profiles?tab=devices&id=${d.device_id}`)}
@@ -382,14 +400,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         )}
 
         {/* Merchants Section */}
-        {(activeTab === 'all' || activeTab === 'merchants') && data.merchants.items.length > 0 && (
+        {(activeTab === 'all' || activeTab === 'merchants') && merchants.length > 0 && (
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Store className="w-4 h-4 text-rose-400" />
-              Merchants ({data.merchants.total})
+              Merchants ({data.merchants?.total || merchants.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.merchants.items.map((m: MerchantSearchResult) => (
+              {merchants.map((m: MerchantSearchResult) => (
                 <div
                   key={m.merchant_id}
                   onClick={() => navigate(`/risk-profiles?tab=merchants&id=${m.merchant_id}`)}
@@ -447,16 +465,16 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
             onClick={() => onPageChange(currentPage + 1)}
             disabled={
               activeTab === 'transactions'
-                ? currentPage >= data.transactions.total_pages
+                ? currentPage >= (data.transactions?.total_pages ?? 1)
                 : activeTab === 'alerts'
-                ? currentPage >= data.alerts.total_pages
+                ? currentPage >= (data.alerts?.total_pages ?? 1)
                 : activeTab === 'cases'
-                ? currentPage >= data.cases.total_pages
+                ? currentPage >= (data.cases?.total_pages ?? 1)
                 : activeTab === 'users'
-                ? currentPage >= data.users.total_pages
+                ? currentPage >= (data.users?.total_pages ?? 1)
                 : activeTab === 'devices'
-                ? currentPage >= data.devices.total_pages
-                : currentPage >= data.merchants.total_pages
+                ? currentPage >= (data.devices?.total_pages ?? 1)
+                : currentPage >= (data.merchants?.total_pages ?? 1)
             }
             className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1"
           >

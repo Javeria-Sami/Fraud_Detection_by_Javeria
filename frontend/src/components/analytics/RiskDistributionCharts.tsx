@@ -134,10 +134,10 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                     data={data.risk_level_distribution}
                     dataKey="count"
                     nameKey="risk_level"
-                    cx="50%"
+                    cx="36%"
                     cy="50%"
-                    innerRadius={55}
-                    outerRadius={80}
+                    innerRadius={50}
+                    outerRadius={75}
                     paddingAngle={3}
                   >
                     {data.risk_level_distribution.map((entry) => (
