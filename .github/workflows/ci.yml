@@ -67,7 +67,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -r backend/requirements.txt
           pip install -e . --no-deps
           pip install ruff pytest-cov
@@ -96,7 +96,7 @@ jobs:
           POSTGRES_DB: test_fraudshield
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 5434:5432
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -116,21 +116,39 @@ jobs:
 
       - name: Install Backend & Database Drivers
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -r backend/requirements.txt
           pip install -e . --no-deps
 
+      - name: Verify PostgreSQL Container Availability
+        run: |
+          python -c "
+          import socket, time
+          port = int('${{ job.services.postgres.ports[5432] }}' or '5432')
+          print(f'Checking PostgreSQL connection on 127.0.0.1:{port}...')
+          for i in range(30):
+              try:
+                  with socket.create_connection(('127.0.0.1', port), timeout=2):
+                      print('PostgreSQL port is reachable!')
+                      break
+              except Exception as e:
+                  print(f'Attempt {i+1}: {e}')
+                  time.sleep(1)
+          else:
+              raise RuntimeError('Could not reach PostgreSQL container')
+          "
+
       - name: Run Alembic Database Migrations
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5434/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5434/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
         run: |
           python -m alembic upgrade head
 
       - name: Verify Database Schema via Integration Tests
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5434/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5434/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
         run: |
           python -m pytest tests/test_database_schema.py -v
 
@@ -154,7 +172,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -r backend/requirements.txt
           pip install -e . --no-deps
 
@@ -185,7 +203,7 @@ jobs:
 
       - name: Install Backend Dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -r backend/requirements.txt
           pip install -e . --no-deps
 

@@ -25,10 +25,10 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 def get_sync_url():
-    url = settings.SYNC_DATABASE_URL
+    url = os.getenv("SYNC_DATABASE_URL") or settings.SYNC_DATABASE_URL
     if not url:
-        # Fallback to converting async database url to sync
-        url = settings.DATABASE_URL.replace("sqlite+aiosqlite://", "sqlite://").replace("postgresql+asyncpg://", "postgresql://")
+        raw_db = os.getenv("DATABASE_URL") or settings.DATABASE_URL
+        url = raw_db.replace("sqlite+aiosqlite://", "sqlite://").replace("postgresql+asyncpg://", "postgresql://")
     return url
 
 def run_migrations_offline() -> None:

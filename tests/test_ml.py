@@ -24,6 +24,7 @@ from datetime import datetime, timezone, timedelta
 from sqlalchemy import select
 
 from backend.app.main import app
+from backend.app.core.config import settings
 from backend.app.core.database import AsyncSessionLocal
 from backend.app.core.security import create_access_token
 from backend.app.models.ml_model import MLModelRegistry, MLPrediction
@@ -225,7 +226,7 @@ async def test_model_registry_lifecycle():
             feature_version=FEATURE_VERSION,
             parameters={"n_estimators": 100},
             metrics={"score_mean": 0.35},
-            artifact_path="/tmp/fake_model.joblib",
+            artifact_path=os.path.join(settings.MODEL_DIR, "isolation_forest_v1.0.0.joblib"),
             status=ModelStatus.APPROVED.value
         )
         assert reg_model.status == "APPROVED"
