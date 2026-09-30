@@ -123,19 +123,27 @@ jobs:
       - name: Verify PostgreSQL Container Availability
         run: |
           python -c "
-          import socket, time
+          import time, psycopg2
           port = int('${{ job.services.postgres.ports[5432] }}' or '5432')
-          print(f'Checking PostgreSQL connection on 127.0.0.1:{port}...')
+          print(f'Checking PostgreSQL authentication on 127.0.0.1:{port}...')
           for i in range(30):
               try:
-                  with socket.create_connection(('127.0.0.1', port), timeout=2):
-                      print('PostgreSQL port is reachable!')
-                      break
+                  conn = psycopg2.connect(
+                      host='127.0.0.1',
+                      port=port,
+                      user='test_user',
+                      password='test_password',
+                      dbname='test_fraudshield',
+                      connect_timeout=3
+                  )
+                  conn.close()
+                  print('PostgreSQL is ready, authenticated, and accepting queries!')
+                  break
               except Exception as e:
                   print(f'Attempt {i+1}: {e}')
                   time.sleep(1)
           else:
-              raise RuntimeError('Could not reach PostgreSQL container')
+              raise RuntimeError('Could not authenticate or connect to PostgreSQL container')
           "
 
       - name: Run Alembic Database Migrations
