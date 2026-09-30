@@ -4,6 +4,34 @@ Application Configuration and Environment Settings.
 import os
 from pydantic_settings import BaseSettings
 
+def _resolve_database_urls() -> tuple[str, str]:
+    db_env = os.getenv("DATABASE_URL")
+    sync_env = os.getenv("SYNC_DATABASE_URL")
+    if db_env:
+        return db_env, sync_env or db_env.replace("+asyncpg", "").replace("+aiosqlite", "")
+    
+    # Handle Vercel / AWS Lambda read-only root filesystem
+    if os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+        import tempfile
+        import shutil
+        tmp_dir = tempfile.gettempdir()
+        tmp_db = os.path.abspath(os.path.join(tmp_dir, "fraud_detection.db"))
+        root_db = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../fraud_detection.db"))
+        if not os.path.exists(tmp_db) and os.path.exists(root_db):
+            try:
+                shutil.copyfile(root_db, tmp_db)
+            except Exception:
+                pass
+        if os.name == 'nt':
+            return f"sqlite+aiosqlite:///{tmp_db}", f"sqlite:///{tmp_db}"
+        else:
+            clean_path = tmp_db.lstrip('/')
+            return f"sqlite+aiosqlite:////{clean_path}", f"sqlite:////{clean_path}"
+
+    return "sqlite+aiosqlite:///./fraud_detection.db", "sqlite:///./fraud_detection.db"
+
+_default_async_db, _default_sync_db = _resolve_database_urls()
+
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Real-Time Fraud & Anomaly Detection Platform"
     VERSION: str = "1.0.0"
@@ -21,8 +49,8 @@ class Settings(BaseSettings):
     
     # Database
     # Defaults to local SQLite for instant zero-dependency execution, can be overridden with postgresql:// in docker/prod
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./fraud_detection.db")
-    SYNC_DATABASE_URL: str = os.getenv("SYNC_DATABASE_URL", "sqlite:///./fraud_detection.db")
+    DATABASE_URL: str = _default_async_db
+    SYNC_DATABASE_URL: str = _default_sync_db
     DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "20"))
     DB_MAX_OVERFLOW: int = int(os.getenv("DB_MAX_OVERFLOW", "10"))
     DB_POOL_RECYCLE: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))

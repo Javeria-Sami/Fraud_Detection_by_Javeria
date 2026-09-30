@@ -46,9 +46,38 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 Base = declarative_base()
+ 
+_db_initialized = False
+_db_init_lock = None
+
+def _get_init_lock():
+    global _db_init_lock
+    if _db_init_lock is None:
+        import asyncio
+        _db_init_lock = asyncio.Lock()
+    return _db_init_lock
+
+async def ensure_db_initialized():
+    """Ensures database schema and seed data are initialized even in serverless environments without lifespan."""
+    global _db_initialized
+    if _db_initialized:
+        return
+    lock = _get_init_lock()
+    async with lock:
+        if _db_initialized:
+            return
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        try:
+            from backend.app.db.seed import seed_database
+            await seed_database()
+        except Exception:
+            pass
+        _db_initialized = True
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency for obtaining async database session."""
+    await ensure_db_initialized()
     async with AsyncSessionLocal() as session:
         try:
             yield session
