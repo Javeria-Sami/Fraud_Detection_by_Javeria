@@ -28,7 +28,9 @@ def get_sync_url():
     url = os.getenv("SYNC_DATABASE_URL") or settings.SYNC_DATABASE_URL
     if not url:
         raw_db = os.getenv("DATABASE_URL") or settings.DATABASE_URL
-        url = raw_db.replace("sqlite+aiosqlite://", "sqlite://").replace("postgresql+asyncpg://", "postgresql://")
+        url = raw_db.replace("sqlite+aiosqlite://", "sqlite://").replace("postgresql+asyncpg://", "postgresql+psycopg2://")
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg2://", 1)
     return url
 
 def run_migrations_offline() -> None:

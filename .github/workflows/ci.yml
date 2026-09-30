@@ -148,14 +148,14 @@ jobs:
 
       - name: Run Alembic Database Migrations
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
+          SYNC_DATABASE_URL: postgresql+psycopg2://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
           DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
         run: |
           python -m alembic upgrade head
 
       - name: Verify Database Schema via Integration Tests
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
+          SYNC_DATABASE_URL: postgresql+psycopg2://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
           DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:${{ job.services.postgres.ports[5432] }}/test_fraudshield
         run: |
           python -m pytest tests/test_database_schema.py -v
