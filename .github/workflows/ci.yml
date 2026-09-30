@@ -94,17 +94,21 @@ jobs:
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
           POSTGRES_DB: test_fraudshield
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 5433:5432
+          - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U test_user"
-          --health-interval 5s
+          --health-cmd pg_isready
+          --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+
+      - name: Stop host PostgreSQL if running
+        run: sudo systemctl stop postgresql || true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -121,15 +125,15 @@ jobs:
 
       - name: Run Alembic Database Migrations
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5433/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5433/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
         run: |
           alembic upgrade head
 
       - name: Verify Database Schema via Integration Tests
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5433/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5433/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
         run: |
           pytest tests/test_database_schema.py -v
 
