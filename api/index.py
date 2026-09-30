@@ -26,5 +26,7 @@ if (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")) and not
 
 from backend.app.main import app
 
-# Vercel looks for the ASGI application object 'app'
-__all__ = ["app"]
+# Vercel supports both 'app' (ASGI) and 'handler'
+handler = app
+
+__all__ = ["app", "handler"]

@@ -11,7 +11,6 @@ import math
 import logging
 from typing import List, Dict, Any, Tuple, Optional
 import numpy as np
-from scipy import stats
 
 logger = logging.getLogger("ml_drift_engine")
 
@@ -122,8 +121,28 @@ def calculate_ks_test(
     if len(ref) < 5 or len(curr) < 5:
         return 0.0, 1.0
 
-    res = stats.ks_2samp(ref, curr)
-    return float(res.statistic), float(res.pvalue)
+    n1, n2 = len(ref), len(curr)
+    ref_sorted = np.sort(ref)
+    curr_sorted = np.sort(curr)
+
+    data_all = np.concatenate([ref_sorted, curr_sorted])
+    cdf1 = np.searchsorted(ref_sorted, data_all, side='right') / n1
+    cdf2 = np.searchsorted(curr_sorted, data_all, side='right') / n2
+
+    d = float(np.max(np.abs(cdf1 - cdf2)))
+
+    # Kolmogorov distribution asymptotic p-value
+    en = math.sqrt(n1 * n2 / (n1 + n2))
+    lambda_val = (en + 0.12 + 0.11 / en) * d
+    if lambda_val <= 0:
+        p_val = 1.0
+    elif lambda_val > 4.0:
+        p_val = 0.0
+    else:
+        p_sum = sum(((-1) ** (j - 1)) * math.exp(-2.0 * (j ** 2) * (lambda_val ** 2)) for j in range(1, 25))
+        p_val = max(0.0, min(1.0, 2.0 * p_sum))
+
+    return float(d), float(p_val)
 
 
 def calculate_categorical_drift(
