@@ -27,13 +27,25 @@ export const Login: React.FC = () => {
   };
 
   const handleQuickDemo = async (role: RoleType) => {
+    const roleCredentials: Record<RoleType, { email: string; pass: string }> = {
+      admin: { email: 'admin@fraudshield.io', pass: 'Admin@123456' },
+      analyst: { email: 'analyst@fraudshield.io', pass: 'Analyst@123456' },
+      viewer: { email: 'viewer@fraudshield.io', pass: 'Viewer@123456' },
+    };
+    const cred = roleCredentials[role];
+    if (cred) {
+      setEmail(cred.email);
+      setPassword(cred.pass);
+    }
     setIsLoading(true);
     setError(null);
     try {
       await switchDemoRole(role);
       navigate('/');
     } catch (err: any) {
-      setError('Demo login failed');
+      const serverDetail = err.response?.data?.detail;
+      const networkError = !err.response ? 'Cannot connect to backend server (http://localhost:8000). Please start the backend service.' : 'Demo login failed: ' + (serverDetail || 'Invalid credentials');
+      setError(networkError);
     } finally {
       setIsLoading(false);
     }
