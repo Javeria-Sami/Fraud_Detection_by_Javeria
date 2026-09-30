@@ -78,7 +78,7 @@ jobs:
 
       - name: Execute Backend Test Suite
         run: |
-          pytest tests/ -v --durations=10
+          python -m pytest tests/ -v --durations=10
 
   # -------------------------------------------------------------------------
   # 3. Database Migration & PostgreSQL Schema Validation
@@ -96,7 +96,7 @@ jobs:
           POSTGRES_DB: test_fraudshield
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 5432:5432
+          - 5434:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -106,9 +106,6 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-
-      - name: Stop host PostgreSQL if running
-        run: sudo systemctl stop postgresql || true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -125,17 +122,17 @@ jobs:
 
       - name: Run Alembic Database Migrations
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5434/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5434/test_fraudshield
         run: |
-          alembic upgrade head
+          python -m alembic upgrade head
 
       - name: Verify Database Schema via Integration Tests
         env:
-          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5432/test_fraudshield
-          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5432/test_fraudshield
+          SYNC_DATABASE_URL: postgresql://test_user:test_password@127.0.0.1:5434/test_fraudshield
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@127.0.0.1:5434/test_fraudshield
         run: |
-          pytest tests/test_database_schema.py -v
+          python -m pytest tests/test_database_schema.py -v
 
   # -------------------------------------------------------------------------
   # 4. ML Pipeline, Feature & Model Artifact Validation
@@ -167,7 +164,7 @@ jobs:
 
       - name: Run ML Validation Tests
         run: |
-          pytest tests/test_ml.py tests/test_ml_monitoring_api.py tests/test_ml_retraining_api.py -v
+          python -m pytest tests/test_ml.py tests/test_ml_monitoring_api.py tests/test_ml_retraining_api.py -v
 
   # -------------------------------------------------------------------------
   # 5. Application Startup Smoke Test & Health Check
