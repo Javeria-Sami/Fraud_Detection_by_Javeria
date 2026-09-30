@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class Merchant(Base):
     __tablename__ = "merchants"
@@ -18,8 +18,8 @@ class Merchant(Base):
     city = Column(String(100), nullable=True)
     risk_level = Column(String(20), default="LOW") # LOW, MEDIUM, HIGH, CRITICAL
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     transactions = relationship("Transaction", back_populates="merchant")

@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, Integer, Boolean, DateTime, Text, JSON, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class FraudRule(Base):
     __tablename__ = "fraud_rules"
@@ -27,8 +27,8 @@ class FraudRule(Base):
     created_by = Column(String(100), default="system")
     updated_by = Column(String(100), default="system")
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     versions = relationship("FraudRuleVersion", back_populates="rule", cascade="all, delete-orphan")
@@ -52,7 +52,7 @@ class FraudRuleVersion(Base):
     weight = Column(Float, default=20.0) # score points
     is_active = Column(Boolean, default=True)
     created_by = Column(String(100), default="system")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
     
     # Relationships
     rule = relationship("FraudRule", back_populates="versions")
@@ -75,7 +75,7 @@ class RuleExecution(Base):
     points_awarded = Column(Float, default=0.0)
     execution_detail = Column(JSON, default=dict)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime, default=utc_now, index=True)
     
     # Relationships
     transaction = relationship("Transaction", back_populates="rule_executions")

@@ -6,7 +6,7 @@ import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, Integer, DateTime, JSON, ForeignKey, Index
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class TransactionStatus(str, enum.Enum):
     PENDING = "PENDING"
@@ -45,8 +45,8 @@ class Transaction(Base):
     longitude = Column(Float, nullable=True)
     ip_address = Column(String(50), nullable=True)
     
-    transaction_timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True) # compatibility alias
+    transaction_timestamp = Column(DateTime, default=utc_now, index=True)
+    timestamp = Column(DateTime, default=utc_now, index=True) # compatibility alias
     status = Column(String(30), default="PENDING", index=True)
     source = Column(String(50), default="API")
     failed_attempts = Column(Integer, default=0)
@@ -58,8 +58,8 @@ class Transaction(Base):
     rules_triggered = Column(JSON, default=list)
     risk_factors = Column(JSON, default=list) # explainability factors
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now, index=True)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     # Relationships
     user = relationship("User", back_populates="transactions", foreign_keys=[user_id])
@@ -86,6 +86,6 @@ class FeatureSnapshot(Base):
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     transaction_id = Column(String(50), ForeignKey("transactions.id", ondelete="CASCADE"), unique=True, nullable=False)
     features = Column(JSON, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
     
     transaction = relationship("Transaction", back_populates="feature_snapshot")

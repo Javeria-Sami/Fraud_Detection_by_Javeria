@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, Integer, DateTime, JSON, Text, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class UserRiskProfile(Base):
     __tablename__ = "user_risk_profiles"
@@ -39,9 +39,9 @@ class UserRiskProfile(Base):
     known_locations = Column(JSON, default=list)
     merchant_preferences = Column(JSON, default=list)
     
-    last_calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    last_calculated_at = Column(DateTime, default=utc_now)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     user = relationship("User", back_populates="risk_profile")
@@ -64,12 +64,12 @@ class DeviceRiskProfile(Base):
     
     associated_users = Column(JSON, default=list)
     locations_used = Column(JSON, default=list)
-    first_seen_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=True)
-    last_seen_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=True)
+    first_seen_at = Column(DateTime, default=utc_now, nullable=True)
+    last_seen_at = Column(DateTime, default=utc_now, nullable=True)
     
-    last_calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    last_calculated_at = Column(DateTime, default=utc_now)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     device = relationship("Device", back_populates="risk_profile")
@@ -93,9 +93,9 @@ class MerchantRiskProfile(Base):
     risk_level = Column(String(20), default="LOW") # LOW, MEDIUM, HIGH, CRITICAL
     base_risk_tier = Column(String(20), default="LOW")
     
-    last_calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    last_calculated_at = Column(DateTime, default=utc_now)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     merchant = relationship("Merchant", back_populates="risk_profile")

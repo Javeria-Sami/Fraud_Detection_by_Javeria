@@ -2,10 +2,15 @@
 Database Connection and Session Management with SQLAlchemy.
 Supports both SQLite (local development) and PostgreSQL (production).
 """
+from datetime import datetime, timezone
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 from backend.app.core.config import settings
+
+def utc_now() -> datetime:
+    """Returns current UTC timestamp as naive datetime for PostgreSQL/asyncpg compatibility."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 # For SQLite, check same thread must be false
 is_sqlite = "sqlite" in settings.DATABASE_URL

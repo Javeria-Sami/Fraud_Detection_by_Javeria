@@ -6,7 +6,7 @@ import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey, Text, Table
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class CaseStatus(str, enum.Enum):
     OPEN = "OPEN"
@@ -36,7 +36,7 @@ case_alerts = Table(
     Base.metadata,
     Column("case_id", String(50), ForeignKey("cases.id", ondelete="CASCADE"), primary_key=True),
     Column("alert_id", String(50), ForeignKey("alerts.id", ondelete="CASCADE"), primary_key=True),
-    Column("created_at", DateTime, default=lambda: datetime.now(timezone.utc))
+    Column("created_at", DateTime, default=utc_now)
 )
 
 # Association table for Case <-> Transactions
@@ -45,7 +45,7 @@ case_transactions = Table(
     Base.metadata,
     Column("case_id", String(50), ForeignKey("cases.id", ondelete="CASCADE"), primary_key=True),
     Column("transaction_id", String(50), ForeignKey("transactions.id", ondelete="CASCADE"), primary_key=True),
-    Column("created_at", DateTime, default=lambda: datetime.now(timezone.utc))
+    Column("created_at", DateTime, default=utc_now)
 )
 
 class Case(Base):
@@ -76,8 +76,8 @@ class Case(Base):
     resolved_at = Column(DateTime, nullable=True)
     closed_at = Column(DateTime, nullable=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now, index=True)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     assigned_user = relationship("User", foreign_keys=[assigned_to])
@@ -105,8 +105,8 @@ class CaseNote(Base):
     author_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     author = Column(String(100), nullable=False) # name or email
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     case = relationship("Case", back_populates="notes")
@@ -124,7 +124,7 @@ class CaseEvidence(Base):
     metadata_json = Column(JSON, nullable=True)
     payload = Column(JSON, nullable=True) # compatibility alias
     uploaded_by = Column(String(100), nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
     
     # Relationships
     case = relationship("Case", back_populates="evidence")
@@ -141,7 +141,7 @@ class CaseHistory(Base):
     actor_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     actor_name = Column(String(100), nullable=True)
     details = Column(JSON, nullable=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime, default=utc_now, index=True)
     
     # Relationships
     case = relationship("Case", back_populates="history")

@@ -23,7 +23,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 from sqlalchemy import select, insert
 
-from backend.app.core.database import AsyncSessionLocal, engine, Base
+from backend.app.core.database import AsyncSessionLocal, engine, Base, utc_now
 from backend.app.core.security import get_password_hash
 from backend.app.models import (
     Role,
@@ -123,7 +123,7 @@ async def seed_database():
                             insert(role_permissions).values(
                                 role_id=r_obj.id,
                                 permission_id=perm_map[p_key].id,
-                                created_at=datetime.now(timezone.utc)
+                                created_at=utc_now()
                             )
                         )
             role_map[r_name] = r_obj
@@ -293,15 +293,15 @@ async def seed_database():
                 drift_metrics={"psi": 0.018, "feature_drift_detected": False, "drift_score": 0.008},
                 artifact_path="ml/saved_models/isolation_forest_v1.0.0.joblib",
                 description="Production baseline Isolation Forest model trained on multivariate behavioral features.",
-                trained_at=datetime.now(timezone.utc) - timedelta(days=30),
-                approved_at=datetime.now(timezone.utc) - timedelta(days=28),
-                deployed_at=datetime.now(timezone.utc) - timedelta(days=27)
+                trained_at=utc_now() - timedelta(days=30),
+                approved_at=utc_now() - timedelta(days=28),
+                deployed_at=utc_now() - timedelta(days=27)
             )
             session.add(model_obj)
             await session.flush()
 
         # 8. Seed Synthetic Transactions & Associated Entities
-        now = datetime.now(timezone.utc)
+        now = utc_now()
         transactions_spec = [
             # 1. Normal grocery purchase
             {

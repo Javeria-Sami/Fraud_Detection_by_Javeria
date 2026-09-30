@@ -18,7 +18,7 @@ from sqlalchemy import (
     UniqueConstraint
 )
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 
 class NotificationType(str, enum.Enum):
@@ -128,8 +128,8 @@ class Notification(Base):
     deduplication_key = Column(String(255), nullable=True, index=True)
     metadata_json = Column(JSON, nullable=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now, index=True)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     # Relationships
     recipient = relationship("User", foreign_keys=[recipient_user_id])
@@ -176,8 +176,8 @@ class NotificationPreference(Base):
     channel = Column(String(32), nullable=False, index=True)   # IN_APP, EMAIL, WEBHOOK
     enabled = Column(Boolean, nullable=False, default=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     # Relationships
     user = relationship("User", foreign_keys=[user_id])
@@ -200,14 +200,14 @@ class NotificationDelivery(Base):
     status = Column(String(32), nullable=False, default=DeliveryStatus.DELIVERED.value, index=True)
     
     attempt_count = Column(Integer, nullable=False, default=1)
-    last_attempt_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    last_attempt_at = Column(DateTime, default=utc_now)
     delivered_at = Column(DateTime, nullable=True)
     
     failure_reason = Column(Text, nullable=True)
     provider_reference = Column(String(255), nullable=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     # Relationships
     notification = relationship("Notification", back_populates="deliveries")

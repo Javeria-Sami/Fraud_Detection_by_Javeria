@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class Device(Base):
     __tablename__ = "devices"
@@ -19,11 +19,11 @@ class Device(Base):
     ip_address = Column(String(50), nullable=True)
     country = Column(String(10), nullable=True)
     city = Column(String(100), nullable=True)
-    first_seen_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    last_seen_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    first_seen_at = Column(DateTime, default=utc_now)
+    last_seen_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     user = relationship("User", back_populates="devices")

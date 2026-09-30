@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class RiskScore(Base):
     __tablename__ = "risk_scores"
@@ -26,7 +26,7 @@ class RiskScore(Base):
     explanation = Column(JSON, default=list) # explainability factors
     scoring_version = Column(String(20), default="v1.0")
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime, default=utc_now, index=True)
     
     # Relationships
     transaction = relationship("Transaction", back_populates="risk_score_record")

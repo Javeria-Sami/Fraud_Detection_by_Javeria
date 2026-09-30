@@ -1,7 +1,7 @@
 """
 Domain Database Models Central Registry.
 """
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 from backend.app.models.user import User, Role, Permission, role_permissions
 from backend.app.models.merchant import Merchant
 from backend.app.models.device import Device

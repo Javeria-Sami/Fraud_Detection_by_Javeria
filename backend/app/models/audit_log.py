@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, DateTime, JSON, Text, ForeignKey, Index
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 
 class AuditLog(Base):
@@ -39,8 +39,8 @@ class AuditLog(Base):
     error_message = Column(Text, nullable=True)
     event_version = Column(String(10), default="1.0", nullable=True)
 
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)  # compatibility alias
+    created_at = Column(DateTime, default=utc_now, index=True)
+    timestamp = Column(DateTime, default=utc_now, index=True)  # compatibility alias
 
     # Relationships
     actor = relationship("User", foreign_keys=[actor_user_id])
@@ -106,5 +106,5 @@ class SystemSetting(Base):
     value = Column(JSON, nullable=False)
     description = Column(String(255), nullable=True)
     updated_by = Column(String(100), default="system")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)

@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, Integer, DateTime, JSON, Text, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 
 class MLModelRegistry(Base):
@@ -31,8 +31,8 @@ class MLModelRegistry(Base):
     deployed_at = Column(DateTime, nullable=True)
     retired_at = Column(DateTime, nullable=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     predictions = relationship("MLPrediction", back_populates="model_version")
@@ -57,7 +57,7 @@ class MLPrediction(Base):
     feature_snapshot = Column(JSON, nullable=True)
     inference_time_ms = Column(Float, default=0.0)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    created_at = Column(DateTime, default=utc_now, index=True)
     
     # Relationships
     transaction = relationship("Transaction", back_populates="ml_predictions")
@@ -76,7 +76,7 @@ class ModelMonitoringRun(Base):
     monitoring_window_start = Column(DateTime, nullable=True)
     monitoring_window_end = Column(DateTime, nullable=True)
 
-    started_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    started_at = Column(DateTime, default=utc_now, index=True)
     completed_at = Column(DateTime, nullable=True)
     status = Column(String(30), default="RUNNING", index=True)  # RUNNING, COMPLETED, PARTIAL, FAILED
     records_evaluated = Column(Integer, default=0)
@@ -84,7 +84,7 @@ class ModelMonitoringRun(Base):
     error_message = Column(Text, nullable=True)
     summary = Column(JSON, default=dict)
 
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
 
     # Relationships
     model_version = relationship("MLModelRegistry", back_populates="monitoring_runs")
@@ -104,7 +104,7 @@ class ModelMetricSnapshot(Base):
     threshold = Column(Float, nullable=True)
     status = Column(String(30), default="NORMAL")  # NORMAL, WARNING, CRITICAL, UNKNOWN
     calculation_metadata = Column(JSON, default=dict)
-    calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    calculated_at = Column(DateTime, default=utc_now)
 
     # Relationships
     monitoring_run = relationship("ModelMonitoringRun", back_populates="metric_snapshots")
@@ -124,7 +124,7 @@ class FeatureDriftResult(Base):
     status = Column(String(30), default="NORMAL", index=True)  # NORMAL, WARNING, CRITICAL, UNKNOWN
     reference_statistics = Column(JSON, default=dict)
     current_statistics = Column(JSON, default=dict)
-    calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    calculated_at = Column(DateTime, default=utc_now)
 
     # Relationships
     monitoring_run = relationship("ModelMonitoringRun", back_populates="drift_results")
@@ -139,7 +139,7 @@ class ModelHealthStatus(Base):
     health_status = Column(String(30), default="NORMAL", index=True)  # NORMAL, WARNING, CRITICAL, UNKNOWN
     reason = Column(Text, nullable=True)
     checks_summary = Column(JSON, default=dict)
-    calculated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    calculated_at = Column(DateTime, default=utc_now, index=True)
 
     # Relationships
     model_version = relationship("MLModelRegistry", back_populates="health_statuses")
@@ -149,7 +149,7 @@ class ModelHealthStatus(Base):
 class ModelRetrainingRun(Base):
     __tablename__ = "model_retraining_runs"
 
-    id = Column(String(60), primary_key=True, default=lambda: f"RETRAIN-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{uuid.uuid4().hex[:8]}")
+    id = Column(String(60), primary_key=True, default=lambda: f"RETRAIN-{utc_now().strftime('%Y%m%d')}-{uuid.uuid4().hex[:8]}")
     model_type = Column(String(100), default="Isolation Forest")
     base_model_version_id = Column(String(50), ForeignKey("model_versions.id", ondelete="SET NULL"), nullable=True, index=True)
     candidate_model_version_id = Column(String(50), ForeignKey("model_versions.id", ondelete="SET NULL"), nullable=True, index=True)
@@ -167,7 +167,7 @@ class ModelRetrainingRun(Base):
     status = Column(String(30), default="QUEUED", index=True)  # QUEUED, RUNNING, VALIDATING_DATA, FEATURE_ENGINEERING, TRAINING, EVALUATING, COMPLETED, FAILED, CANCELLED
     records_used = Column(Integer, default=0)
 
-    started_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
+    started_at = Column(DateTime, default=utc_now, index=True)
     completed_at = Column(DateTime, nullable=True)
     duration_ms = Column(Float, default=0.0)
     error_message = Column(Text, nullable=True)
@@ -178,7 +178,7 @@ class ModelRetrainingRun(Base):
     artifact_checksum = Column(String(100), nullable=True)
 
     created_by = Column(String(100), nullable=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now)
 
     # Relationships
     base_model_version = relationship("MLModelRegistry", foreign_keys=[base_model_version_id], lazy="selectin")

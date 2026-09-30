@@ -6,7 +6,7 @@ import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
-from backend.app.core.database import Base
+from backend.app.core.database import Base, utc_now
 
 class AlertSeverity(str, enum.Enum):
     LOW = "LOW"
@@ -53,8 +53,8 @@ class Alert(Base):
     resolved_at = Column(DateTime, nullable=True)
     closed_at = Column(DateTime, nullable=True)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=utc_now, index=True)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     # Relationships
     transaction = relationship("Transaction", back_populates="alerts")
