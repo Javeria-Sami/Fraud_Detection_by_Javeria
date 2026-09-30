@@ -40,11 +40,14 @@ class Settings(BaseSettings):
     # Alert Cooldown (seconds) to prevent storm
     ALERT_COOLDOWN_SECONDS: int = 300
     
-    # CORS (Explicit trusted origins, no wildcard on credentialed API)
+    # CORS (Explicit trusted origins and dynamic regex for Vercel preview/production deployments)
+    CORS_ORIGIN_REGEX: str | None = os.getenv("CORS_ORIGIN_REGEX", r"^https:\/\/.*\.vercel\.app$")
     BACKEND_CORS_ORIGINS: list[str] = [
-        origin.strip() for origin in os.getenv(
-            "CORS_ORIGINS",
-            "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000"
+        origin.strip() for origin in (
+            os.getenv(
+                "CORS_ORIGINS",
+                "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000"
+            ) + (f",{os.getenv('FRONTEND_URL')}" if os.getenv("FRONTEND_URL") else "")
         ).split(",") if origin.strip()
     ]
 

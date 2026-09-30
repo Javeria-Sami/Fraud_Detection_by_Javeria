@@ -148,10 +148,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Telemetry & Request Correlation Middleware
 app.add_middleware(TelemetryMiddleware)
 
-# CORS Middleware (Hardened with explicit origins)
+# CORS Middleware (Hardened with explicit origins and Vercel preview domain matching)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origin_regex=settings.CORS_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],

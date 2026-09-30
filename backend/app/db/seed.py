@@ -24,7 +24,7 @@ from datetime import datetime, timezone, timedelta
 from sqlalchemy import select, insert
 
 from backend.app.core.database import AsyncSessionLocal, engine, Base, utc_now
-from backend.app.core.security import get_password_hash
+from backend.app.core.security import get_password_hash, verify_password
 from backend.app.models import (
     Role,
     Permission,
@@ -162,6 +162,14 @@ async def seed_database():
                     is_verified=True
                 )
                 session.add(u_obj)
+            else:
+                # Ensure existing users have valid hashes matching demo credentials and active status
+                if not verify_password(raw_pwd, u_obj.hashed_password):
+                    u_obj.hashed_password = get_password_hash(raw_pwd)
+                if not u_obj.is_active:
+                    u_obj.is_active = True
+                if r_name in role_map and u_obj.role_id != role_map[r_name].id:
+                    u_obj.role_id = role_map[r_name].id
             user_map[u_id] = u_obj
         await session.flush()
 
