@@ -80,21 +80,40 @@ class MLInferenceService:
 
     @classmethod
     def _ensure_model_loaded(cls):
-        """Ensures that a valid model is in memory. If not, fits fallback on synthetic data."""
-        if cls._cached_model is None or cls._cached_preprocessor is None:
-            # Generate synthetic fallback
-            from ml.datasets.synthetic_generator import generate_synthetic_transactions
-            from backend.app.engine.ml.trainer import MLTrainingService
-            from backend.app.engine.ml.types import MLTrainingConfig
+        """Ensures that a valid model is in memory. If not, fits fallback in memory without requiring disk writes."""
+        if cls._cached_model is not None and cls._cached_preprocessor is not None:
+            return
 
-            logger.warning("No active ML model found in memory. Generating fallback Isolation Forest model...")
-            df = generate_synthetic_transactions(num_samples=1000, anomaly_ratio=0.08, seed=42)
-            art_path, report, meta = MLTrainingService.train(
-                df=df,
-                config=MLTrainingConfig(n_estimators=100, random_state=42),
-                model_version="v1.0.0-fallback"
+        # 1. Try loading baseline v1.0.0 artifact from disk if available
+        try:
+            baseline_path = os.path.join(settings.MODEL_DIR, "isolation_forest_v1.0.0.joblib")
+            if os.path.exists(baseline_path):
+                cls.load_from_artifact(baseline_path, model_id="MODEL-ISOFOREST-v1.0.0")
+                return
+        except Exception as err:
+            logger.warning("Could not load baseline model from disk (%s). Falling back to in-memory model.", err)
+
+        # 2. Generate lightweight in-memory fallback model without requiring disk writes
+        try:
+            from ml.datasets.synthetic_generator import generate_synthetic_transactions
+            from backend.app.engine.ml.preprocessor import MLPreprocessor
+            from sklearn.ensemble import IsolationForest
+
+            logger.info("Initializing in-memory Isolation Forest model for serverless/cold-start runtime...")
+            df = generate_synthetic_transactions(num_samples=250, anomaly_ratio=0.08, seed=42)
+            preprocessor = MLPreprocessor()
+            X_train = preprocessor.fit_transform(df)
+            model = IsolationForest(n_estimators=50, contamination=0.08, random_state=42)
+            model.fit(X_train)
+            cls.load_model(
+                model_obj=model,
+                preprocessor=preprocessor,
+                version="v1.0.0-in-memory",
+                threshold=0.65,
+                model_id="MODEL-v1.0.0-in-memory"
             )
-            cls.load_from_artifact(art_path, model_id="MODEL-v1.0.0-fallback")
+        except Exception as e:
+            logger.error("Failed to initialize in-memory ML model: %s", e)
 
     @classmethod
     def predict(
