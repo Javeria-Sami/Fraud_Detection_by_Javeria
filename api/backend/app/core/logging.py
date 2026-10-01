@@ -125,25 +125,26 @@ def setup_structured_logging(
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     root_logger.setLevel(numeric_level)
 
-    # Remove existing handlers to avoid duplicate log outputs
-    for handler in list(root_logger.handlers):
-        root_logger.removeHandler(handler)
+    # In serverless/Lambda runtime, preserve platform root handlers
+    if not (os.getenv("AWS_LAMBDA_FUNCTION_NAME") or os.getenv("VERCEL") == "1"):
+        for handler in list(root_logger.handlers):
+            root_logger.removeHandler(handler)
 
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(numeric_level)
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(numeric_level)
 
-    if json_format:
-        formatter = StructuredJSONFormatter(
-            service_name=service_name,
-            environment=os.getenv("ENVIRONMENT", "DEVELOPMENT")
-        )
-    else:
-        formatter = logging.Formatter(
-            "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
-        )
+        if json_format:
+            formatter = StructuredJSONFormatter(
+                service_name=service_name,
+                environment=os.getenv("ENVIRONMENT", "DEVELOPMENT")
+            )
+        else:
+            formatter = logging.Formatter(
+                "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
+            )
 
-    handler.setFormatter(formatter)
-    root_logger.addHandler(handler)
+        handler.setFormatter(formatter)
+        root_logger.addHandler(handler)
 
 
 def get_logger(name: str) -> logging.Logger:
