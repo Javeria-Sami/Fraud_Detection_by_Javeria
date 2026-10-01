@@ -35,9 +35,25 @@ if not os.getenv("DATABASE_URL") or (os.getenv("VERCEL") == "1" or os.getenv("AW
         os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:////{clean_path}"
         os.environ["SYNC_DATABASE_URL"] = f"sqlite:////{clean_path}"
 
-from backend.app.main import app
+try:
+    from backend.app.main import app
+except Exception as exc:
+    err_tb = traceback.format_exc()
+    print(f"[api/index.py FATAL ERROR] Failed to load FastAPI app: {exc}\n{err_tb}", file=sys.stderr)
+    from fastapi import FastAPI
+    from fastapi.responses import JSONResponse
+    app = FastAPI(title="Error Fallback")
+    
+    @app.api_route("/{path_param:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
+    async def fallback_error_handler(path_param: str):
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "ServerlessInitializationError",
+                "detail": str(exc),
+                "traceback": err_tb
+            }
+        )
 
-# For @vercel/python runtime, export the FastAPI instance as 'app'
+# Export FastAPI instance 'app' for @vercel/python ASGI runtime
 __all__ = ["app"]
-
-
