@@ -64,11 +64,22 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
         
     # Pre-load ML Engine
-    from backend.app.engine.ml.service import MLInferenceService
-    MLInferenceService._ensure_model_loaded()
+    try:
+        from backend.app.engine.ml.service import MLInferenceService
+        MLInferenceService._ensure_model_loaded()
+    except Exception:
+        pass
     
-    # Seed Database
-    await seed_initial_database()
+    # Seed Database only if empty
+    try:
+        from backend.app.models.user import User
+        from sqlalchemy import select, func
+        async with AsyncSessionLocal() as session:
+            cnt = await session.scalar(select(func.count()).select_from(User))
+            if not cnt:
+                await seed_initial_database()
+    except Exception:
+        pass
     
     yield
     

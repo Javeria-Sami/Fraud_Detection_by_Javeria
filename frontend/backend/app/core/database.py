@@ -68,12 +68,17 @@ async def ensure_db_initialized():
             return
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+        _db_initialized = True
         try:
-            from backend.app.db.seed import seed_database
-            await seed_database()
+            from backend.app.models.user import User
+            from sqlalchemy import select, func
+            async with AsyncSessionLocal() as session:
+                cnt = await session.scalar(select(func.count()).select_from(User))
+                if not cnt:
+                    from backend.app.db.seed import seed_database
+                    await seed_database()
         except Exception:
             pass
-        _db_initialized = True
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency for obtaining async database session."""
