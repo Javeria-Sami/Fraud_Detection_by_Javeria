@@ -35,44 +35,9 @@ if not os.getenv("DATABASE_URL") or (os.getenv("VERCEL") == "1" or os.getenv("AW
         os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:////{clean_path}"
         os.environ["SYNC_DATABASE_URL"] = f"sqlite:////{clean_path}"
 
-try:
-    from backend.app.main import app
-    try:
-        from mangum import Mangum
-        handler = Mangum(app, lifespan="off")
-    except Exception:
-        handler = app
-except Exception as exc:
-    err_tb = traceback.format_exc()
-    print(f"[api/index.py FATAL ERROR] Failed to load FastAPI app: {exc}\n{err_tb}", file=sys.stderr)
-    try:
-        from fastapi import FastAPI
-        from fastapi.responses import JSONResponse
-        app = FastAPI(title="Error Fallback")
-        @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
-        async def fallback_error_handler(path: str):
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "error": "ServerlessInitializationError",
-                    "detail": str(exc),
-                    "traceback": err_tb
-                }
-            )
-        handler = app
-    except Exception:
-        from http.server import BaseHTTPRequestHandler
-        import json
-        class FallbackHandler(BaseHTTPRequestHandler):
-            def do_GET(self):
-                self.send_response(500)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": "FallbackHandler", "detail": str(exc), "traceback": err_tb}).encode('utf-8'))
-            def do_POST(self):
-                self.do_GET()
-        handler = FallbackHandler
-        app = FallbackHandler
+from backend.app.main import app
 
-__all__ = ["app", "handler"]
+# For @vercel/python runtime, export the FastAPI instance as 'app'
+__all__ = ["app"]
+
 
