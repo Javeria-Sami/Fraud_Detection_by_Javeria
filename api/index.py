@@ -14,14 +14,14 @@ if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
 # Configure writable /tmp SQLite database if running in Vercel serverless environment without external Postgres
-if (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")) and not os.getenv("DATABASE_URL"):
+if not os.getenv("DATABASE_URL") or (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")):
     import tempfile
     import shutil
     tmp_dir = tempfile.gettempdir()
     tmp_db = os.path.abspath(os.path.join(tmp_dir, "fraud_detection.db"))
-    root_db = os.path.abspath(os.path.join(ROOT_DIR, "fraud_detection.db"))
     api_db = os.path.abspath(os.path.join(CURRENT_DIR, "fraud_detection.db"))
-    source_db = root_db if os.path.exists(root_db) else (api_db if os.path.exists(api_db) else None)
+    root_db = os.path.abspath(os.path.join(ROOT_DIR, "fraud_detection.db"))
+    source_db = api_db if os.path.exists(api_db) else (root_db if os.path.exists(root_db) else None)
     if not os.path.exists(tmp_db) and source_db:
         try:
             shutil.copyfile(source_db, tmp_db)

@@ -69,7 +69,13 @@ class RealtimeConnectionManager:
     def __init__(self, config: Optional[EventSystemConfig] = None):
         self.config = config or default_event_config
         self._sessions: Dict[WebSocket, ClientSession] = {}
-        self._lock = asyncio.Lock()
+        self._lock: Optional[asyncio.Lock] = None
+
+    @property
+    def lock(self) -> asyncio.Lock:
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+        return self._lock
 
     @property
     def active_connection_count(self) -> int:
@@ -111,7 +117,7 @@ class RealtimeConnectionManager:
             subscriptions=subscriptions
         )
 
-        async with self._lock:
+        async with self.lock:
             self._sessions[websocket] = session
             metrics_tracker.record_connect()
 
@@ -120,7 +126,7 @@ class RealtimeConnectionManager:
 
     async def remove_connection(self, websocket: WebSocket):
         """Removes a client session upon disconnect."""
-        async with self._lock:
+        async with self.lock:
             if websocket in self._sessions:
                 session = self._sessions.pop(websocket)
                 metrics_tracker.record_disconnect()
@@ -163,7 +169,7 @@ class RealtimeConnectionManager:
         metrics_tracker.record_publish(event_type)
 
         # Snapshot active sessions
-        async with self._lock:
+        async with self.lock:
             sessions_snapshot = list(self._sessions.items())
 
         if not sessions_snapshot:
@@ -216,7 +222,7 @@ class RealtimeConnectionManager:
     async def graceful_shutdown(self):
         """Closes all active client connections during application shutdown."""
         logger.info("Initiating graceful shutdown for %d active WebSocket connections.", len(self._sessions))
-        async with self._lock:
+        async with self.lock:
             for ws in list(self._sessions.keys()):
                 try:
                     await ws.send_json({"event_type": "system.shutdown", "message": "Server shutting down."})

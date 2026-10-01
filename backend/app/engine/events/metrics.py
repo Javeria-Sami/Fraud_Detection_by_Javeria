@@ -10,7 +10,6 @@ import asyncio
 class RealtimeMetrics:
     """In-memory telemetry tracker for real-time WebSocket connection performance and broadcast events."""
     def __init__(self):
-        self._lock = asyncio.Lock()
         self.active_connections: int = 0
         self.peak_connections: int = 0
         self.total_connections_opened: int = 0

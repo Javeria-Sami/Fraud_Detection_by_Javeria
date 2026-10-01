@@ -59,32 +59,37 @@ async def seed_initial_database():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize DB Schema
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    if not (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")):
+        # Initialize DB Schema
+        try:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+        except Exception:
+            pass
+            
+        # Pre-load ML Engine
+        try:
+            from backend.app.engine.ml.service import MLInferenceService
+            MLInferenceService._ensure_model_loaded()
+        except Exception:
+            pass
         
-    # Pre-load ML Engine
-    try:
-        from backend.app.engine.ml.service import MLInferenceService
-        MLInferenceService._ensure_model_loaded()
-    except Exception:
-        pass
-    
-    # Seed Database only if empty
-    try:
-        from backend.app.models.user import User
-        from sqlalchemy import select, func
-        async with AsyncSessionLocal() as session:
-            cnt = await session.scalar(select(func.count()).select_from(User))
-            if not cnt:
-                await seed_initial_database()
-    except Exception:
-        pass
+        # Seed Database only if empty
+        try:
+            from backend.app.models.user import User
+            from sqlalchemy import select, func
+            async with AsyncSessionLocal() as session:
+                cnt = await session.scalar(select(func.count()).select_from(User))
+                if not cnt:
+                    await seed_initial_database()
+        except Exception:
+            pass
     
     yield
     
-    # Teardown
-    await engine.dispose()
+    # Teardown (only for long-running non-serverless processes)
+    if not (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")):
+        await engine.dispose()
 
 logger = logging.getLogger("fraudshield_api")
 
