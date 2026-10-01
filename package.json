@@ -1,0 +1,9 @@
+{
+  "name": "fraudshield",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "typecheck": "cd frontend && npm run typecheck"
+  }
+}
