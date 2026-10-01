@@ -196,3 +196,51 @@ app.include_router(simulator_router, prefix=settings.API_V1_STR)
 app.include_router(search_router, prefix=settings.API_V1_STR)
 app.include_router(ws_router, prefix=settings.API_V1_STR)
 app.include_router(ws_router) # Also mount directly at /ws/live for convenience
+
+# ---------------------------------------------------------------------------
+# Section 26: Frontend SPA Serving & Fallback Routing
+# ---------------------------------------------------------------------------
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
+
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+_repo_root = os.path.abspath(os.path.join(_current_dir, "..", ".."))
+_frontend_dist = os.path.join(_repo_root, "frontend", "dist")
+
+if os.path.isdir(_frontend_dist):
+    _assets_dir = os.path.join(_frontend_dist, "assets")
+    if os.path.isdir(_assets_dir):
+        app.mount("/assets", StaticFiles(directory=_assets_dir), name="spa-assets")
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_spa_fallback(full_path: str):
+    # Do not intercept API, health, docs, or websocket routes
+    if full_path.startswith(("api/", "health", "docs", "openapi.json", "redoc", "ws")):
+        return JSONResponse(status_code=404, content={"detail": f"Route /{full_path} not found"})
+
+    if os.path.isdir(_frontend_dist):
+        potential_file = os.path.abspath(os.path.join(_frontend_dist, full_path))
+        if os.path.exists(potential_file) and os.path.isfile(potential_file) and potential_file.startswith(_frontend_dist):
+            return FileResponse(potential_file)
+
+        index_file = os.path.join(_frontend_dist, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+
+    # Fallback minimal HTML shell if dist not present
+    return HTMLResponse(
+        content='''<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/shield.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FraudShield — Real-Time Fraud & Anomaly Detection Platform</title>
+  </head>
+  <body class="bg-[#0b0f19] text-slate-100 font-sans antialiased">
+    <div id="root"></div>
+  </body>
+</html>''',
+        status_code=200
+    )
+
