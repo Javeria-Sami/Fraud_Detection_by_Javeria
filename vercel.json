@@ -4,7 +4,12 @@
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.py": {
-      "includeFiles": "backend/**,ml/**,fraud_detection.db"
+      "includeFiles": [
+        "backend/**",
+        "ml/**",
+        "simulator/**",
+        "fraud_detection.db"
+      ]
     }
   },
   "rewrites": [
