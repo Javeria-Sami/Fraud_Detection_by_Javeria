@@ -12,6 +12,7 @@ Responsibilities:
 7. Persist audit-ready records in `ml_predictions`.
 8. Provide batch inference for backtesting and evaluation.
 """
+import os
 import time
 import uuid
 import logging
