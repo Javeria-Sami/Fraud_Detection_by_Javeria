@@ -2,8 +2,32 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/health(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/docs(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/frontend/assets/$1"
+    },
+    {
+      "source": "/shield.svg",
+      "destination": "/frontend/shield.svg"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/api"
+      "destination": "/frontend/index.html"
     }
   ]
 }
