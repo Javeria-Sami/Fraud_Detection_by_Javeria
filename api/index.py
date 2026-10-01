@@ -35,23 +35,35 @@ if (os.getenv("VERCEL") == "1" or os.getenv("AWS_LAMBDA_FUNCTION_NAME")) and not
 
 try:
     from backend.app.main import app
-    handler = app
 except Exception as exc:
-    print(f"[api/index.py FATAL ERROR] Failed to load FastAPI app: {exc}", file=sys.stderr)
-    traceback.print_exc()
-    from fastapi import FastAPI
-    from fastapi.responses import JSONResponse
-    app = FastAPI(title="Error Fallback")
-    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
-    async def fallback_error_handler(path: str):
-        return JSONResponse(
-            status_code=500,
-            content={
-                "error": "ServerlessFunctionInitializationError",
-                "detail": str(exc),
-                "traceback": traceback.format_exc()
-            }
-        )
-    handler = app
+    err_tb = traceback.format_exc()
+    print(f"[api/index.py FATAL ERROR] Failed to load FastAPI app: {exc}\n{err_tb}", file=sys.stderr)
+    try:
+        from fastapi import FastAPI
+        from fastapi.responses import JSONResponse
+        app = FastAPI(title="Error Fallback")
+        @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
+        async def fallback_error_handler(path: str):
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "error": "ServerlessInitializationError",
+                    "detail": str(exc),
+                    "traceback": err_tb
+                }
+            )
+    except Exception:
+        from http.server import BaseHTTPRequestHandler
+        import json
+        class FallbackHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "FallbackHandler", "detail": str(exc), "traceback": err_tb}).encode('utf-8'))
+            def do_POST(self):
+                self.do_GET()
+        app = FallbackHandler
 
+handler = app
 __all__ = ["app", "handler"]
