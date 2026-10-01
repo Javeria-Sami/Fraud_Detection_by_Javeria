@@ -2,29 +2,26 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm --prefix frontend install && npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "src": "/health",
-      "dest": "/api/index.py"
+      "source": "/health",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/docs",
-      "dest": "/api/index.py"
+      "source": "/docs",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/openapi.json",
-      "dest": "/api/index.py"
+      "source": "/openapi.json",
+      "destination": "/api/index.py"
     },
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/.*",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
