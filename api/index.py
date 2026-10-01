@@ -37,6 +37,11 @@ if not os.getenv("DATABASE_URL") or (os.getenv("VERCEL") == "1" or os.getenv("AW
 
 try:
     from backend.app.main import app
+    try:
+        from mangum import Mangum
+        handler = Mangum(app, lifespan="off")
+    except Exception:
+        handler = app
 except Exception as exc:
     err_tb = traceback.format_exc()
     print(f"[api/index.py FATAL ERROR] Failed to load FastAPI app: {exc}\n{err_tb}", file=sys.stderr)
@@ -54,6 +59,7 @@ except Exception as exc:
                     "traceback": err_tb
                 }
             )
+        handler = app
     except Exception:
         from http.server import BaseHTTPRequestHandler
         import json
@@ -65,7 +71,8 @@ except Exception as exc:
                 self.wfile.write(json.dumps({"error": "FallbackHandler", "detail": str(exc), "traceback": err_tb}).encode('utf-8'))
             def do_POST(self):
                 self.do_GET()
+        handler = FallbackHandler
         app = FallbackHandler
 
-handler = app
 __all__ = ["app", "handler"]
+
