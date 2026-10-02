@@ -64,6 +64,16 @@ async def login(
     result = await db.execute(stmt)
     user = result.scalar_one_or_none()
 
+    # If user not found, auto-seed default dataset to support instant demo access
+    if not user:
+        try:
+            from backend.app.db.seed import seed_database
+            await seed_database()
+            result = await db.execute(stmt)
+            user = result.scalar_one_or_none()
+        except Exception:
+            pass
+
     # Generic invalid credentials message to prevent account enumeration
     if not user or not verify_password(credentials.password, user.hashed_password):
         await AuditService.log_action(
