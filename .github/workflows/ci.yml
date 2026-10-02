@@ -107,6 +107,11 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
+      - name: Stop Host PostgreSQL Service (Avoid Port Conflicts)
+        run: |
+          sudo systemctl stop postgresql.service || true
+          sudo systemctl disable postgresql.service || true
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:

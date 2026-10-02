@@ -1,12 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
     },
     {
-      "source": "/health(.*)",
+      "source": "/health/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/health",
       "destination": "/api/index.py"
     },
     {
@@ -18,16 +23,8 @@
       "destination": "/api/index.py"
     },
     {
-      "source": "/assets/(.*)",
-      "destination": "/frontend/assets/$1"
-    },
-    {
-      "source": "/shield.svg",
-      "destination": "/frontend/shield.svg"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/frontend/index.html"
+      "destination": "/index.html"
     }
   ]
 }

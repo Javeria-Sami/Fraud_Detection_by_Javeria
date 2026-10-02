@@ -94,7 +94,7 @@ class AuditLog(Base):
         return self.result
 
     @property
-    def metadata(self) -> dict:
+    def metadata_dict(self) -> dict:
         return self.metadata_json or {}
 
 

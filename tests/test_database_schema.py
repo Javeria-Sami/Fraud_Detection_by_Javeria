@@ -42,13 +42,17 @@ from backend.app.models import (
     SystemSetting
 )
 
+from sqlalchemy.pool import StaticPool
 import pytest_asyncio
-
-TEST_DB_URL = "sqlite+aiosqlite:///:memory:"
 
 @pytest_asyncio.fixture
 async def db_session():
-    test_engine = create_async_engine(TEST_DB_URL, echo=False)
+    test_engine = create_async_engine(
+        "sqlite+aiosqlite:///:memory:",
+        echo=False,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
+    )
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         
@@ -61,6 +65,8 @@ async def db_session():
     async with TestSessionLocal() as session:
         yield session
         
+    async with test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
     await test_engine.dispose()
 
 @pytest.mark.asyncio
@@ -72,9 +78,13 @@ async def test_database_connection_and_table_creation(db_session: AsyncSession):
 @pytest.mark.asyncio
 async def test_roles_and_permissions_many_to_many(db_session: AsyncSession):
     """Test 2: Verify Roles, Permissions, and Many-to-Many associations."""
-    perm1 = Permission(id=str(uuid.uuid4()), name="transaction.read", description="Read txns")
-    perm2 = Permission(id=str(uuid.uuid4()), name="transaction.update", description="Update txns")
-    role = Role(id=str(uuid.uuid4()), name="TEST_ROLE", description="Test role")
+    uid = uuid.uuid4().hex[:8]
+    pname1 = f"test.perm.read.{uid}"
+    pname2 = f"test.perm.update.{uid}"
+    rname = f"TEST_ROLE_{uid}"
+    perm1 = Permission(id=str(uuid.uuid4()), name=pname1, description="Read txns")
+    perm2 = Permission(id=str(uuid.uuid4()), name=pname2, description="Update txns")
+    role = Role(id=str(uuid.uuid4()), name=rname, description="Test role")
     
     db_session.add_all([perm1, perm2, role])
     await db_session.flush()
@@ -88,22 +98,23 @@ async def test_roles_and_permissions_many_to_many(db_session: AsyncSession):
     
     # Query back
     from sqlalchemy.orm import selectinload
-    stmt = select(Role).options(selectinload(Role.permissions)).where(Role.name == "TEST_ROLE")
+    stmt = select(Role).options(selectinload(Role.permissions)).where(Role.name == rname)
     retrieved_role = (await db_session.execute(stmt)).scalar_one()
     assert len(retrieved_role.permissions) == 2
-    assert any(p.name == "transaction.read" for p in retrieved_role.permissions)
+    assert any(p.name == pname1 for p in retrieved_role.permissions)
 
 @pytest.mark.asyncio
 async def test_user_creation_and_uniqueness_constraints(db_session: AsyncSession):
     """Test 3: Verify User creation, role foreign key, and email/username unique constraints."""
-    role = Role(id=str(uuid.uuid4()), name="ANALYST_ROLE")
+    uid = uuid.uuid4().hex[:8]
+    role = Role(id=str(uuid.uuid4()), name=f"ANALYST_ROLE_{uid}")
     db_session.add(role)
     await db_session.flush()
     
     user1 = User(
         id=str(uuid.uuid4()),
-        email="test.analyst@fraudshield.io",
-        username="analyst_test",
+        email=f"test.analyst.{uid}@fraudshield.io",
+        username=f"analyst_test_{uid}",
         full_name="Test Analyst",
         hashed_password="secure_hash_pwd",
         role_id=role.id,
@@ -115,8 +126,8 @@ async def test_user_creation_and_uniqueness_constraints(db_session: AsyncSession
     # Test email uniqueness violation
     duplicate_email_user = User(
         id=str(uuid.uuid4()),
-        email="test.analyst@fraudshield.io", # Duplicate
-        username="unique_username_2",
+        email=f"test.analyst.{uid}@fraudshield.io", # Duplicate
+        username=f"unique_username_2_{uid}",
         full_name="Another User",
         hashed_password="hashed_password"
     )
