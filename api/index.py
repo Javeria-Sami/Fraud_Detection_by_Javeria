@@ -55,5 +55,11 @@ except Exception as exc:
             }
         )
 
-# Export FastAPI instance 'app' for @vercel/python ASGI runtime
-__all__ = ["app"]
+try:
+    from mangum import Mangum
+    handler = Mangum(app, lifespan="off")
+except Exception:
+    handler = app
+
+# Export FastAPI instance 'app' and lambda 'handler' for @vercel/python
+__all__ = ["app", "handler"]
