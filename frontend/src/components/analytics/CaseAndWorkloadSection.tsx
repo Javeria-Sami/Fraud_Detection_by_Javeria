@@ -49,23 +49,24 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
       <div className="space-y-6 animate-pulse">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-xl h-24 p-4" />
+            <div key={i} className="bg-soc-card border border-soc-border rounded-2xl h-24 p-4 shadow-sm" />
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl h-80 p-5" />
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl h-80 p-5" />
+          <div className="bg-soc-card border border-soc-border rounded-2xl h-80 p-5 shadow-sm" />
+          <div className="bg-soc-card border border-soc-border rounded-2xl h-80 p-5 shadow-sm" />
         </div>
       </div>
     );
   }
 
   const customTooltipStyle = {
-    backgroundColor: '#0f172a',
-    borderColor: '#334155',
-    borderRadius: '0.5rem',
-    color: '#f8fafc',
+    backgroundColor: 'var(--soc-card, #FFFFFF)',
+    borderColor: 'var(--soc-border, #E2E8F0)',
+    borderRadius: '0.75rem',
+    color: 'var(--soc-foreground, #0F172A)',
     fontSize: '0.75rem',
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
   };
 
   const totalCases = data?.total_cases ?? 0;
@@ -79,76 +80,76 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
     <div className="space-y-6">
       {/* Case Lifecycle Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:border-blue-500/30 transition-all">
+          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-600 dark:text-cyan-400">
             <FolderOpen className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
               Total Cases
             </div>
-            <div className="text-2xl font-bold text-white mt-1">{totalCases}</div>
-            <div className="text-[11px] text-slate-500">Recorded dossiers</div>
+            <div className="text-2xl font-bold text-soc-foreground mt-1 font-mono">{totalCases}</div>
+            <div className="text-[11px] text-soc-muted">Recorded dossiers</div>
           </div>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:border-blue-500/30 transition-all">
+          <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400">
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
               Active Investigation
             </div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-2xl font-bold text-soc-foreground mt-1 font-mono">
               {openCases + investigatingCases}
             </div>
-            <div className="text-[11px] text-amber-400">{investigatingCases} in triage</div>
+            <div className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">{investigatingCases} in triage</div>
           </div>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:border-blue-500/30 transition-all">
+          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
               Resolved Cases
             </div>
-            <div className="text-2xl font-bold text-white mt-1">{resolvedCases}</div>
-            <div className="text-[11px] text-slate-500">{closedCases} archived</div>
+            <div className="text-2xl font-bold text-soc-foreground mt-1 font-mono">{resolvedCases}</div>
+            <div className="text-[11px] text-soc-muted">{closedCases} archived</div>
           </div>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:border-blue-500/30 transition-all">
+          <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-600 dark:text-purple-400">
             <Briefcase className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
               Resolution Rate
             </div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-2xl font-bold text-soc-foreground mt-1 font-mono">
               {resolutionRate}%
             </div>
-            <div className="text-[11px] text-slate-500">Pipeline completion</div>
+            <div className="text-[11px] text-soc-muted">Pipeline completion</div>
           </div>
         </div>
       </div>
 
       {/* Case Trend Over Time */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+      <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               <span>Case Creation vs. Resolution Timeline</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-soc-muted mt-0.5">
               Investigation intake compared against closed findings
             </p>
           </div>
-          <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
+          <span className="text-xs text-soc-muted bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg border border-soc-border font-medium">
             {data.case_trend?.length || 0} Intervals
           </span>
         </div>
@@ -157,9 +158,9 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
           {data.case_trend && data.case_trend.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.case_trend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={10} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" />
+                <XAxis dataKey="time" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <Tooltip contentStyle={customTooltipStyle} />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                 <Line
@@ -167,21 +168,21 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                   dataKey="created_count"
                   name="Cases Opened"
                   stroke="#3B82F6"
-                  strokeWidth={2}
-                  dot={{ r: 2 }}
+                  strokeWidth={2.5}
+                  dot={{ r: 3 }}
                 />
                 <Line
                   type="monotone"
                   dataKey="resolved_count"
                   name="Cases Resolved"
                   stroke="#10B981"
-                  strokeWidth={2}
-                  dot={{ r: 2 }}
+                  strokeWidth={2.5}
+                  dot={{ r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-xs text-slate-500">
+            <div className="flex items-center justify-center h-full text-xs text-soc-muted">
               No case timeline data available
             </div>
           )}
@@ -190,13 +191,13 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Case Resolution Distribution */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm flex flex-col justify-between">
           <div className="mb-4">
-            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Resolution Findings Outcome</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-soc-muted mt-0.5">
               Breakdown by fraud verification result
             </p>
           </div>
@@ -236,7 +237,7 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-full w-full text-xs text-slate-500">
+              <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No resolution finding records
               </div>
             )}
@@ -244,19 +245,19 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
         </div>
 
         {/* Analyst Workload Table */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm flex flex-col justify-between">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-purple-400" />
+              <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+                <UserCheck className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 <span>Analyst Workload Distribution</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Active investigation caseload per security analyst
               </p>
             </div>
             {!data.analyst_workload && (
-              <span className="flex items-center gap-1 text-[11px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+              <span className="flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20 font-medium">
                 <Lock className="w-3 h-3" /> RBAC Restricted
               </span>
             )}
@@ -266,25 +267,25 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
             {data.analyst_workload && data.analyst_workload.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400">
-                    <th className="pb-2 font-medium">Analyst</th>
-                    <th className="pb-2 font-medium">Assigned</th>
-                    <th className="pb-2 font-medium">Open / Active</th>
-                    <th className="pb-2 font-medium">Resolved</th>
+                  <tr className="border-b border-soc-border text-soc-muted">
+                    <th className="pb-2 font-semibold">Analyst</th>
+                    <th className="pb-2 font-semibold">Assigned</th>
+                    <th className="pb-2 font-semibold">Open / Active</th>
+                    <th className="pb-2 font-semibold">Resolved</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-soc-border">
                   {data.analyst_workload.map((analyst: any, idx: number) => (
-                    <tr key={analyst.analyst_name || analyst.analyst_email || `analyst-${idx}`} className="hover:bg-slate-800/40">
-                      <td className="py-2.5 font-medium text-white flex items-center gap-1.5">
-                        <UserCheck className="w-3.5 h-3.5 text-blue-400" />
+                    <tr key={analyst.analyst_name || analyst.analyst_email || `analyst-${idx}`} className="hover:bg-blue-50/60 dark:hover:bg-soc-hover/40 transition-colors">
+                      <td className="py-2.5 font-medium text-soc-foreground flex items-center gap-1.5">
+                        <UserCheck className="w-3.5 h-3.5 text-blue-500" />
                         <span>{analyst.analyst_name || analyst.analyst_email || 'SecOps Analyst'}</span>
                       </td>
-                      <td className="py-2.5 text-slate-300">{analyst.assigned_cases ?? analyst.active_cases ?? 0}</td>
-                      <td className="py-2.5 font-semibold text-amber-400">
+                      <td className="py-2.5 text-soc-text-secondary font-mono">{analyst.assigned_cases ?? analyst.active_cases ?? 0}</td>
+                      <td className="py-2.5 font-semibold font-mono text-amber-600 dark:text-amber-400">
                         {analyst.open_cases ?? analyst.active_cases ?? 0}
                       </td>
-                      <td className="py-2.5 font-semibold text-emerald-400">
+                      <td className="py-2.5 font-semibold font-mono text-emerald-600 dark:text-emerald-400">
                         {analyst.resolved_cases ?? 0}
                       </td>
                     </tr>
@@ -292,8 +293,8 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                 </tbody>
               </table>
             ) : (
-              <div className="flex flex-col items-center justify-center h-48 text-xs text-slate-500 gap-2">
-                <Lock className="w-6 h-6 text-slate-600" />
+              <div className="flex flex-col items-center justify-center h-48 text-xs text-soc-muted gap-2">
+                <Lock className="w-6 h-6 text-soc-muted opacity-60" />
                 <span>Analyst workload data requires Analyst or Admin role privileges</span>
               </div>
             )}

@@ -36,19 +36,20 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-pulse">
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl h-80 p-5" />
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl h-80 p-5" />
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl h-80 p-5 lg:col-span-2" />
+        <div className="bg-soc-card border border-soc-border rounded-2xl h-80 p-5" />
+        <div className="bg-soc-card border border-soc-border rounded-2xl h-80 p-5" />
+        <div className="bg-soc-card border border-soc-border rounded-2xl h-80 p-5 lg:col-span-2" />
       </div>
     );
   }
 
   const customTooltipStyle = {
-    backgroundColor: '#0f172a',
-    borderColor: '#334155',
-    borderRadius: '0.5rem',
-    color: '#f8fafc',
+    backgroundColor: 'var(--soc-card, #FFFFFF)',
+    borderColor: 'var(--soc-border, #E2E8F0)',
+    borderRadius: '0.75rem',
+    color: 'var(--soc-foreground, #0F172A)',
     fontSize: '0.75rem',
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
   };
 
   const getHistogramColor = (minScore: number) => {
@@ -72,44 +73,44 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
     <div className="space-y-6">
       {/* Top Metric Header */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+          <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-500">
             <Gauge className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-bold text-soc-muted uppercase tracking-wider">
               Average Risk Score
             </div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-2xl font-bold font-mono text-soc-foreground mt-1">
               {avgScore.toFixed(1)}{' '}
-              <span className="text-xs font-normal text-slate-400">/ 100</span>
+              <span className="text-xs font-normal text-soc-muted">/ 100</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+          <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-500">
             <Activity className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-bold text-soc-muted uppercase tracking-wider">
               Scored Transactions
             </div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-2xl font-bold font-mono text-soc-foreground mt-1">
               {scoredTxns.toLocaleString()}
             </div>
           </div>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex items-center gap-4">
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="text-xs font-bold text-soc-muted uppercase tracking-wider">
               Elevated Risk Ratio
             </div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-2xl font-bold font-mono text-soc-foreground mt-1">
               {elevatedRatio.toFixed(1)}%
             </div>
           </div>
@@ -118,14 +119,14 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Risk Level Tier Distribution */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-amber-500" />
                 <span>Risk Level Tier Distribution</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Proportion of transactions classified by risk tier
               </p>
             </div>
@@ -148,7 +149,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                     {data.risk_level_distribution.map((entry) => (
                       <Cell
                         key={`cell-${entry.risk_level}`}
-                        fill={RISK_COLORS[entry.risk_level] || '#6B7280'}
+                        fill={RISK_COLORS[entry.risk_level] || '#64748B'}
                       />
                     ))}
                   </Pie>
@@ -166,7 +167,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-full w-full text-xs text-slate-500">
+              <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No risk tier data available
               </div>
             )}
@@ -174,14 +175,14 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
         </div>
 
         {/* 0-100 Risk Score Histogram */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                <BarChart2 className="w-4 h-4 text-blue-400" />
+              <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+                <BarChart2 className="w-4 h-4 text-blue-500" />
                 <span>0–100 Risk Score Frequency Distribution</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Decile histogram of scored transactions
               </p>
             </div>
@@ -194,11 +195,11 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                   data={data.risk_histogram}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                  <XAxis dataKey="bucket" stroke="#64748b" fontSize={10} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" vertical={false} />
+                  <XAxis dataKey="bucket" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} />
                   <Tooltip contentStyle={customTooltipStyle} />
-                  <Bar dataKey="count" name="Frequency" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="count" name="Frequency" radius={[6, 6, 0, 0]}>
                     {data.risk_histogram.map((bucket, index) => (
                       <Cell key={`hist-${index}`} fill={getHistogramColor(bucket.min_score)} />
                     ))}
@@ -206,7 +207,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-full text-xs text-slate-500">
+              <div className="flex items-center justify-center h-full text-xs text-soc-muted">
                 No histogram data available
               </div>
             )}
@@ -215,18 +216,18 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
       </div>
 
       {/* Risk Trend Timeline */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+      <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-              <Activity className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+              <Activity className="w-4 h-4 text-emerald-500" />
               <span>Risk Severity & Average Score Trend</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-soc-muted mt-0.5">
               Evolution of average risk score alongside high & critical volume
             </p>
           </div>
-          <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
+          <span className="text-xs font-mono font-semibold text-soc-muted bg-soc-surface border border-soc-border px-2.5 py-1 rounded-lg">
             {data.risk_trend?.length || 0} Intervals
           </span>
         </div>
@@ -235,10 +236,10 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
           {data.risk_trend && data.risk_trend.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.risk_trend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={10} tickLine={false} />
-                <YAxis yAxisId="left" stroke="#64748b" fontSize={10} tickLine={false} domain={[0, 100]} />
-                <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={10} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" />
+                <XAxis dataKey="time" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                <YAxis yAxisId="left" stroke="#94a3b8" fontSize={10} tickLine={false} domain={[0, 100]} />
+                <YAxis yAxisId="right" orientation="right" stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <Tooltip contentStyle={customTooltipStyle} />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                 <Line
@@ -247,7 +248,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                   dataKey="avg_risk_score"
                   name="Avg Risk (0-100)"
                   stroke="#10B981"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   dot={{ r: 2 }}
                 />
                 <Line
@@ -256,7 +257,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                   dataKey="high_risk_count"
                   name="High Risk Count"
                   stroke="#F97316"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   dot={{ r: 2 }}
                 />
                 <Line
@@ -265,13 +266,13 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                   dataKey="critical_risk_count"
                   name="Critical Risk Count"
                   stroke="#EF4444"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   dot={{ r: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-xs text-slate-500">
+            <div className="flex items-center justify-center h-full text-xs text-soc-muted">
               No trend data available
             </div>
           )}
