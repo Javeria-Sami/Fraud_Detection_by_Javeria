@@ -17,16 +17,28 @@ interface Props {
 }
 
 export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVersion }) => {
-  const missingEntries = Object.entries(dataQuality.missing_rates || {}).filter(
+  const safeDq = dataQuality || {
+    total_records: 0,
+    features_monitored: 0,
+    missing_rates: {},
+    nan_counts: {},
+    inf_counts: {},
+    out_of_bounds_counts: {},
+    freshness_lag_seconds: 0,
+    data_freshness_status: 'FRESH',
+    has_schema_issues: false,
+  };
+
+  const missingEntries = Object.entries(safeDq.missing_rates || {}).filter(
     ([, rate]) => rate > 0
   );
-  const nanEntries = Object.entries(dataQuality.nan_counts || {}).filter(
+  const nanEntries = Object.entries(safeDq.nan_counts || {}).filter(
     ([, count]) => count > 0
   );
-  const infEntries = Object.entries(dataQuality.inf_counts || {}).filter(
+  const infEntries = Object.entries(safeDq.inf_counts || {}).filter(
     ([, count]) => count > 0
   );
-  const oobEntries = Object.entries(dataQuality.out_of_bounds_counts || {}).filter(
+  const oobEntries = Object.entries(safeDq.out_of_bounds_counts || {}).filter(
     ([, count]) => count > 0
   );
 
@@ -47,7 +59,7 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-            {dataQuality.total_records} Records Evaluated
+            {safeDq.total_records ?? 0} Records Evaluated
           </span>
         </div>
       </div>
@@ -63,16 +75,16 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
             </span>
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                dataQuality.data_freshness_status === 'FRESH'
+                safeDq.data_freshness_status === 'FRESH'
                   ? 'bg-emerald-500/20 text-emerald-400'
                   : 'bg-amber-500/20 text-amber-400'
               }`}
             >
-              {dataQuality.data_freshness_status}
+              {safeDq.data_freshness_status || 'FRESH'}
             </span>
           </div>
           <div className="mt-2 text-base font-bold font-mono text-white">
-            {formatLag(dataQuality.freshness_lag_seconds)}
+            {formatLag(safeDq.freshness_lag_seconds ?? 0)}
           </div>
           <p className="text-[10px] text-slate-500 mt-0.5">Time since latest transaction event</p>
         </div>
@@ -84,7 +96,7 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
               <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
               <span>Schema Version</span>
             </span>
-            {!dataQuality.has_schema_issues ? (
+            {!safeDq.has_schema_issues ? (
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">
                 COMPATIBLE
               </span>

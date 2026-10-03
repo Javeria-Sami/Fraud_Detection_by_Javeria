@@ -52,10 +52,12 @@ async def get_mlops_health_summary(
         # Fallback to any model
         model = (await db.execute(select(MLModelRegistry).order_by(desc(MLModelRegistry.created_at)))).scalars().first()
 
+    now_iso = datetime.now(timezone.utc).isoformat()
     if not model:
         return MLOpsHealthSummaryResponse(
             health_status="UNKNOWN",
-            health_reason="No registered ML models found in registry"
+            health_reason="No registered ML models found in registry",
+            monitoring_window={"start": now_iso, "end": now_iso}
         )
 
     model_id = model.id
@@ -77,7 +79,8 @@ async def get_mlops_health_summary(
             active_model_version=model_version,
             feature_version=model_feat_ver,
             health_status="UNKNOWN",
-            health_reason="Monitoring run has not yet evaluated telemetry for this model"
+            health_reason="Monitoring run has not yet evaluated telemetry for this model",
+            monitoring_window={"start": now_iso, "end": now_iso}
         )
 
     summary = latest_run.summary or {}

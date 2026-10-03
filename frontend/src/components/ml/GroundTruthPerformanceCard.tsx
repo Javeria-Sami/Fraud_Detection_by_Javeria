@@ -21,6 +21,8 @@ interface Props {
 }
 
 export const GroundTruthPerformanceCard: React.FC<Props> = ({ performance }) => {
+  const safePerf = performance || { available: false };
+
   return (
     <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-xl space-y-4">
       <div className="flex items-center justify-between border-b border-soc-border pb-3">
@@ -31,10 +33,10 @@ export const GroundTruthPerformanceCard: React.FC<Props> = ({ performance }) => 
           </h3>
         </div>
         <div>
-          {performance.available ? (
+          {safePerf.available ? (
             <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" />
-              <span>{performance.sample_size} Verified Labels</span>
+              <span>{safePerf.sample_size ?? 0} Verified Labels</span>
             </span>
           ) : (
             <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-slate-800 text-slate-400 border border-slate-700">
@@ -44,7 +46,7 @@ export const GroundTruthPerformanceCard: React.FC<Props> = ({ performance }) => 
         </div>
       </div>
 
-      {!performance.available ? (
+      {!safePerf.available ? (
         <div className="p-5 bg-soc-bg border border-soc-border rounded-xl text-center space-y-2">
           <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
             <Info className="w-4 h-4" />
@@ -53,7 +55,7 @@ export const GroundTruthPerformanceCard: React.FC<Props> = ({ performance }) => 
             Ground-Truth Performance Unavailable
           </h4>
           <p className="text-[11px] text-slate-400 max-w-md mx-auto">
-            {performance.reason ||
+            {safePerf.reason ||
               'Real-time unsupervised anomaly scoring operates without immediate ground-truth labels. Metrics will compute automatically once case investigations & fraud dispute outcomes are confirmed.'}
           </p>
           <div className="text-[10px] font-mono text-slate-500">

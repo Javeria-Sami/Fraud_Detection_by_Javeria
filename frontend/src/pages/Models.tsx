@@ -149,7 +149,34 @@ export const Models: React.FC = () => {
         mlRetrainingApi.listRuns(20, 0).catch(() => null),
       ]);
 
-      setHealthSummary(healthRes || DEFAULT_HEALTH_SUMMARY);
+      const mergedHealth: ModelHealthSummary = healthRes
+        ? {
+            ...DEFAULT_HEALTH_SUMMARY,
+            ...healthRes,
+            monitoring_window: {
+              ...DEFAULT_HEALTH_SUMMARY.monitoring_window,
+              ...(healthRes.monitoring_window || {}),
+            },
+            metrics: {
+              ...DEFAULT_HEALTH_SUMMARY.metrics,
+              ...(healthRes.metrics || {}),
+            },
+            data_quality: {
+              ...DEFAULT_HEALTH_SUMMARY.data_quality,
+              ...(healthRes.data_quality || {}),
+            },
+            drift_summary: {
+              ...DEFAULT_HEALTH_SUMMARY.drift_summary,
+              ...(healthRes.drift_summary || {}),
+            },
+            ground_truth_performance: {
+              ...DEFAULT_HEALTH_SUMMARY.ground_truth_performance,
+              ...(healthRes.ground_truth_performance || {}),
+            },
+          }
+        : DEFAULT_HEALTH_SUMMARY;
+
+      setHealthSummary(mergedHealth);
       setMonitoredModels(Array.isArray(modelsRes) && modelsRes.length > 0 ? modelsRes : [
         {
           id: 'MDL-ISOF-01',
@@ -273,11 +300,11 @@ export const Models: React.FC = () => {
               </div>
               <div>
                 <div className="flex items-center gap-2.5">
-                  <h2 className="text-base font-bold text-white">{healthSummary.model_name}</h2>
-                  <ModelHealthBadge status={healthSummary.health_status} />
+                  <h2 className="text-base font-bold text-white">{healthSummary.model_name || 'Anomaly Detection Model'}</h2>
+                  <ModelHealthBadge status={healthSummary.health_status || 'NORMAL'} />
                 </div>
                 <p className="text-xs text-slate-400 font-mono mt-0.5">
-                  Model Version: <span className="text-purple-400 font-semibold">{healthSummary.model_version}</span> | Feature Store: <span className="text-cyan-400">{healthSummary.feature_version}</span> | Window: <span className="text-slate-300">{new Date(healthSummary.monitoring_window.start).toLocaleTimeString()} - {new Date(healthSummary.monitoring_window.end).toLocaleTimeString()}</span>
+                  Model Version: <span className="text-purple-400 font-semibold">{healthSummary.model_version || '1.0.0'}</span> | Feature Store: <span className="text-cyan-400">{healthSummary.feature_version || '1.0.0'}</span> | Window: <span className="text-slate-300">{healthSummary.monitoring_window?.start ? new Date(healthSummary.monitoring_window.start).toLocaleTimeString() : '00:00:00'} - {healthSummary.monitoring_window?.end ? new Date(healthSummary.monitoring_window.end).toLocaleTimeString() : '23:59:59'}</span>
                 </p>
               </div>
             </div>
@@ -285,7 +312,7 @@ export const Models: React.FC = () => {
             <div className="text-right">
               <span className="text-[11px] text-slate-400 font-sans block">Active Monitoring Samples</span>
               <span className="text-base font-mono font-bold text-white">
-                {healthSummary.sample_size} Predictions
+                {healthSummary.sample_size ?? healthSummary.metrics?.prediction_volume ?? 0} Predictions
               </span>
             </div>
           </div>
@@ -320,10 +347,10 @@ export const Models: React.FC = () => {
                 Anomaly Rate
               </span>
               <div className="text-lg font-bold font-mono text-purple-400 mt-1">
-                {(healthSummary.metrics.anomaly_rate * 100).toFixed(2)}%
+                {((healthSummary.metrics?.anomaly_rate ?? 0) * 100).toFixed(2)}%
               </div>
               <span className="text-[10px] text-slate-500">
-                {healthSummary.metrics.anomaly_volume} / {healthSummary.metrics.prediction_volume} flagged
+                {healthSummary.metrics?.anomaly_volume ?? 0} / {healthSummary.metrics?.prediction_volume ?? 0} flagged
               </span>
             </div>
 
@@ -332,10 +359,10 @@ export const Models: React.FC = () => {
                 Avg Anomaly Score
               </span>
               <div className="text-lg font-bold font-mono text-blue-400 mt-1">
-                {healthSummary.metrics.average_score.toFixed(4)}
+                {healthSummary.metrics?.average_score?.toFixed(4) ?? '0.0000'}
               </div>
               <span className="text-[10px] text-slate-500">
-                Median: {healthSummary.metrics.median_score.toFixed(4)}
+                Median: {healthSummary.metrics?.median_score?.toFixed(4) ?? '0.0000'}
               </span>
             </div>
 
@@ -344,10 +371,10 @@ export const Models: React.FC = () => {
                 Inference p95 Latency
               </span>
               <div className="text-lg font-bold font-mono text-cyan-400 mt-1">
-                {healthSummary.metrics.latency_p95_ms.toFixed(1)} ms
+                {healthSummary.metrics?.latency_p95_ms?.toFixed(1) ?? '0.0'} ms
               </div>
               <span className="text-[10px] text-slate-500">
-                p50: {healthSummary.metrics.latency_p50_ms.toFixed(1)}ms | p99: {healthSummary.metrics.latency_p99_ms.toFixed(1)}ms
+                p50: {healthSummary.metrics?.latency_p50_ms?.toFixed(1) ?? '0.0'}ms | p99: {healthSummary.metrics?.latency_p99_ms?.toFixed(1) ?? '0.0'}ms
               </span>
             </div>
 
@@ -356,7 +383,7 @@ export const Models: React.FC = () => {
                 Score Drift (PSI)
               </span>
               <div className="text-lg font-bold font-mono text-emerald-400 mt-1">
-                {healthSummary.drift_summary.prediction_score_drift_psi.toFixed(4)}
+                {healthSummary.drift_summary?.prediction_score_drift_psi?.toFixed(4) ?? '0.0000'}
               </div>
               <span className="text-[10px] text-slate-500">
                 vs reference baseline
@@ -368,10 +395,10 @@ export const Models: React.FC = () => {
                 Features Drifted
               </span>
               <div className="text-lg font-bold font-mono text-amber-400 mt-1">
-                {healthSummary.drift_summary.drifted_features_count} / {healthSummary.drift_summary.features_monitored}
+                {healthSummary.drift_summary?.drifted_features_count ?? 0} / {healthSummary.drift_summary?.features_monitored ?? 0}
               </div>
               <span className="text-[10px] text-slate-500">
-                {healthSummary.drift_summary.critical_count} critical | {healthSummary.drift_summary.warning_count} warn
+                {healthSummary.drift_summary?.critical_count ?? 0} critical | {healthSummary.drift_summary?.warning_count ?? 0} warn
               </span>
             </div>
 
@@ -380,10 +407,10 @@ export const Models: React.FC = () => {
                 Failure Rate
               </span>
               <div className="text-lg font-bold font-mono text-slate-200 mt-1">
-                {(healthSummary.metrics.failure_rate * 100).toFixed(2)}%
+                {((healthSummary.metrics?.failure_rate ?? 0) * 100).toFixed(2)}%
               </div>
               <span className="text-[10px] text-slate-500">
-                Throughput: {healthSummary.metrics.throughput_per_sec.toFixed(0)} req/s
+                Throughput: {healthSummary.metrics?.throughput_per_sec?.toFixed(0) ?? '0'} req/s
               </span>
             </div>
           </div>
@@ -480,7 +507,7 @@ export const Models: React.FC = () => {
                     </h3>
                   </div>
                   <span className="text-[11px] font-mono text-slate-400">
-                    Range: [{healthSummary.metrics.min_score.toFixed(3)}, {healthSummary.metrics.max_score.toFixed(3)}]
+                    Range: [{healthSummary.metrics?.min_score?.toFixed(3) ?? '0.000'}, {healthSummary.metrics?.max_score?.toFixed(3) ?? '1.000'}]
                   </span>
                 </div>
 
@@ -488,37 +515,37 @@ export const Models: React.FC = () => {
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p10</span>
                     <span className="font-bold text-slate-300">
-                      {healthSummary.metrics.p10_score?.toFixed(3) || '0.000'}
+                      {healthSummary.metrics?.p10_score?.toFixed(3) || '0.000'}
                     </span>
                   </div>
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p25</span>
                     <span className="font-bold text-slate-300">
-                      {healthSummary.metrics.p25_score?.toFixed(3) || '0.000'}
+                      {healthSummary.metrics?.p25_score?.toFixed(3) || '0.000'}
                     </span>
                   </div>
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">Median</span>
                     <span className="font-bold text-purple-400">
-                      {healthSummary.metrics.median_score.toFixed(3)}
+                      {healthSummary.metrics?.median_score?.toFixed(3) ?? '0.000'}
                     </span>
                   </div>
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p75</span>
                     <span className="font-bold text-slate-300">
-                      {healthSummary.metrics.p75_score?.toFixed(3) || '0.000'}
+                      {healthSummary.metrics?.p75_score?.toFixed(3) || '0.000'}
                     </span>
                   </div>
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p90</span>
                     <span className="font-bold text-slate-300">
-                      {healthSummary.metrics.p90_score?.toFixed(3) || '0.000'}
+                      {healthSummary.metrics?.p90_score?.toFixed(3) || '0.000'}
                     </span>
                   </div>
                   <div className="p-2.5 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p95</span>
                     <span className="font-bold text-rose-400">
-                      {healthSummary.metrics.p95_score?.toFixed(3) || '0.000'}
+                      {healthSummary.metrics?.p95_score?.toFixed(3) || '0.000'}
                     </span>
                   </div>
                 </div>
@@ -538,7 +565,7 @@ export const Models: React.FC = () => {
                     </h3>
                   </div>
                   <span className="text-[11px] font-mono text-emerald-400">
-                    Avg: {healthSummary.metrics.latency_avg_ms.toFixed(1)} ms
+                    Avg: {healthSummary.metrics?.latency_avg_ms?.toFixed(1) ?? '0.0'} ms
                   </span>
                 </div>
 
@@ -546,25 +573,25 @@ export const Models: React.FC = () => {
                   <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p50 Latency</span>
                     <span className="text-base font-bold text-white mt-1 block">
-                      {healthSummary.metrics.latency_p50_ms.toFixed(1)} ms
+                      {healthSummary.metrics?.latency_p50_ms?.toFixed(1) ?? '0.0'} ms
                     </span>
                   </div>
                   <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p95 Latency</span>
                     <span className="text-base font-bold text-cyan-400 mt-1 block">
-                      {healthSummary.metrics.latency_p95_ms.toFixed(1)} ms
+                      {healthSummary.metrics?.latency_p95_ms?.toFixed(1) ?? '0.0'} ms
                     </span>
                   </div>
                   <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">p99 Latency</span>
                     <span className="text-base font-bold text-amber-400 mt-1 block">
-                      {healthSummary.metrics.latency_p99_ms.toFixed(1)} ms
+                      {healthSummary.metrics?.latency_p99_ms?.toFixed(1) ?? '0.0'} ms
                     </span>
                   </div>
                   <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
                     <span className="text-[10px] text-slate-500 font-sans block">Max Latency</span>
                     <span className="text-base font-bold text-rose-400 mt-1 block">
-                      {healthSummary.metrics.latency_max_ms.toFixed(1)} ms
+                      {healthSummary.metrics?.latency_max_ms?.toFixed(1) ?? '0.0'} ms
                     </span>
                   </div>
                 </div>
