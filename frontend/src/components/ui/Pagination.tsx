@@ -21,12 +21,31 @@ export const Pagination: React.FC<PaginationProps> = ({
   onPageSizeChange,
   className = '',
 }) => {
-  if (totalPages <= 1 && (!totalItems || totalItems <= pageSize)) {
+  const safeTotalPages = Math.max(1, totalPages);
+  const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
+
+  if (safeTotalPages <= 1 && (!totalItems || totalItems <= pageSize)) {
     return null;
   }
 
-  const startItem = totalItems ? Math.min((currentPage - 1) * pageSize + 1, totalItems) : 0;
-  const endItem = totalItems ? Math.min(currentPage * pageSize, totalItems) : 0;
+  const startItem = totalItems ? Math.min((safePage - 1) * pageSize + 1, totalItems) : 0;
+  const endItem = totalItems ? Math.min(safePage * pageSize, totalItems) : 0;
+
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    if (safeTotalPages <= 7) {
+      for (let i = 1; i <= safeTotalPages; i++) pages.push(i);
+    } else {
+      if (safePage <= 3) {
+        pages.push(1, 2, 3, 4, '...', safeTotalPages);
+      } else if (safePage >= safeTotalPages - 2) {
+        pages.push(1, '...', safeTotalPages - 3, safeTotalPages - 2, safeTotalPages - 1, safeTotalPages);
+      } else {
+        pages.push(1, '...', safePage - 1, safePage, safePage + 1, '...', safeTotalPages);
+      }
+    }
+    return pages;
+  };
 
   return (
     <div className={`flex flex-wrap items-center justify-between gap-4 py-3 px-4 border-t border-soc-border text-xs text-soc-muted ${className}`}>
@@ -34,19 +53,20 @@ export const Pagination: React.FC<PaginationProps> = ({
       <div className="flex items-center gap-2 font-mono text-[11px]">
         {totalItems !== undefined ? (
           <span>
-            Showing <strong className="text-soc-foreground font-semibold">{startItem}–{endItem}</strong> of <strong className="text-soc-foreground font-semibold">{totalItems}</strong> records
+            Showing <strong className="text-soc-foreground font-semibold">{startItem}–{endItem}</strong> of{' '}
+            <strong className="text-soc-foreground font-semibold">{totalItems}</strong> records
           </span>
         ) : (
-          <span>Page {currentPage} of {totalPages}</span>
+          <span>Page {safePage} of {safeTotalPages}</span>
         )}
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 flex-wrap">
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage <= 1}
+          disabled={safePage <= 1}
           onClick={() => onPageChange(1)}
           aria-label="First page"
           className="p-1.5 h-8 w-8"
@@ -56,23 +76,48 @@ export const Pagination: React.FC<PaginationProps> = ({
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage <= 1}
-          onClick={() => onPageChange(currentPage - 1)}
+          disabled={safePage <= 1}
+          onClick={() => onPageChange(safePage - 1)}
           aria-label="Previous page"
           className="p-1.5 h-8 w-8"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
         </Button>
 
-        <span className="px-2.5 py-1 text-xs font-mono font-semibold text-soc-foreground bg-soc-surface rounded-md border border-soc-border">
-          {currentPage} / {totalPages || 1}
-        </span>
+        {/* Numbered Page Buttons */}
+        <div className="flex items-center gap-1">
+          {getPageNumbers().map((p, idx) => {
+            if (p === '...') {
+              return (
+                <span key={`gen-ell-${idx}`} className="px-1.5 text-slate-500 font-mono text-xs select-none">
+                  ...
+                </span>
+              );
+            }
+            const pageNum = Number(p);
+            const isActive = pageNum === safePage;
+            return (
+              <button
+                key={`gen-page-${pageNum}`}
+                type="button"
+                onClick={() => onPageChange(pageNum)}
+                className={`min-w-[28px] h-8 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
+                  isActive
+                    ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
+                    : 'bg-soc-bg border-soc-border text-slate-300 hover:bg-slate-800 hover:text-white'
+                }`}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
+        </div>
 
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage >= totalPages}
-          onClick={() => onPageChange(currentPage + 1)}
+          disabled={safePage >= safeTotalPages}
+          onClick={() => onPageChange(safePage + 1)}
           aria-label="Next page"
           className="p-1.5 h-8 w-8"
         >
@@ -81,8 +126,8 @@ export const Pagination: React.FC<PaginationProps> = ({
         <Button
           variant="outline"
           size="sm"
-          disabled={currentPage >= totalPages}
-          onClick={() => onPageChange(totalPages)}
+          disabled={safePage >= safeTotalPages}
+          onClick={() => onPageChange(safeTotalPages)}
           aria-label="Last page"
           className="p-1.5 h-8 w-8"
         >

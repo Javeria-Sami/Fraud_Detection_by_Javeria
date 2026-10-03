@@ -605,29 +605,51 @@ export const Notifications: React.FC = () => {
 
           {/* Pagination Controls */}
           {total > pageSize && (
-            <div className="flex items-center justify-between pt-4 border-t border-soc-border text-xs text-soc-muted">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-soc-border text-xs text-soc-muted">
               <span>
                 Showing {notifications.length > 0 ? (page - 1) * pageSize + 1 : 0} -{' '}
                 {Math.min(page * pageSize, total)} of {total} notifications
               </span>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <button
+                  type="button"
                   disabled={page <= 1}
-                  onClick={() => setPage(prev => Math.max(1, prev - 1))}
-                  className="p-1.5 rounded-lg bg-soc-card border border-soc-border disabled:opacity-40 hover:bg-soc-cardHover text-soc-foreground"
+                  onClick={() => setPage(1)}
+                  className="p-1.5 rounded-lg bg-soc-card border border-soc-border disabled:opacity-40 hover:bg-slate-800 text-soc-foreground transition-colors"
+                  title="First Page"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
-                <span className="font-mono px-2">
-                  Page {page} of {totalPages}
-                </span>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).slice(
+                    Math.max(0, page - 3),
+                    Math.min(totalPages, page + 2)
+                  ).map((pNum) => (
+                    <button
+                      key={`notif-page-${pNum}`}
+                      type="button"
+                      onClick={() => setPage(pNum)}
+                      className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
+                        page === pNum
+                          ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
+                          : 'bg-soc-card border-soc-border text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {pNum}
+                    </button>
+                  ))}
+                </div>
+
                 <button
+                  type="button"
                   disabled={page >= totalPages}
-                  onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
-                  className="p-1.5 rounded-lg bg-soc-card border border-soc-border disabled:opacity-40 hover:bg-soc-cardHover text-soc-foreground"
+                  onClick={() => setPage(totalPages)}
+                  className="p-1.5 rounded-lg bg-soc-card border border-soc-border disabled:opacity-40 hover:bg-slate-800 text-soc-foreground transition-colors"
+                  title="Last Page"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>

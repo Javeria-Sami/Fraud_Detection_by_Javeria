@@ -446,43 +446,74 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       </div>
 
       {/* Pagination Controls for Entity View */}
-      {activeTab !== 'all' && (
-        <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-          <button
-            type="button"
-            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage <= 1}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Previous
-          </button>
-          <span className="text-xs text-slate-400 font-mono">
-            Page {currentPage}
-          </span>
-          <button
-            type="button"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={
-              activeTab === 'transactions'
-                ? currentPage >= (data.transactions?.total_pages ?? 1)
-                : activeTab === 'alerts'
-                ? currentPage >= (data.alerts?.total_pages ?? 1)
-                : activeTab === 'cases'
-                ? currentPage >= (data.cases?.total_pages ?? 1)
-                : activeTab === 'users'
-                ? currentPage >= (data.users?.total_pages ?? 1)
-                : activeTab === 'devices'
-                ? currentPage >= (data.devices?.total_pages ?? 1)
-                : currentPage >= (data.merchants?.total_pages ?? 1)
-            }
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1"
-          >
-            Next
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+      {activeTab !== 'all' && (() => {
+        const totalPages =
+          activeTab === 'transactions'
+            ? (data.transactions?.total_pages ?? 1)
+            : activeTab === 'alerts'
+            ? (data.alerts?.total_pages ?? 1)
+            : activeTab === 'cases'
+            ? (data.cases?.total_pages ?? 1)
+            : activeTab === 'users'
+            ? (data.users?.total_pages ?? 1)
+            : activeTab === 'devices'
+            ? (data.devices?.total_pages ?? 1)
+            : (data.merchants?.total_pages ?? 1);
+
+        const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).slice(
+          Math.max(0, currentPage - 3),
+          Math.min(totalPages, currentPage + 2)
+        );
+
+        return (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-800 text-xs">
+            <span className="text-xs text-slate-400 font-mono">
+              Page <strong className="text-white">{currentPage}</strong> of <strong className="text-white">{totalPages}</strong>
+            </span>
+
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button
+                type="button"
+                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage <= 1}
+                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+                title="Previous Page"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span>Previous</span>
+              </button>
+
+              <div className="flex items-center gap-1">
+                {pageNumbers.map((pNum) => (
+                  <button
+                    key={`search-page-${pNum}`}
+                    type="button"
+                    onClick={() => onPageChange(pNum)}
+                    className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
+                      currentPage === pNum
+                        ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                    }`}
+                  >
+                    {pNum}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage >= totalPages}
+                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+                title="Next Page"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };
