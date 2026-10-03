@@ -310,48 +310,60 @@ async def seed_database():
 
         # 8. Seed Synthetic Transactions & Associated Entities
         now = utc_now()
-        transactions_spec = [
-            # 1. Normal grocery purchase
-            {
-                "id": "TXN-10001", "user_id": "USR-CUST-1001", "merchant_id": "MERCH-AMAZON", "device_id": "DEV-MACBOOK-01",
-                "amount": 42.50, "currency": "USD", "payment_method": "CREDIT_CARD", "merchant_name": "Amazon Web Retail",
-                "merchant_category": "Electronics & Retail", "country": "US", "city": "New York", "lat": 40.7128, "lon": -74.0060,
-                "ip": "198.51.100.12", "time_offset_m": 60, "status": "COMPLETED", "score": 12.0, "risk_level": "LOW",
-                "ml_score": 0.05, "rules_triggered": [], "failed_attempts": 0
-            },
-            # 2. High amount luxury purchase
-            {
-                "id": "TXN-10002", "user_id": "USR-CUST-1001", "merchant_id": "MERCH-GUCCI", "device_id": "DEV-IPHONE-01",
-                "amount": 6850.00, "currency": "USD", "payment_method": "CREDIT_CARD", "merchant_name": "Gucci Fifth Avenue",
-                "merchant_category": "Luxury Goods", "country": "US", "city": "New York", "lat": 40.7128, "lon": -74.0060,
-                "ip": "198.51.100.15", "time_offset_m": 45, "status": "COMPLETED", "score": 68.0, "risk_level": "MEDIUM",
-                "ml_score": 0.45, "rules_triggered": ["HIGH_AMOUNT"], "failed_attempts": 0
-            },
-            # 3. New device crypto transaction from high-risk IP
-            {
-                "id": "TXN-10003", "user_id": "USR-CUST-1002", "merchant_id": "MERCH-BINANCE", "device_id": "DEV-BOT-01",
-                "amount": 9400.00, "currency": "USD", "payment_method": "WIRE", "merchant_name": "Binance Global Exchange",
-                "merchant_category": "Crypto & Exchange", "country": "RU", "city": "Moscow", "lat": 55.7558, "lon": 37.6173,
-                "ip": "185.220.101.5", "time_offset_m": 25, "status": "DECLINED", "score": 94.0, "risk_level": "CRITICAL",
-                "ml_score": 0.92, "rules_triggered": ["HIGH_AMOUNT", "NEW_DEVICE", "UNUSUAL_LOCATION", "MERCHANT_ANOMALY"], "failed_attempts": 3
-            },
-            # 4. Rapid velocity series
-            {
-                "id": "TXN-10004", "user_id": "USR-CUST-1003", "merchant_id": "MERCH-STEAM", "device_id": "DEV-ANDROID-01",
-                "amount": 120.00, "currency": "USD", "payment_method": "DEBIT_CARD", "merchant_name": "Steam Gaming Platform",
-                "merchant_category": "Digital Goods", "country": "US", "city": "Chicago", "lat": 41.8781, "lon": -87.6298,
-                "ip": "192.0.2.78", "time_offset_m": 10, "status": "COMPLETED", "score": 74.0, "risk_level": "HIGH",
-                "ml_score": 0.62, "rules_triggered": ["RAPID_TRANSACTIONS"], "failed_attempts": 1
-            },
-            # 5. Casino anomalous transaction
-            {
-                "id": "TXN-10005", "user_id": "USR-CUST-1001", "merchant_id": "MERCH-CASINO", "device_id": "DEV-BOT-01",
-                "amount": 15000.00, "currency": "EUR", "payment_method": "WIRE", "merchant_name": "Monte Carlo Royale",
-                "merchant_category": "Gambling & Casino", "country": "MC", "city": "Monaco", "lat": 43.7384, "lon": 7.4246,
-                "ip": "185.220.101.5", "time_offset_m": 5, "status": "DECLINED", "score": 98.0, "risk_level": "CRITICAL",
-                "ml_score": 0.97, "rules_triggered": ["HIGH_AMOUNT", "NEW_DEVICE", "UNUSUAL_LOCATION", "MERCHANT_ANOMALY", "UNUSUAL_TIME"], "failed_attempts": 4
-            }
+        transactions_spec = []
+
+        seed_users = ["USR-CUST-1001", "USR-CUST-1002", "USR-CUST-1003", "USR-CUST-1004", "USR-CUST-1005", "USR-CUST-1006", "USR-CUST-1007", "USR-CUST-1008", "USR-CUST-1009", "USR-CUST-1010"]
+        seed_merchants = [
+            ("MERCH-AMAZON", "Amazon Web Retail", "Electronics & Retail", "CREDIT_CARD", "USD", "US", "New York", 40.7128, -74.0060, "198.51.100.12"),
+            ("MERCH-APPLE", "Apple Store Online", "Electronics & Devices", "APPLE_PAY", "USD", "US", "Cupertino", 37.3318, -122.0312, "192.0.2.14"),
+            ("MERCH-BINANCE", "Binance Global Exchange", "Crypto & Exchange", "WIRE", "USD", "RU", "Moscow", 55.7558, 37.6173, "185.220.101.5"),
+            ("MERCH-STEAM", "Steam Gaming Platform", "Digital Goods", "DEBIT_CARD", "EUR", "DE", "Berlin", 52.5200, 13.4050, "194.25.0.1"),
+            ("MERCH-CASINO", "Monte Carlo Royale", "Gambling & Casino", "WIRE", "EUR", "MC", "Monaco", 43.7384, 7.4246, "185.220.101.5"),
+            ("MERCH-UBER", "Uber Technologies BV", "Transportation", "CREDIT_CARD", "GBP", "GB", "London", 51.5074, -0.1278, "82.165.197.1"),
+            ("MERCH-TARGET", "Target Superstores", "Retail Goods", "DEBIT_CARD", "USD", "US", "Chicago", 41.8781, -87.6298, "64.233.160.1"),
         ]
+        seed_devices = ["DEV-MACBOOK-01", "DEV-IPHONE-01", "DEV-BOT-01", "DEV-ANDROID-01", "DEV-WINDOWS-01", "DEV-IPHONE-02"]
+
+        for i in range(1, 66):
+            u_id = seed_users[(i - 1) % len(seed_users)]
+            m_info = seed_merchants[(i - 1) % len(seed_merchants)]
+            dev_id = seed_devices[(i - 1) % len(seed_devices)]
+            
+            is_crit = i % 7 == 0
+            is_high = i % 5 == 0 and not is_crit
+            is_med = i % 3 == 0 and not is_crit and not is_high
+
+            r_level = "CRITICAL" if is_crit else ("HIGH" if is_high else ("MEDIUM" if is_med else "LOW"))
+            score = 92.0 + (i % 7) if is_crit else (72.0 + (i % 15) if is_high else (42.0 + (i % 20) if is_med else 8.0 + (i % 20)))
+            ml_s = round(score / 100.0, 2)
+            amt = round(1200.0 + (i * 123) % 7500, 2) if is_crit else (round(450.0 + (i * 65) % 2500, 2) if is_high else round(25.0 + (i * 19) % 350, 2))
+            stat = "DECLINED" if is_crit else ("FLAGGED" if is_high else ("REVIEW_REQUIRED" if is_med else "COMPLETED"))
+            fails = 3 if is_crit else (1 if is_high else 0)
+            rules_trig = ["HIGH_AMOUNT", "NEW_DEVICE", "UNUSUAL_LOCATION"] if is_crit else (["RAPID_TRANSACTIONS"] if is_high else ([]))
+
+            transactions_spec.append({
+                "id": f"TXN-1{str(i).padStart(4, '0') if hasattr(str(i), 'padStart') else f'{i:04d}'}",
+                "user_id": u_id,
+                "merchant_id": m_info[0],
+                "device_id": dev_id,
+                "amount": amt,
+                "currency": m_info[4],
+                "payment_method": m_info[3],
+                "merchant_name": m_info[1],
+                "merchant_category": m_info[2],
+                "country": m_info[5],
+                "city": m_info[6],
+                "lat": m_info[7],
+                "lon": m_info[8],
+                "ip": m_info[9],
+                "time_offset_m": i * 18,
+                "status": stat,
+                "score": float(score),
+                "risk_level": r_level,
+                "ml_score": ml_s,
+                "rules_triggered": rules_trig,
+                "failed_attempts": fails
+            })
 
         txn_map = {}
         for t_data in transactions_spec:
@@ -457,12 +469,26 @@ async def seed_database():
         await session.flush()
 
         # 9. Seed Alerts
-        alerts_spec = [
-            ("ALT-001", "TXN-10003", "USR-CUST-1002", "CRITICAL", 94.0, "Impossible Travel & Novel Device Crypto Outflow", "NEW", "analyst@fraudshield.io"),
-            ("ALT-002", "TXN-10004", "USR-CUST-1003", "HIGH", 74.0, "Rapid Velocity Gaming Card Burst", "INVESTIGATING", "analyst@fraudshield.io"),
-            ("ALT-003", "TXN-10005", "USR-CUST-1001", "CRITICAL", 98.0, "Offshore Casino High-Value Anomaly", "ACKNOWLEDGED", "analyst@fraudshield.io"),
-            ("ALT-004", "TXN-10002", "USR-CUST-1001", "MEDIUM", 68.0, "Elevated Luxury Purchase Amount", "RESOLVED", "analyst@fraudshield.io")
+        alerts_spec = []
+        alert_titles = [
+            ("Impossible Travel & Novel Device Crypto Outflow", "CRITICAL", 94.0),
+            ("Rapid Velocity Gaming Card Burst", "HIGH", 74.0),
+            ("Offshore Casino High-Value Anomaly", "CRITICAL", 98.0),
+            ("Elevated Luxury Purchase Amount", "MEDIUM", 68.0),
+            ("Sudden Cross-Border Spend Surge", "HIGH", 82.0),
+            ("Multiple Authorization Failures Prior to Settlement", "HIGH", 78.0),
+            ("Unseen Device Fingerprint Association", "MEDIUM", 54.0),
         ]
+        alert_statuses = ["NEW", "INVESTIGATING", "ACKNOWLEDGED", "RESOLVED"]
+
+        for i in range(1, 31):
+            t_idx = ((i - 1) % 65) + 1
+            t_id = f"TXN-1{t_idx:04d}"
+            u_id = seed_users[(i - 1) % len(seed_users)]
+            t_info = alert_titles[(i - 1) % len(alert_titles)]
+            stat = alert_statuses[(i - 1) % len(alert_statuses)]
+            a_id = f"ALT-{i:03d}"
+            alerts_spec.append((a_id, t_id, u_id, t_info[1], t_info[2], t_info[0], stat, "analyst@fraudshield.io"))
 
         alert_map = {}
         for a_id, t_id, u_id, sev, score, title, status, assigned_email in alerts_spec:
@@ -483,17 +509,39 @@ async def seed_database():
                     alert_reason=title,
                     triggered_rules=txn_map[t_id].rules_triggered or [],
                     model_version="v1.0.0",
-                    created_at=now - timedelta(minutes=20)
+                    created_at=now - timedelta(minutes=i * 25)
                 )
                 session.add(a_obj)
             alert_map[a_id] = a_obj
         await session.flush()
 
         # 10. Seed Cases with Alerts, Transactions, Notes, Evidence, and History
-        cases_spec = [
-            ("CASE-1001", "Cryptocurrency Account Takeover Investigation", "Investigating severe unauthorized crypto outflow via novel Russian IP endpoint.", "CRITICAL", "INVESTIGATING", "USR-ANALYST-01", "USR-CUST-1002", ["ALT-001"], ["TXN-10003"]),
-            ("CASE-1002", "Gaming Micro-transaction Velocity Attack", "Investigating rapid carding attempt across gaming merchants.", "HIGH", "OPEN", "USR-ANALYST-01", "USR-CUST-1003", ["ALT-002"], ["TXN-10004"])
+        cases_spec = []
+        case_templates = [
+            ("Cryptocurrency Account Takeover Investigation", "Investigating severe unauthorized crypto outflow via novel Russian IP endpoint.", "CRITICAL", "INVESTIGATING"),
+            ("Gaming Micro-transaction Velocity Attack", "Investigating rapid carding attempt across gaming merchants.", "HIGH", "OPEN"),
+            ("Offshore Casino High-Value Anomaly Cluster", "Review of irregular gambling transactions exceeding velocity thresholds.", "CRITICAL", "INVESTIGATING"),
+            ("Synthetic Identity Generation Wave", "Investigating pattern of newly provisioned cardholder profiles with repeated billing discrepancies.", "HIGH", "OPEN"),
+            ("Cross-Border POS Terminal Card Cloning", "Physical store point-of-sale skimming vector identified in London retail hubs.", "CRITICAL", "RESOLVED"),
+            ("Card-Not-Present Refund Fraud Ring", "Multi-account merchant dispute exploitation targeting consumer electronics.", "MEDIUM", "OPEN"),
         ]
+
+        for i in range(1, 13):
+            tmpl = case_templates[(i - 1) % len(case_templates)]
+            u_id = seed_users[(i - 1) % len(seed_users)]
+            alt_id = f"ALT-{i:03d}"
+            tx_id = f"TXN-1{i:04d}"
+            cases_spec.append((
+                f"CASE-1{i:03d}",
+                f"{tmpl[0]} #{i}",
+                tmpl[1],
+                tmpl[2],
+                tmpl[3],
+                "USR-ANALYST-01",
+                u_id,
+                [alt_id] if alt_id in alert_map else [],
+                [tx_id] if tx_id in txn_map else []
+            ))
 
         for c_id, title, desc, sev, status, assigned_id, subj_id, alt_ids, t_ids in cases_spec:
             c_stmt = select(Case).where(Case.id == c_id)

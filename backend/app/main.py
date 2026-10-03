@@ -164,7 +164,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Telemetry & Request Correlation Middleware
 app.add_middleware(TelemetryMiddleware)
 
-# CORS Middleware (Hardened with explicit origins and Vercel preview domain matching)
+# CORS Middleware (Hardened with explicit origins, Vercel preview domain matching, and exposed pagination headers)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.BACKEND_CORS_ORIGINS,
@@ -172,6 +172,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*", "X-Total-Count", "X-Total-Pages", "X-Page", "X-Page-Size", "x-total-count", "x-total-pages", "x-page", "x-page-size"],
 )
 
 
