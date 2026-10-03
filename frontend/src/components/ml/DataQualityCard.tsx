@@ -59,83 +59,104 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
         </div>
       </div>
 
-      {/* Grid of Key Quality Signals */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
+      {/* Structured Telemetry Signal Rows */}
+      <div className="space-y-3 text-xs">
         {/* 1. Data Freshness */}
-        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
-          <div className="flex items-start justify-between gap-2 min-w-0">
-            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
-              <Clock className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>Data Freshness</span>
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-700 transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0">
+              <Clock className="w-4 h-4" />
             </div>
-            <span
-              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap border ${
-                safeDq.data_freshness_status === 'FRESH'
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-              }`}
-            >
-              {safeDq.data_freshness_status || 'FRESH'}
-            </span>
+            <div>
+              <div className="text-xs font-bold text-white flex items-center gap-2 flex-wrap">
+                <span>Data Freshness</span>
+                <span
+                  className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                    safeDq.data_freshness_status === 'FRESH'
+                      ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                      : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                  }`}
+                >
+                  {safeDq.data_freshness_status || 'FRESH'}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">Time since latest transaction event</p>
+            </div>
           </div>
-          <div className="space-y-1">
-            <div className="text-lg font-bold font-mono text-white tracking-tight">
+
+          <div className="text-left sm:text-right pl-11 sm:pl-0 shrink-0">
+            <div className="text-base font-bold font-mono text-white">
               {formatLag(safeDq.freshness_lag_seconds ?? 0)}
             </div>
-            <p className="text-[11px] text-slate-400 leading-snug">Time since latest transaction event</p>
+            <span className="text-[10px] text-emerald-400 font-mono">Stream Synchronized</span>
           </div>
         </div>
 
-        {/* 2. Schema Version */}
-        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
-          <div className="flex items-start justify-between gap-2 min-w-0">
-            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
-              <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>Schema Version</span>
+        {/* 2. Schema Compatibility */}
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-700 transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 shrink-0">
+              <ShieldCheck className="w-4 h-4" />
             </div>
-            {!safeDq.has_schema_issues ? (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
-                COMPATIBLE
-              </span>
-            ) : (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 whitespace-nowrap">
-                MISMATCH
-              </span>
-            )}
+            <div>
+              <div className="text-xs font-bold text-white flex items-center gap-2 flex-wrap">
+                <span>Schema Compatibility</span>
+                {!safeDq.has_schema_issues ? (
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    COMPATIBLE
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                    MISMATCH
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">Expected feature schema & transformations</p>
+            </div>
           </div>
-          <div className="space-y-1">
-            <div className="text-lg font-bold font-mono text-cyan-300 tracking-tight">
+
+          <div className="text-left sm:text-right pl-11 sm:pl-0 shrink-0">
+            <div className="text-base font-bold font-mono text-cyan-300">
               {modelFeatureVersion || '1.0.0'}
             </div>
-            <p className="text-[11px] text-slate-400 leading-snug">Expected feature schema & transformations</p>
+            <span className="text-[10px] text-slate-400 font-mono">Registry Match</span>
           </div>
         </div>
 
-        {/* 3. Invalid Values Counter */}
-        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
-          <div className="flex items-start justify-between gap-2 min-w-0">
-            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Invalid Values</span>
+        {/* 3. Numeric Integrity & Invalid Values */}
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-700 transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
+              <AlertTriangle className="w-4 h-4" />
             </div>
-            {totalInvalid === 0 ? (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
-                CLEAN (0)
-              </span>
-            ) : (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 whitespace-nowrap">
-                {totalInvalid} DETECTED
-              </span>
-            )}
+            <div>
+              <div className="text-xs font-bold text-white flex items-center gap-2 flex-wrap">
+                <span>Numeric Integrity</span>
+                {totalInvalid === 0 ? (
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    CLEAN (0)
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                    {totalInvalid} VIOLATIONS
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
+                <span>NaN: <strong className={nanCount > 0 ? 'text-rose-400' : 'text-emerald-400'}>{nanCount}</strong></span>
+                <span>·</span>
+                <span>Inf: <strong className={infCount > 0 ? 'text-rose-400' : 'text-emerald-400'}>{infCount}</strong></span>
+                <span>·</span>
+                <span>Out-of-Bounds: <strong className={oobCount > 0 ? 'text-rose-400' : 'text-emerald-400'}>{oobCount}</strong></span>
+              </div>
+            </div>
           </div>
-          <div className="space-y-1">
-            <div className="text-lg font-bold font-mono text-emerald-400 tracking-tight">
-              {totalInvalid === 0 ? '0 Violations' : `${totalInvalid} Violations`}
+
+          <div className="text-left sm:text-right pl-11 sm:pl-0 shrink-0">
+            <div className={`text-base font-bold font-mono ${totalInvalid === 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              {totalInvalid === 0 ? '0 Errors' : `${totalInvalid} Errors`}
             </div>
-            <div className="text-[11px] font-mono text-slate-300">
-              NaN: <span className={nanCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{nanCount}</span> · Inf: <span className={infCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{infCount}</span> · OOB: <span className={oobCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{oobCount}</span>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-snug">Numeric integrity violations</p>
+            <span className="text-[10px] text-slate-400">Integrity Check</span>
           </div>
         </div>
       </div>
