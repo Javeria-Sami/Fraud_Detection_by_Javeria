@@ -1,259 +1,233 @@
 import { Transaction, Alert, Case, UserRiskProfile, FraudRule, SystemSetting } from '../types';
 
-export const MOCK_TRANSACTIONS: Transaction[] = [
-  {
-    id: 'TXN-9842-A1',
-    transaction_id: 'TXN-9842-A1',
-    user_id: 'USR-CUST-1001',
-    user_name: 'John Doe',
-    merchant_id: 'MERCH-AMAZON',
-    merchant_name: 'Amazon Web Retail',
-    merchant_category: 'Electronics & Retail',
-    payment_method: 'CREDIT_CARD',
-    transaction_type: 'PURCHASE',
-    amount: 1450.00,
-    currency: 'USD',
-    device_id: 'DEV-MACBOOK-01',
-    ip_address: '198.51.100.45',
-    city: 'London',
-    country: 'GB',
-    failed_attempts: 0,
-    source: 'API',
-    risk_score: 84,
-    risk_level: 'CRITICAL',
-    ml_anomaly_score: 0.88,
-    rules_triggered: [
-      { rule_id: 'RULE-001', rule_name: 'Velocity Spike', severity: 'CRITICAL', category: 'VELOCITY', points: 35, version: '1.0' },
-      { rule_id: 'RULE-004', rule_name: 'High Amount Cross-Border', severity: 'HIGH', category: 'AMOUNT', points: 25, version: '1.0' }
-    ],
-    risk_factors: [
-      { factor_name: 'Excessive Amount', weight: 0.4, score: 85, contribution: 34, description: 'High amount exceeding 3x 30-day baseline' },
-      { factor_name: 'New Geo', weight: 0.3, score: 80, contribution: 24, description: 'Cross-border transaction without prior geo fingerprint' }
-    ],
-    status: 'DECLINED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 3).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 3).toISOString(),
-  },
-  {
-    id: 'TXN-9843-B2',
-    transaction_id: 'TXN-9843-B2',
-    user_id: 'USR-CUST-1002',
-    user_name: 'Sarah Connor',
-    merchant_id: 'MERCH-BINANCE',
-    merchant_name: 'Binance Global Exchange',
-    merchant_category: 'Crypto & Exchange',
-    payment_method: 'CRYPTO',
-    transaction_type: 'TRANSFER',
-    amount: 3200.00,
-    currency: 'USD',
-    device_id: 'DEV-IPHONE-02',
-    ip_address: '203.0.113.88',
-    city: 'Singapore',
-    country: 'SG',
-    failed_attempts: 2,
-    source: 'API',
-    risk_score: 72,
-    risk_level: 'HIGH',
-    ml_anomaly_score: 0.76,
-    rules_triggered: [
-      { rule_id: 'RULE-002', rule_name: 'Crypto High Risk Tier', severity: 'HIGH', category: 'MERCHANT', points: 25, version: '1.0' }
-    ],
-    risk_factors: [
-      { factor_name: 'Merchant Risk', weight: 0.4, score: 75, contribution: 30, description: 'High risk merchant category' },
-      { factor_name: 'Failed PIN Attempts', weight: 0.3, score: 70, contribution: 21, description: 'Multiple failed PIN attempts prior to authorization' }
-    ],
-    status: 'FLAGGED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-  },
-  {
-    id: 'TXN-9844-C3',
-    transaction_id: 'TXN-9844-C3',
-    user_id: 'USR-CUST-1003',
-    user_name: 'Alice Smith',
-    merchant_id: 'MERCH-APPLE',
-    merchant_name: 'Apple Store Online',
-    merchant_category: 'Electronics & Devices',
-    payment_method: 'APPLE_PAY',
-    transaction_type: 'PURCHASE',
-    amount: 199.00,
-    currency: 'USD',
-    device_id: 'DEV-IPHONE-15',
-    ip_address: '192.0.2.14',
-    city: 'Cupertino',
-    country: 'US',
-    failed_attempts: 0,
-    source: 'MOBILE_APP',
-    risk_score: 12,
-    risk_level: 'LOW',
-    ml_anomaly_score: 0.10,
-    rules_triggered: [],
-    risk_factors: [],
-    status: 'APPROVED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
-  },
-  {
-    id: 'TXN-9845-D4',
-    transaction_id: 'TXN-9845-D4',
-    user_id: 'USR-CUST-1004',
-    user_name: 'Elena Rostova',
-    merchant_id: 'MERCH-UBER',
-    merchant_name: 'Uber BV Amsterdam',
-    merchant_category: 'Transportation',
-    payment_method: 'CREDIT_CARD',
-    transaction_type: 'PURCHASE',
-    amount: 42.50,
-    currency: 'EUR',
-    device_id: 'DEV-ANDROID-09',
-    ip_address: '185.220.101.5',
-    city: 'Amsterdam',
-    country: 'NL',
-    failed_attempts: 0,
-    source: 'API',
-    risk_score: 18,
-    risk_level: 'LOW',
-    ml_anomaly_score: 0.15,
-    rules_triggered: [],
-    risk_factors: [],
-    status: 'APPROVED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-  },
-  {
-    id: 'TXN-9846-E5',
-    transaction_id: 'TXN-9846-E5',
-    user_id: 'USR-CUST-1005',
-    user_name: 'Marcus Vance',
-    merchant_id: 'MERCH-DELIVEROO',
-    merchant_name: 'Deliveroo London',
-    merchant_category: 'Food & Dining',
-    payment_method: 'DEBIT_CARD',
-    transaction_type: 'PURCHASE',
-    amount: 58.00,
-    currency: 'GBP',
-    device_id: 'DEV-IPHONE-08',
-    ip_address: '82.165.197.1',
-    city: 'London',
-    country: 'GB',
-    failed_attempts: 0,
-    source: 'MOBILE_APP',
-    risk_score: 8,
-    risk_level: 'LOW',
-    ml_anomaly_score: 0.05,
-    rules_triggered: [],
-    risk_factors: [],
-    status: 'APPROVED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-  },
-  {
-    id: 'TXN-9847-F6',
-    transaction_id: 'TXN-9847-F6',
-    user_id: 'USR-CUST-1006',
-    user_name: 'Tariq Al-Mansoor',
-    merchant_id: 'MERCH-TARGET',
-    merchant_name: 'Target Stores US',
-    merchant_category: 'Retail Goods',
-    payment_method: 'CREDIT_CARD',
-    transaction_type: 'PURCHASE',
-    amount: 890.00,
-    currency: 'USD',
-    device_id: 'DEV-WINDOWS-04',
-    ip_address: '64.233.160.1',
-    city: 'Chicago',
-    country: 'US',
-    failed_attempts: 1,
-    source: 'WEB_PORTAL',
-    risk_score: 48,
-    risk_level: 'MEDIUM',
-    ml_anomaly_score: 0.45,
-    rules_triggered: [
-      { rule_id: 'RULE-005', rule_name: 'New Device Association', severity: 'MEDIUM', category: 'DEVICE', points: 15, version: '1.0' }
-    ],
-    risk_factors: [
-      { factor_name: 'Device Anomaly', weight: 0.3, score: 50, contribution: 15, description: 'Unregistered device fingerprint detected' }
-    ],
-    status: 'APPROVED',
-    timestamp: new Date(Date.now() - 1000 * 60 * 140).toISOString(),
-    created_at: new Date(Date.now() - 1000 * 60 * 140).toISOString(),
-  }
-];
+// Helper generator for rich mock transactions
+function generateMockTransactions(): Transaction[] {
+  const users = [
+    { id: 'USR-CUST-1001', name: 'John Doe', city: 'London', country: 'GB', ip: '198.51.100.45', device: 'DEV-MACBOOK-01' },
+    { id: 'USR-CUST-1002', name: 'Sarah Connor', city: 'Singapore', country: 'SG', ip: '203.0.113.88', device: 'DEV-IPHONE-02' },
+    { id: 'USR-CUST-1003', name: 'Alice Smith', city: 'Cupertino', country: 'US', ip: '192.0.2.14', device: 'DEV-IPHONE-15' },
+    { id: 'USR-CUST-1004', name: 'Elena Rostova', city: 'Amsterdam', country: 'NL', ip: '185.220.101.5', device: 'DEV-ANDROID-09' },
+    { id: 'USR-CUST-1005', name: 'Marcus Vance', city: 'London', country: 'GB', ip: '82.165.197.1', device: 'DEV-IPHONE-08' },
+    { id: 'USR-CUST-1006', name: 'Tariq Al-Mansoor', city: 'Chicago', country: 'US', ip: '64.233.160.1', device: 'DEV-WINDOWS-04' },
+    { id: 'USR-CUST-1007', name: 'David Kim', city: 'Seoul', country: 'KR', ip: '211.234.112.5', device: 'DEV-GALAXY-24' },
+    { id: 'USR-CUST-1008', name: 'Claire Dubois', city: 'Paris', country: 'FR', ip: '195.154.120.33', device: 'DEV-MACBOOK-02' },
+    { id: 'USR-CUST-1009', name: 'Alejandro Gomez', city: 'Madrid', country: 'ES', ip: '213.97.0.15', device: 'DEV-ANDROID-11' },
+    { id: 'USR-CUST-1010', name: 'Hanna Lindqvist', city: 'Stockholm', country: 'SE', ip: '193.180.251.1', device: 'DEV-IPHONE-14' },
+    { id: 'USR-CUST-1011', name: 'Liam O\'Connor', city: 'Dublin', country: 'IE', ip: '89.101.24.50', device: 'DEV-WINDOWS-07' },
+    { id: 'USR-CUST-1012', name: 'Sophia Chen', city: 'Toronto', country: 'CA', ip: '142.250.190.4', device: 'DEV-MACBOOK-04' },
+    { id: 'USR-CUST-1013', name: 'Mateo Rossi', city: 'Milan', country: 'IT', ip: '93.186.240.2', device: 'DEV-IPHONE-13' },
+    { id: 'USR-CUST-1014', name: 'Ananya Patel', city: 'Mumbai', country: 'IN', ip: '115.112.80.12', device: 'DEV-ONEPLUS-11' },
+    { id: 'USR-CUST-1015', name: 'Lucas Silva', city: 'Sao Paulo', country: 'BR', ip: '177.18.200.9', device: 'DEV-ANDROID-12' },
+  ];
 
-export const MOCK_ALERTS: Alert[] = [
-  {
-    id: 'ALT-1001-CRIT',
-    title: 'High Velocity Transfer Spike on New Device',
-    severity: 'CRITICAL',
-    status: 'OPEN',
-    alert_reason: 'Account USR-CUST-1001 triggered 3 high amount transactions within 90 seconds from an unrecognized IP in London.',
-    transaction_id: 'TXN-9842-A1',
-    risk_score: 84,
-    triggered_rules: ['RULE-001', 'RULE-004'],
-    created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    assigned_to: 'analyst@fraudshield.io'
-  },
-  {
-    id: 'ALT-1002-HIGH',
-    title: 'Suspicious Crypto Gateway Settlement',
-    severity: 'HIGH',
-    status: 'INVESTIGATING',
-    alert_reason: 'Rapid outflow to high-risk merchant category following multiple authentication attempts.',
-    transaction_id: 'TXN-9843-B2',
-    risk_score: 72,
-    triggered_rules: ['RULE-002'],
-    created_at: new Date(Date.now() - 1000 * 60 * 20).toISOString(),
-    assigned_to: 'analyst@fraudshield.io'
-  },
-  {
-    id: 'ALT-1003-MED',
-    title: 'Unrecognized Device Association with Elevated Amount',
-    severity: 'MEDIUM',
-    status: 'OPEN',
-    alert_reason: 'First time purchase from Windows workstation above average spending threshold.',
-    transaction_id: 'TXN-9847-F6',
-    risk_score: 48,
-    triggered_rules: ['RULE-005'],
-    created_at: new Date(Date.now() - 1000 * 60 * 145).toISOString(),
-  }
-];
+  const merchants = [
+    { name: 'Amazon Web Retail', category: 'Electronics & Retail', method: 'CREDIT_CARD', cur: 'USD' },
+    { name: 'Binance Global Exchange', category: 'Crypto & Exchange', method: 'CRYPTO', cur: 'USD' },
+    { name: 'Apple Store Online', category: 'Electronics & Devices', method: 'APPLE_PAY', cur: 'USD' },
+    { name: 'Uber BV Amsterdam', category: 'Transportation', method: 'CREDIT_CARD', cur: 'EUR' },
+    { name: 'Deliveroo London', category: 'Food & Dining', method: 'DEBIT_CARD', cur: 'GBP' },
+    { name: 'Target Stores US', category: 'Retail Goods', method: 'CREDIT_CARD', cur: 'USD' },
+    { name: 'Coinbase Pro Prime', category: 'Crypto & Exchange', method: 'CRYPTO', cur: 'USD' },
+    { name: 'BestBuy Electronics', category: 'Electronics & Retail', method: 'CREDIT_CARD', cur: 'USD' },
+    { name: 'Netflix International', category: 'Streaming & Digital', method: 'DEBIT_CARD', cur: 'EUR' },
+    { name: 'Steam Games Europe', category: 'Gaming & Digital', method: 'CREDIT_CARD', cur: 'EUR' },
+    { name: 'Airbnb Travel Lodging', category: 'Travel & Lodging', method: 'CREDIT_CARD', cur: 'USD' },
+    { name: 'Expedia Flights & Hotels', category: 'Travel & Lodging', method: 'CREDIT_CARD', cur: 'GBP' },
+    { name: 'Spotify AB', category: 'Streaming & Digital', method: 'APPLE_PAY', cur: 'EUR' },
+    { name: 'Stripe Direct Settlement', category: 'Payment Gateway', method: 'WIRE_TRANSFER', cur: 'USD' },
+    { name: 'Walmart Supercenter', category: 'Retail Goods', method: 'DEBIT_CARD', cur: 'USD' },
+  ];
 
-export const MOCK_CASES: Case[] = [
-  {
-    id: 'CASE-2026-089',
-    case_id: 'CASE-2026-089',
-    title: 'Coordinated Account Takeover Attack Ring',
-    description: 'Investigation into linked credential stuffing patterns affecting multiple retail accounts across London and Amsterdam.',
-    status: 'INVESTIGATING',
-    severity: 'CRITICAL',
-    assigned_analyst: 'analyst@fraudshield.io',
-    assigned_to: 'analyst@fraudshield.io',
-    risk_score: 88,
-    related_transaction_ids: ['TXN-9842-A1'],
-    related_alert_ids: ['ALT-1001-CRIT'],
-    alerts_count: 4,
-    transactions_count: 6,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    updated_at: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-  },
-  {
-    id: 'CASE-2026-088',
-    case_id: 'CASE-2026-088',
-    title: 'Crypto Off-Ramping Anomaly Cluster',
-    description: 'Review of merchant gateway transactions exhibiting high card testing frequency and rapid cashout attempts.',
-    status: 'OPEN',
-    severity: 'HIGH',
-    assigned_analyst: 'analyst@fraudshield.io',
-    assigned_to: 'analyst@fraudshield.io',
-    risk_score: 74,
-    related_transaction_ids: ['TXN-9843-B2'],
-    related_alert_ids: ['ALT-1002-HIGH'],
-    alerts_count: 2,
-    transactions_count: 3,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+  const tiers: ('LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL')[] = ['LOW', 'LOW', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL', 'LOW', 'MEDIUM'];
+  const statuses: ('APPROVED' | 'REVIEW_REQUIRED' | 'BLOCKED' | 'FLAGGED' | 'DECLINED')[] = [
+    'APPROVED',
+    'APPROVED',
+    'APPROVED',
+    'REVIEW_REQUIRED',
+    'FLAGGED',
+    'DECLINED',
+    'BLOCKED',
+    'APPROVED',
+  ];
+
+  const transactions: Transaction[] = [];
+
+  for (let i = 1; i <= 75; i++) {
+    const user = users[(i - 1) % users.length];
+    const merch = merchants[(i * 3) % merchants.length];
+    const tier = tiers[i % tiers.length];
+    const status = tier === 'CRITICAL' ? (i % 2 === 0 ? 'DECLINED' : 'BLOCKED')
+      : tier === 'HIGH' ? (i % 2 === 0 ? 'FLAGGED' : 'REVIEW_REQUIRED')
+      : tier === 'MEDIUM' ? (i % 2 === 0 ? 'REVIEW_REQUIRED' : 'APPROVED')
+      : 'APPROVED';
+
+    const baseAmount = tier === 'CRITICAL' ? 1200 + (i * 115) % 8500
+      : tier === 'HIGH' ? 650 + (i * 85) % 3500
+      : tier === 'MEDIUM' ? 150 + (i * 45) % 950
+      : 15 + (i * 23) % 250;
+
+    const riskScore = tier === 'CRITICAL' ? 82 + (i % 17)
+      : tier === 'HIGH' ? 62 + (i % 18)
+      : tier === 'MEDIUM' ? 38 + (i % 20)
+      : 5 + (i % 25);
+
+    const pad = String(i).padStart(3, '0');
+    const id = `TXN-98${pad}-X${i % 9}`;
+    const minutesAgo = (i - 1) * 28 + (i % 7) * 4;
+    const timestamp = new Date(Date.now() - 1000 * 60 * minutesAgo).toISOString();
+
+    const rules = [];
+    if (tier === 'CRITICAL' || tier === 'HIGH') {
+      rules.push({
+        rule_id: 'RULE-001',
+        rule_name: 'Velocity Spike Detection',
+        severity: tier as any,
+        category: 'VELOCITY',
+        points: 35,
+        version: '1.2.0',
+      });
+      if (merch.category.includes('Crypto')) {
+        rules.push({
+          rule_id: 'RULE-002',
+          rule_name: 'Crypto High Risk Outflow',
+          severity: 'HIGH' as any,
+          category: 'MERCHANT',
+          points: 25,
+          version: '1.0.0',
+        });
+      }
+    }
+
+    const riskFactors = [];
+    if (tier !== 'LOW') {
+      riskFactors.push({
+        factor_name: tier === 'CRITICAL' ? 'Excessive Velocity & Amount' : 'New Device Fingerprint',
+        weight: 0.4,
+        score: riskScore,
+        contribution: Math.round(riskScore * 0.4),
+        description: `Statistical deviation in transaction characteristics for ${user.name}`,
+      });
+    }
+
+    transactions.push({
+      id,
+      transaction_id: id,
+      user_id: user.id,
+      user_name: user.name,
+      merchant_id: `MERCH-${merch.name.substring(0, 6).toUpperCase()}`,
+      merchant_name: merch.name,
+      merchant_category: merch.category,
+      payment_method: merch.method,
+      transaction_type: 'PURCHASE',
+      amount: parseFloat(baseAmount.toFixed(2)),
+      currency: merch.cur,
+      device_id: user.device,
+      ip_address: user.ip,
+      city: user.city,
+      country: user.country,
+      failed_attempts: tier === 'CRITICAL' ? 2 : tier === 'HIGH' ? 1 : 0,
+      source: i % 3 === 0 ? 'MOBILE_APP' : i % 3 === 1 ? 'API' : 'WEB_PORTAL',
+      risk_score: riskScore,
+      risk_level: tier,
+      ml_anomaly_score: parseFloat((riskScore / 100).toFixed(2)),
+      rules_triggered: rules,
+      risk_factors: riskFactors,
+      status,
+      timestamp,
+      created_at: timestamp,
+    });
   }
-];
+
+  return transactions;
+}
+
+export const MOCK_TRANSACTIONS: Transaction[] = generateMockTransactions();
+
+// Helper generator for rich mock alerts
+function generateMockAlerts(): Alert[] {
+  const alerts: Alert[] = [];
+  const severities: ('CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW')[] = ['CRITICAL', 'HIGH', 'HIGH', 'MEDIUM', 'MEDIUM', 'LOW'];
+  const statuses: ('OPEN' | 'INVESTIGATING' | 'RESOLVED' | 'CLOSED')[] = ['OPEN', 'INVESTIGATING', 'OPEN', 'RESOLVED', 'OPEN'];
+
+  const reasons = [
+    'High Velocity Transfer Spike on New Device',
+    'Suspicious Crypto Gateway Settlement',
+    'Unrecognized Device Association with Elevated Amount',
+    'Cross-Border Geo Hop Detected within 15 Minutes',
+    'Multiple PIN Failures Followed by High-Value Purchase',
+    'ML High Confidence Anomaly on Out-of-Pattern Spending',
+    'Card Testing Sequence Identified on Merchant Terminal',
+  ];
+
+  for (let i = 1; i <= 45; i++) {
+    const pad = String(i).padStart(3, '0');
+    const sev = severities[i % severities.length];
+    const stat = statuses[i % statuses.length];
+    const rIdx = (i - 1) % reasons.length;
+    const score = sev === 'CRITICAL' ? 80 + (i % 18) : sev === 'HIGH' ? 60 + (i % 20) : sev === 'MEDIUM' ? 40 + (i % 20) : 15 + (i % 20);
+
+    alerts.push({
+      id: `ALT-${1000 + i}-${sev.substring(0, 4)}`,
+      title: reasons[rIdx],
+      severity: sev,
+      status: stat,
+      alert_reason: `Automated detection trigger on account USR-CUST-10${(i % 15) + 1} with score ${score}.`,
+      transaction_id: `TXN-98${String((i % 75) + 1).padStart(3, '0')}-X${i % 9}`,
+      risk_score: score,
+      triggered_rules: sev === 'CRITICAL' ? ['RULE-001', 'RULE-004'] : sev === 'HIGH' ? ['RULE-002'] : ['RULE-005'],
+      created_at: new Date(Date.now() - 1000 * 60 * ((i - 1) * 45 + 10)).toISOString(),
+      assigned_to: stat !== 'OPEN' ? 'analyst@fraudshield.io' : undefined,
+    });
+  }
+  return alerts;
+}
+
+export const MOCK_ALERTS: Alert[] = generateMockAlerts();
+
+// Helper generator for rich mock cases
+function generateMockCases(): Case[] {
+  const cases: Case[] = [];
+  const severities: ('CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW')[] = ['CRITICAL', 'HIGH', 'HIGH', 'MEDIUM', 'LOW'];
+  const statuses: ('OPEN' | 'INVESTIGATING' | 'RESOLVED' | 'CLOSED')[] = ['OPEN', 'INVESTIGATING', 'OPEN', 'RESOLVED', 'CLOSED'];
+
+  const titles = [
+    'Coordinated Account Takeover Attack Ring',
+    'Crypto Off-Ramping Anomaly Cluster',
+    'Synthetic Identity Generation Syndicate',
+    'Card-Not-Present Refund Fraud Wave',
+    'Merchant Collusion & Chargeback Exploitation',
+    'Automated Bot Credential Stuffing Campaign',
+  ];
+
+  for (let i = 1; i <= 30; i++) {
+    const pad = String(i).padStart(3, '0');
+    const sev = severities[i % severities.length];
+    const stat = statuses[i % statuses.length];
+    const title = titles[(i - 1) % titles.length];
+    const score = sev === 'CRITICAL' ? 85 + (i % 13) : sev === 'HIGH' ? 68 + (i % 17) : 45 + (i % 20);
+
+    cases.push({
+      id: `CASE-2026-${pad}`,
+      case_id: `CASE-2026-${pad}`,
+      title: `${title} #${i}`,
+      description: `Comprehensive multi-entity investigation analyzing linked transaction vectors across accounts.`,
+      status: stat,
+      severity: sev,
+      assigned_analyst: 'analyst@fraudshield.io',
+      assigned_to: 'analyst@fraudshield.io',
+      risk_score: score,
+      related_transaction_ids: [`TXN-98${String((i % 75) + 1).padStart(3, '0')}-X1`],
+      related_alert_ids: [`ALT-${1000 + i}-${sev.substring(0, 4)}`],
+      alerts_count: 2 + (i % 5),
+      transactions_count: 3 + (i % 8),
+      created_at: new Date(Date.now() - 1000 * 60 * 60 * (i * 8)).toISOString(),
+      updated_at: new Date(Date.now() - 1000 * 60 * 60 * (i * 2)).toISOString(),
+    });
+  }
+  return cases;
+}
+
+export const MOCK_CASES: Case[] = generateMockCases();
 
 export const MOCK_RISK_PROFILES: UserRiskProfile[] = [
   {

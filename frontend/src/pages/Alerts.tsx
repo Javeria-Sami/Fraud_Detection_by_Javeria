@@ -194,24 +194,46 @@ export const Alerts: React.FC = () => {
       if (res.data && Array.isArray(res.data.items)) {
         setAlertsData(res.data);
       } else {
-        const safeItems = extractSafeArray<Alert>(res.data, MOCK_ALERTS);
+        // Dynamic fallback slicing
+        let filtered = [...MOCK_ALERTS];
+        if (filters.search) {
+          const q = filters.search.toLowerCase();
+          filtered = filtered.filter(a => a.id.toLowerCase().includes(q) || a.title.toLowerCase().includes(q) || a.alert_reason.toLowerCase().includes(q));
+        }
+        if (filters.severity) filtered = filtered.filter(a => a.severity === filters.severity);
+        if (filters.status) filtered = filtered.filter(a => a.status === filters.status);
+        const total = filtered.length;
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+        const safePage = Math.min(page, totalPages);
+        const start = (safePage - 1) * pageSize;
         setAlertsData({
-          items: safeItems.length > 0 ? safeItems : MOCK_ALERTS,
-          total: safeItems.length > 0 ? safeItems.length : MOCK_ALERTS.length,
-          page: 1,
+          items: filtered.slice(start, start + pageSize),
+          total,
+          page: safePage,
           page_size: pageSize,
-          total_pages: 1
+          total_pages: totalPages,
         });
       }
       setLastSynced(new Date().toLocaleTimeString());
     } catch (err) {
       console.warn('Failed to load paginated alerts, using active defaults:', err);
+      let filtered = [...MOCK_ALERTS];
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        filtered = filtered.filter(a => a.id.toLowerCase().includes(q) || a.title.toLowerCase().includes(q) || a.alert_reason.toLowerCase().includes(q));
+      }
+      if (filters.severity) filtered = filtered.filter(a => a.severity === filters.severity);
+      if (filters.status) filtered = filtered.filter(a => a.status === filters.status);
+      const total = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      const safePage = Math.min(page, totalPages);
+      const start = (safePage - 1) * pageSize;
       setAlertsData({
-        items: MOCK_ALERTS,
-        total: MOCK_ALERTS.length,
-        page: 1,
+        items: filtered.slice(start, start + pageSize),
+        total,
+        page: safePage,
         page_size: pageSize,
-        total_pages: 1
+        total_pages: totalPages,
       });
       setLastSynced(new Date().toLocaleTimeString());
     } finally {

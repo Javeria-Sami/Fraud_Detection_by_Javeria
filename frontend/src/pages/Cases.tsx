@@ -123,15 +123,44 @@ export const Cases: React.FC = () => {
       if (analystFilter && analystFilter !== 'ALL') params.append('assigned_analyst', analystFilter);
 
       const res = await apiClient.get<CasePaginatedResponse>(`/cases/paginated?${params.toString()}`);
-      const safeItems = extractSafeArray<Case>(res.data, MOCK_CASES);
-      setCases(safeItems.length > 0 ? safeItems : MOCK_CASES);
-      setTotalCases(res.data?.total || (safeItems.length > 0 ? safeItems.length : MOCK_CASES.length));
-      setTotalPages(res.data?.total_pages || 1);
+      if (res.data && Array.isArray(res.data.items)) {
+        setCases(res.data.items);
+        setTotalCases(res.data.total);
+        setTotalPages(res.data.total_pages);
+      } else {
+        let filtered = [...MOCK_CASES];
+        if (search) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter(c => c.id.toLowerCase().includes(q) || c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q));
+        }
+        if (statusFilter && statusFilter !== 'ALL') filtered = filtered.filter(c => c.status === statusFilter);
+        if (severityFilter && severityFilter !== 'ALL') filtered = filtered.filter(c => c.severity === severityFilter);
+        if (analystFilter && analystFilter !== 'ALL') filtered = filtered.filter(c => c.assigned_analyst === analystFilter);
+        const total = filtered.length;
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+        const safePage = Math.min(page, totalPages);
+        const start = (safePage - 1) * pageSize;
+        setCases(filtered.slice(start, start + pageSize));
+        setTotalCases(total);
+        setTotalPages(totalPages);
+      }
     } catch (err) {
       console.warn('Failed to load cases, using active defaults:', err);
-      setCases(MOCK_CASES);
-      setTotalCases(MOCK_CASES.length);
-      setTotalPages(1);
+      let filtered = [...MOCK_CASES];
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(c => c.id.toLowerCase().includes(q) || c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q));
+      }
+      if (statusFilter && statusFilter !== 'ALL') filtered = filtered.filter(c => c.status === statusFilter);
+      if (severityFilter && severityFilter !== 'ALL') filtered = filtered.filter(c => c.severity === severityFilter);
+      if (analystFilter && analystFilter !== 'ALL') filtered = filtered.filter(c => c.assigned_analyst === analystFilter);
+      const total = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      const safePage = Math.min(page, totalPages);
+      const start = (safePage - 1) * pageSize;
+      setCases(filtered.slice(start, start + pageSize));
+      setTotalCases(total);
+      setTotalPages(totalPages);
     } finally {
       setIsLoading(false);
     }

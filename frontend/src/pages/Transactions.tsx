@@ -99,6 +99,86 @@ export const Transactions: React.FC = () => {
     [selectedTxnId, setSearchParams]
   );
 
+  // Fallback client-side filter, sort, and slice for offline/mock resiliency
+  const getFilteredAndPaginatedMock = useCallback(() => {
+    let filtered = [...MOCK_TRANSACTIONS];
+
+    if (filters.search) {
+      const q = filters.search.toLowerCase().trim();
+      filtered = filtered.filter(
+        (t) =>
+          t.id.toLowerCase().includes(q) ||
+          t.user_id.toLowerCase().includes(q) ||
+          (t.user_name && t.user_name.toLowerCase().includes(q)) ||
+          t.merchant_name.toLowerCase().includes(q) ||
+          (t.merchant_category && t.merchant_category.toLowerCase().includes(q)) ||
+          (t.device_id && t.device_id.toLowerCase().includes(q)) ||
+          (t.city && t.city.toLowerCase().includes(q))
+      );
+    }
+
+    if (filters.risk_level) {
+      filtered = filtered.filter((t) => t.risk_level === filters.risk_level);
+    }
+
+    if (filters.status) {
+      filtered = filtered.filter((t) => t.status === filters.status);
+    }
+
+    if (filters.currency) {
+      filtered = filtered.filter((t) => t.currency.toUpperCase() === filters.currency.toUpperCase());
+    }
+
+    if (filters.min_amount) {
+      const min = parseFloat(filters.min_amount);
+      if (!isNaN(min)) filtered = filtered.filter((t) => t.amount >= min);
+    }
+
+    if (filters.max_amount) {
+      const max = parseFloat(filters.max_amount);
+      if (!isNaN(max)) filtered = filtered.filter((t) => t.amount <= max);
+    }
+
+    if (filters.start_date) {
+      const start = new Date(filters.start_date).getTime();
+      filtered = filtered.filter((t) => new Date(t.timestamp).getTime() >= start);
+    }
+
+    if (filters.end_date) {
+      const end = new Date(filters.end_date).getTime() + 86400000;
+      filtered = filtered.filter((t) => new Date(t.timestamp).getTime() <= end);
+    }
+
+    filtered.sort((a, b) => {
+      let valA: any = (a as any)[sort] ?? '';
+      let valB: any = (b as any)[sort] ?? '';
+
+      if (sort === 'timestamp' || sort === 'created_at') {
+        valA = new Date(valA).getTime();
+        valB = new Date(valB).getTime();
+      } else if (typeof valA === 'string') {
+        valA = valA.toLowerCase();
+        valB = (valB || '').toLowerCase();
+      }
+
+      if (valA < valB) return order === 'asc' ? -1 : 1;
+      if (valA > valB) return order === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    const total = filtered.length;
+    const calcPages = Math.max(1, Math.ceil(total / pageSize));
+    const safePage = Math.min(Math.max(1, page), calcPages);
+    const startIdx = (safePage - 1) * pageSize;
+    const paginatedItems = filtered.slice(startIdx, startIdx + pageSize);
+
+    return {
+      items: paginatedItems,
+      total,
+      totalPages: calcPages,
+    };
+  }, [filters, sort, order, page, pageSize]);
+
   // Fetch transactions list
   const fetchTransactions = useCallback(async () => {
     setIsLoading(true);
@@ -121,27 +201,42 @@ export const Transactions: React.FC = () => {
       if (filters.start_date) queryParams.set('start_date', filters.start_date);
       if (filters.end_date) queryParams.set('end_date', filters.end_date);
 
-      const res = await apiClient.get<Transaction[]>(`/transactions?${queryParams.toString()}`);
-      const safeData = extractSafeArray<Transaction>(res.data, MOCK_TRANSACTIONS);
-      setTransactions(safeData.length > 0 ? safeData : MOCK_TRANSACTIONS);
-
-      if (res.headers['x-total-count']) {
-        setTotalRecords(parseInt(res.headers['x-total-count'], 10));
+      const res = await apiClient.get<any>(`/transactions?${queryParams.toString()}`);
+      
+      if (res.data && Array.isArray(res.data.items)) {
+        setTransactions(res.data.items);
+        setTotalRecords(res.data.total ?? res.data.items.length);
+        setTotalPages(res.data.total_pages ?? Math.max(1, Math.ceil((res.data.total ?? res.data.items.length) / pageSize)));
+      } else if (Array.isArray(res.data)) {
+        if (res.headers['x-total-count']) {
+          setTransactions(res.data);
+          const total = parseInt(res.headers['x-total-count'], 10);
+          setTotalRecords(total);
+          setTotalPages(res.headers['x-total-pages'] ? parseInt(res.headers['x-total-pages'], 10) : Math.max(1, Math.ceil(total / pageSize)));
+        } else {
+          const total = res.data.length;
+          const calcPages = Math.max(1, Math.ceil(total / pageSize));
+          const startIdx = (page - 1) * pageSize;
+          setTransactions(res.data.slice(startIdx, startIdx + pageSize));
+          setTotalRecords(total);
+          setTotalPages(calcPages);
+        }
       } else {
-        setTotalRecords(safeData.length > 0 ? safeData.length : MOCK_TRANSACTIONS.length);
-      }
-      if (res.headers['x-total-pages']) {
-        setTotalPages(parseInt(res.headers['x-total-pages'], 10));
+        const fallback = getFilteredAndPaginatedMock();
+        setTransactions(fallback.items);
+        setTotalRecords(fallback.total);
+        setTotalPages(fallback.totalPages);
       }
     } catch (err: any) {
       console.warn('API error, using active mock transactions:', err);
-      setTransactions(MOCK_TRANSACTIONS);
-      setTotalRecords(MOCK_TRANSACTIONS.length);
-      setTotalPages(1);
+      const fallback = getFilteredAndPaginatedMock();
+      setTransactions(fallback.items);
+      setTotalRecords(fallback.total);
+      setTotalPages(fallback.totalPages);
     } finally {
       setIsLoading(false);
     }
-  }, [filters, sort, order, page, pageSize]);
+  }, [filters, sort, order, page, pageSize, getFilteredAndPaginatedMock]);
 
   useEffect(() => {
     fetchTransactions();
