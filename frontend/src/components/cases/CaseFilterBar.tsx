@@ -37,12 +37,12 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
             placeholder="Search by Case ID, Title, User ID, Description, or Analyst..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-9 py-2 bg-slate-900/90 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full pl-10 pr-9 py-2 bg-soc-bg border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-indigo-500 transition-colors"
           />
           {search && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-soc-foreground"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -52,50 +52,50 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
         {/* Filter dropdowns */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Status filter */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs">
-            <span className="text-slate-400 text-[11px] font-medium">Status:</span>
+          <div className="flex items-center gap-1.5 bg-soc-bg border border-soc-border rounded-xl px-3 py-1.5 text-xs">
+            <span className="text-soc-muted text-[11px] font-medium">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => onStatusChange(e.target.value)}
-              className="bg-transparent text-white focus:outline-none text-xs cursor-pointer font-medium"
+              className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold"
             >
-              <option value="" className="bg-slate-900">All Statuses</option>
-              <option value="OPEN" className="bg-slate-900">OPEN</option>
-              <option value="INVESTIGATING" className="bg-slate-900">INVESTIGATING</option>
-              <option value="PENDING" className="bg-slate-900">PENDING</option>
-              <option value="RESOLVED" className="bg-slate-900">RESOLVED</option>
-              <option value="CLOSED" className="bg-slate-900">CLOSED</option>
+              <option value="">All Statuses</option>
+              <option value="OPEN">OPEN</option>
+              <option value="INVESTIGATING">INVESTIGATING</option>
+              <option value="PENDING">PENDING</option>
+              <option value="RESOLVED">RESOLVED</option>
+              <option value="CLOSED">CLOSED</option>
             </select>
           </div>
 
           {/* Severity filter */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs">
-            <span className="text-slate-400 text-[11px] font-medium">Severity:</span>
+          <div className="flex items-center gap-1.5 bg-soc-bg border border-soc-border rounded-xl px-3 py-1.5 text-xs">
+            <span className="text-soc-muted text-[11px] font-medium">Severity:</span>
             <select
               value={severityFilter}
               onChange={(e) => onSeverityChange(e.target.value)}
-              className="bg-transparent text-white focus:outline-none text-xs cursor-pointer font-medium"
+              className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold"
             >
-              <option value="" className="bg-slate-900">All Severities</option>
-              <option value="CRITICAL" className="bg-slate-900 text-rose-400">CRITICAL</option>
-              <option value="HIGH" className="bg-slate-900 text-amber-400">HIGH</option>
-              <option value="MEDIUM" className="bg-slate-900 text-blue-400">MEDIUM</option>
-              <option value="LOW" className="bg-slate-900 text-slate-400">LOW</option>
+              <option value="">All Severities</option>
+              <option value="CRITICAL">CRITICAL</option>
+              <option value="HIGH">HIGH</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="LOW">LOW</option>
             </select>
           </div>
 
           {/* Analyst filter */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs">
-            <span className="text-slate-400 text-[11px] font-medium">Analyst:</span>
+          <div className="flex items-center gap-1.5 bg-soc-bg border border-soc-border rounded-xl px-3 py-1.5 text-xs">
+            <span className="text-soc-muted text-[11px] font-medium">Analyst:</span>
             <select
               value={analystFilter}
               onChange={(e) => onAnalystChange(e.target.value)}
-              className="bg-transparent text-white focus:outline-none text-xs cursor-pointer font-medium max-w-[130px] truncate"
+              className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold max-w-[130px] truncate"
             >
-              <option value="" className="bg-slate-900">All Analysts</option>
-              <option value="UNASSIGNED" className="bg-slate-900 text-amber-400">Unassigned</option>
-              <option value="analyst@fraudshield.io" className="bg-slate-900">analyst@fraudshield.io</option>
-              <option value="admin@fraudshield.io" className="bg-slate-900">admin@fraudshield.io</option>
+              <option value="">All Analysts</option>
+              <option value="UNASSIGNED">Unassigned</option>
+              <option value="analyst@fraudshield.io">analyst@fraudshield.io</option>
+              <option value="admin@fraudshield.io">admin@fraudshield.io</option>
             </select>
           </div>
 
@@ -103,10 +103,10 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
           {hasActiveFilters && (
             <button
               onClick={onResetFilters}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors border border-slate-700"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-soc-surface hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground text-xs font-semibold transition-colors border border-soc-border shadow-sm"
               title="Reset all active filters"
             >
-              <RotateCcw className="w-3 h-3 text-slate-400" />
+              <RotateCcw className="w-3.5 h-3.5 text-soc-muted" />
               <span>Reset</span>
             </button>
           )}

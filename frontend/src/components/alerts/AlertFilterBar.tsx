@@ -63,7 +63,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search Alert ID, Txn ID, User, Reason..."
-            className="w-full bg-soc-bg border border-soc-border rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-soc-bg border border-soc-border rounded-xl pl-9 pr-8 py-2 text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-blue-500 transition-colors"
           />
           {searchInput && (
             <button
@@ -71,7 +71,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
                 setSearchInput('');
                 onFilterChange({ search: '' });
               }}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-soc-foreground p-1"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -83,7 +83,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
           <select
             value={filters.severity}
             onChange={(e) => onFilterChange({ severity: e.target.value })}
-            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 transition-colors cursor-pointer font-semibold"
           >
             <option value="">All Severities</option>
             <option value="CRITICAL">Critical Severity</option>
@@ -99,7 +99,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
           <select
             value={filters.status}
             onChange={(e) => onFilterChange({ status: e.target.value })}
-            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 transition-colors cursor-pointer font-semibold"
           >
             <option value="">All Statuses</option>
             <option value="OPEN">Open (New & Active)</option>
@@ -119,8 +119,8 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             onClick={() => setShowAdvanced(!showAdvanced)}
             className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all ${
               showAdvanced || activeChips.length > 2
-                ? 'bg-blue-600/15 border-blue-500/40 text-blue-400'
-                : 'bg-soc-bg border-soc-border text-slate-300 hover:bg-slate-800'
+                ? 'bg-blue-600/15 border-blue-500/40 text-blue-600 dark:text-blue-400'
+                : 'bg-soc-surface border-soc-border text-soc-muted hover:text-soc-foreground hover:bg-soc-cardHover shadow-sm'
             }`}
           >
             <Filter className="w-3.5 h-3.5" />
@@ -130,7 +130,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
           {activeChips.length > 0 && (
             <button
               onClick={onReset}
-              className="p-2 rounded-xl bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors"
+              className="p-2 rounded-xl bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-rose-500 transition-colors shadow-sm"
               title="Reset all filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />

@@ -414,9 +414,9 @@ export const AuditLogs: React.FC = () => {
               fetchStats();
             }}
             disabled={isLoading}
-            className="px-3.5 py-2 rounded-xl bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-md disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-xs font-semibold flex items-center gap-2 transition-all shadow-sm disabled:opacity-50"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-blue-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-blue-500' : ''}`} />
             <span>Refresh</span>
           </button>
         </div>
@@ -425,18 +425,18 @@ export const AuditLogs: React.FC = () => {
       {/* KPI Stats Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* 1. Total Events */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-lg flex items-center justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Total Audit Events</span>
-            <div className="text-xl font-extrabold text-white">{(stats?.total_events ?? totalCount).toLocaleString()}</div>
+            <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">Total Audit Events</span>
+            <div className="text-xl font-extrabold text-soc-foreground">{(stats?.total_events ?? totalCount).toLocaleString()}</div>
           </div>
-          <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
+          <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500 dark:text-blue-400">
             <FileText className="w-4 h-4" />
           </div>
         </div>
 
         {/* 2. Events Today */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-lg flex items-center justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Events Today</span>
             <div className="text-xl font-extrabold text-emerald-400">{stats?.events_today ?? 48}</div>

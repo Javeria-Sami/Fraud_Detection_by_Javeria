@@ -101,14 +101,14 @@ export const AlertKPIs: React.FC<AlertKPIsProps> = ({
           <button
             key={idx}
             onClick={kpi.onClick}
-            className={`text-left p-4 rounded-xl border transition-all relative overflow-hidden group cursor-pointer ${
+            className={`text-left p-4 rounded-xl border transition-all relative overflow-hidden group cursor-pointer bg-soc-card shadow-sm ${
               kpi.isActive
-                ? `${kpi.bgColor} ${kpi.activeBorder} shadow-lg ring-1 ring-white/10`
-                : 'bg-soc-card border-soc-border hover:border-slate-600'
+                ? `${kpi.bgColor} ${kpi.activeBorder} shadow-md ring-2 ring-blue-500`
+                : 'border-soc-border hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-semibold text-slate-400 group-hover:text-slate-200 transition-colors">
+              <span className="text-[11px] font-semibold text-soc-muted group-hover:text-soc-foreground transition-colors">
                 {kpi.label}
               </span>
               <div className={`p-1.5 rounded-lg ${kpi.bgColor} ${kpi.borderColor} ${kpi.color}`}>
@@ -117,12 +117,12 @@ export const AlertKPIs: React.FC<AlertKPIsProps> = ({
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold font-mono text-white tracking-tight">
+              <span className="text-xl font-bold font-mono text-soc-foreground tracking-tight">
                 {kpi.count.toLocaleString()}
               </span>
             </div>
 
-            <p className="text-[10px] text-slate-400 mt-1 truncate">{kpi.description}</p>
+            <p className="text-[10px] text-soc-muted mt-1 truncate font-mono">{kpi.description}</p>
           </button>
         );
       })}

@@ -84,33 +84,31 @@ export const CaseKPIs: React.FC<CaseKPIsProps> = ({
           <button
             key={card.id}
             onClick={() => onFilterByStatus(card.statusTarget)}
-            className={`flex flex-col p-4 rounded-xl border text-left transition-all ${
-              card.bgColor
-            } ${card.borderColor} hover:border-slate-500/50 ${
-              isActive ? 'ring-2 ring-indigo-500 shadow-md' : ''
+            className={`flex flex-col p-4 rounded-xl border text-left transition-all bg-soc-card border-soc-border hover:border-slate-400 dark:hover:border-slate-600 shadow-sm ${
+              isActive ? 'ring-2 ring-indigo-500 border-indigo-500 shadow-md' : ''
             }`}
           >
             <div className="flex items-center justify-between w-full">
-              <span className="text-xs font-medium text-slate-400 truncate">
+              <span className="text-xs font-semibold text-soc-muted truncate">
                 {card.label}
               </span>
-              <div className={`p-1.5 rounded-lg ${card.textColor} bg-slate-800/60`}>
+              <div className={`p-1.5 rounded-lg ${card.textColor} ${card.bgColor} border ${card.borderColor}`}>
                 <Icon className="w-4 h-4" />
               </div>
             </div>
 
             <div className="mt-2 flex items-baseline gap-2">
               {isLoading ? (
-                <div className="h-7 w-16 bg-slate-700/50 rounded animate-pulse" />
+                <div className="h-7 w-16 bg-slate-200 dark:bg-slate-700/50 rounded animate-pulse" />
               ) : (
-                <span className="text-2xl font-bold font-mono text-white tracking-tight">
+                <span className="text-2xl font-bold font-mono text-soc-foreground tracking-tight">
                   {card.value.toLocaleString()}
                 </span>
               )}
             </div>
 
             {card.subtext && (
-              <span className="text-[11px] text-slate-400 mt-0.5">
+              <span className="text-[11px] text-soc-muted mt-0.5 font-mono">
                 {card.subtext}
               </span>
             )}

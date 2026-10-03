@@ -456,14 +456,14 @@ export const HistoricalSearch: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="p-2 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-cyan-400">
+            <div className="p-2 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-cyan-500 dark:text-cyan-400">
               <History className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
+            <h1 className="text-2xl font-bold text-soc-foreground tracking-tight">
               Historical & Cross-Entity Search
             </h1>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-soc-muted">
             Query across historical transactions, alerts, investigation cases, user behavioral profiles, devices, and merchants.
           </p>
         </div>
@@ -473,9 +473,9 @@ export const HistoricalSearch: React.FC = () => {
             type="button"
             onClick={() => executeSearch()}
             disabled={isLoading}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-200 border border-slate-700 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+            className="px-3.5 py-2 bg-soc-surface hover:bg-soc-cardHover disabled:opacity-50 text-soc-muted hover:text-soc-foreground border border-soc-border text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors shadow-sm"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-cyan-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-cyan-500' : ''}`} />
             Refresh
           </button>
         </div>

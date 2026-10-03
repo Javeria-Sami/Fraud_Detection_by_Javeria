@@ -58,13 +58,13 @@ export const KPICard: React.FC<KPICardProps> = ({
   };
 
   const getTrendColor = () => {
-    if (trendDirection === 'up') return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
-    if (trendDirection === 'down') return 'text-rose-400 bg-rose-500/10 border-rose-500/20';
-    return 'text-slate-400 bg-slate-800 border-slate-700';
+    if (trendDirection === 'up') return 'text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
+    if (trendDirection === 'down') return 'text-rose-500 dark:text-rose-400 bg-rose-500/10 border-rose-500/20';
+    return 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700';
   };
 
   return (
-    <Card className={`hover:border-slate-700 transition-colors ${className}`}>
+    <Card className={`hover:border-slate-400 dark:hover:border-slate-700 transition-colors ${className}`}>
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-semibold text-soc-muted uppercase tracking-wider">

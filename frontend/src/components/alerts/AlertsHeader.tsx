@@ -24,19 +24,19 @@ export const AlertsHeader: React.FC<AlertsHeaderProps> = ({
         </div>
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-white tracking-tight">Alert Center</h1>
+            <h1 className="text-xl font-bold text-soc-foreground tracking-tight">Alert Center</h1>
             <span
               className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold border ${
                 isLive
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                  ? 'bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border-emerald-500/30'
+                  : 'bg-amber-500/10 text-amber-500 dark:text-amber-400 border-amber-500/30'
               }`}
             >
               <Radio className={`w-3 h-3 ${isLive ? 'animate-pulse' : ''}`} />
               {isLive ? 'Live Feed' : 'Connecting'}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-soc-muted mt-1">
             Real-time security alert queue, risk triage, automated deduplication, and investigation lifecycle.
           </p>
         </div>
@@ -44,24 +44,24 @@ export const AlertsHeader: React.FC<AlertsHeaderProps> = ({
 
       <div className="flex items-center gap-3 self-start md:self-auto">
         <div className="text-right hidden sm:block">
-          <div className="text-[11px] font-mono text-slate-400">Total Alerts</div>
-          <div className="text-xs font-mono font-bold text-white">{totalAlerts.toLocaleString()}</div>
+          <div className="text-[11px] font-mono text-soc-muted">Total Alerts</div>
+          <div className="text-xs font-mono font-bold text-soc-foreground">{totalAlerts.toLocaleString()}</div>
         </div>
 
         <div className="h-7 w-px bg-soc-border hidden sm:block" />
 
         <div className="text-right hidden sm:block">
-          <div className="text-[11px] font-mono text-slate-400">Last Synced</div>
-          <div className="text-xs font-mono font-bold text-slate-300">{lastUpdated}</div>
+          <div className="text-[11px] font-mono text-soc-muted">Last Synced</div>
+          <div className="text-xs font-mono font-bold text-soc-foreground">{lastUpdated}</div>
         </div>
 
         <button
           onClick={onRefresh}
           disabled={isLoading}
-          className="p-2.5 rounded-xl bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 hover:text-white transition-colors disabled:opacity-50"
+          className="p-2.5 rounded-xl bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground transition-colors disabled:opacity-50 shadow-sm"
           title="Refresh Alerts"
         >
-          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-blue-400' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-blue-500' : ''}`} />
         </button>
       </div>
     </div>
