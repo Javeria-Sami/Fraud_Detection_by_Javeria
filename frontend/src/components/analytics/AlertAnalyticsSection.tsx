@@ -209,40 +209,50 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
             <p className="text-xs text-soc-muted mt-0.5">Alerts categorized by priority</p>
           </div>
 
-          <div className="h-56 w-full flex items-center">
+          <div className="h-56 w-full flex items-center justify-between">
             {data.severity_distribution && data.severity_distribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                  <Pie
-                    data={data.severity_distribution}
-                    dataKey="count"
-                    nameKey="label"
-                    cx="42%"
-                    cy="50%"
-                    innerRadius={38}
-                    outerRadius={58}
-                    paddingAngle={3}
-                  >
-                    {data.severity_distribution.map((entry) => (
-                      <Cell
-                        key={`cell-${entry.label}`}
-                        fill={SEVERITY_COLORS[entry.label] || '#64748B'}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={customTooltipStyle} />
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '6px', lineHeight: '22px' }}
-                    formatter={(val) => {
-                      const item = data.severity_distribution.find((d) => d.label === val);
-                      return `${val}: ${item?.count || 0}`;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <>
+                <div className="w-1/2 h-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={data.severity_distribution}
+                        dataKey="count"
+                        nameKey="label"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={38}
+                        outerRadius={58}
+                        paddingAngle={3}
+                      >
+                        {data.severity_distribution.map((entry) => (
+                          <Cell
+                            key={`cell-${entry.label}`}
+                            fill={SEVERITY_COLORS[entry.label] || '#64748B'}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip contentStyle={customTooltipStyle} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="w-1/2 flex flex-col justify-center space-y-2 pl-2">
+                  {data.severity_distribution.map((item) => (
+                    <div key={item.label} className="flex items-center justify-between text-xs pr-2">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span
+                          className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                          style={{ backgroundColor: SEVERITY_COLORS[item.label] || '#64748B' }}
+                        />
+                        <span className="font-semibold text-soc-muted uppercase tracking-wider text-[11px] truncate">
+                          {item.label}
+                        </span>
+                      </div>
+                      <span className="font-mono font-bold text-soc-foreground ml-2">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No severity data
@@ -261,37 +271,47 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
             <p className="text-xs text-soc-muted mt-0.5">Alerts by lifecycle state</p>
           </div>
 
-          <div className="h-56 w-full flex items-center">
+          <div className="h-56 w-full flex items-center justify-between">
             {data.status_distribution && data.status_distribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                  <Pie
-                    data={data.status_distribution}
-                    dataKey="count"
-                    nameKey="label"
-                    cx="42%"
-                    cy="50%"
-                    innerRadius={38}
-                    outerRadius={58}
-                    paddingAngle={3}
-                  >
-                    {data.status_distribution.map((_, index) => (
-                      <Cell key={`status-${index}`} fill={PALETTE[index % PALETTE.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={customTooltipStyle} />
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '6px', lineHeight: '22px' }}
-                    formatter={(val) => {
-                      const item = data.status_distribution.find((d) => d.label === val);
-                      return `${val}: ${item?.count || 0}`;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <>
+                <div className="w-1/2 h-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={data.status_distribution}
+                        dataKey="count"
+                        nameKey="label"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={38}
+                        outerRadius={58}
+                        paddingAngle={3}
+                      >
+                        {data.status_distribution.map((_, index) => (
+                          <Cell key={`status-${index}`} fill={PALETTE[index % PALETTE.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip contentStyle={customTooltipStyle} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="w-1/2 flex flex-col justify-center space-y-2 pl-2">
+                  {data.status_distribution.map((item, index) => (
+                    <div key={item.label} className="flex items-center justify-between text-xs pr-2">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span
+                          className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                          style={{ backgroundColor: PALETTE[index % PALETTE.length] }}
+                        />
+                        <span className="font-semibold text-soc-muted uppercase tracking-wider text-[11px] truncate">
+                          {item.label}
+                        </span>
+                      </div>
+                      <span className="font-mono font-bold text-soc-foreground ml-2">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No status data
