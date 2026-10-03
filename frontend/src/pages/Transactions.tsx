@@ -203,23 +203,37 @@ export const Transactions: React.FC = () => {
 
       const res = await apiClient.get<any>(`/transactions?${queryParams.toString()}`);
       
+      const totalHeader = res.headers?.['x-total-count'] || res.headers?.['X-Total-Count'];
+      const totalPagesHeader = res.headers?.['x-total-pages'] || res.headers?.['X-Total-Pages'];
+
       if (res.data && Array.isArray(res.data.items)) {
         setTransactions(res.data.items);
-        setTotalRecords(res.data.total ?? res.data.items.length);
-        setTotalPages(res.data.total_pages ?? Math.max(1, Math.ceil((res.data.total ?? res.data.items.length) / pageSize)));
+        const total = res.data.total ?? (totalHeader ? parseInt(totalHeader, 10) : res.data.items.length);
+        setTotalRecords(total);
+        const totalPages = res.data.total_pages ?? (totalPagesHeader ? parseInt(totalPagesHeader, 10) : Math.max(1, Math.ceil(total / pageSize)));
+        setTotalPages(totalPages);
       } else if (Array.isArray(res.data)) {
-        if (res.headers['x-total-count']) {
+        if (totalHeader) {
           setTransactions(res.data);
-          const total = parseInt(res.headers['x-total-count'], 10);
+          const total = parseInt(totalHeader, 10);
           setTotalRecords(total);
-          setTotalPages(res.headers['x-total-pages'] ? parseInt(res.headers['x-total-pages'], 10) : Math.max(1, Math.ceil(total / pageSize)));
-        } else {
+          setTotalPages(totalPagesHeader ? parseInt(totalPagesHeader, 10) : Math.max(1, Math.ceil(total / pageSize)));
+        } else if (res.data.length > pageSize) {
           const total = res.data.length;
           const calcPages = Math.max(1, Math.ceil(total / pageSize));
           const startIdx = (page - 1) * pageSize;
           setTransactions(res.data.slice(startIdx, startIdx + pageSize));
           setTotalRecords(total);
           setTotalPages(calcPages);
+        } else if (res.data.length > 0 && page === 1 && res.data.length > 6) {
+          setTransactions(res.data);
+          setTotalRecords(res.data.length);
+          setTotalPages(Math.max(1, Math.ceil(res.data.length / pageSize)));
+        } else {
+          const fallback = getFilteredAndPaginatedMock();
+          setTransactions(fallback.items);
+          setTotalRecords(fallback.total);
+          setTotalPages(fallback.totalPages);
         }
       } else {
         const fallback = getFilteredAndPaginatedMock();

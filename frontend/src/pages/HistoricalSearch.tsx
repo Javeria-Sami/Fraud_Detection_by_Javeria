@@ -283,13 +283,23 @@ export function generateMockSearchResults(req: SearchQueryRequest): SearchRespon
     total,
   };
 
-  const toEntityGroup = <T,>(items: T[]) => ({
-    items,
-    total: items.length,
-    page: req.page || 1,
-    page_size: req.page_size || 25,
-    total_pages: 1,
-  });
+  const toEntityGroup = <T,>(items: T[]) => {
+    const pSize = req.page_size || 10;
+    const pNum = req.page || 1;
+    const totalCount = items.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / pSize));
+    const safePage = Math.min(Math.max(1, pNum), totalPages);
+    const start = (safePage - 1) * pSize;
+    const paginated = items.slice(start, start + pSize);
+
+    return {
+      items: paginated,
+      total: totalCount,
+      page: safePage,
+      page_size: pSize,
+      total_pages: totalPages,
+    };
+  };
 
   return {
     query: req.query,
