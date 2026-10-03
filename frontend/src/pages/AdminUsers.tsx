@@ -170,44 +170,76 @@ export const FALLBACK_PERMISSION_MATRIX: PermissionMatrixResponse = {
   ],
 };
 
-export const FALLBACK_ADMIN_USERS: AdminUserListItem[] = [
-  {
-    id: 'USR-001',
-    email: 'admin@fraudshield.io',
-    username: 'admin',
-    full_name: 'Alex Mercer (Lead Admin)',
-    role: 'ADMIN',
-    is_active: true,
-    is_verified: true,
-    created_at: new Date(Date.now() - 60 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_login_at: new Date().toISOString(),
-  },
-  {
-    id: 'USR-002',
-    email: 'analyst@fraudshield.io',
-    username: 'analyst',
-    full_name: 'Elena Rostova (Senior Analyst)',
-    role: 'ANALYST',
-    is_active: true,
-    is_verified: true,
-    created_at: new Date(Date.now() - 45 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_login_at: new Date(Date.now() - 3600000).toISOString(),
-  },
-  {
-    id: 'USR-003',
-    email: 'viewer@fraudshield.io',
-    username: 'viewer',
-    full_name: 'Marcus Vance (Compliance Auditor)',
-    role: 'VIEWER',
-    is_active: true,
-    is_verified: true,
-    created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_login_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-];
+const GENERATE_FALLBACK_ADMIN_USERS = (): AdminUserListItem[] => {
+  const usersList: AdminUserListItem[] = [
+    {
+      id: 'USR-001',
+      email: 'admin@fraudshield.io',
+      username: 'admin',
+      full_name: 'Alex Mercer (Lead Admin)',
+      role: 'ADMIN',
+      is_active: true,
+      is_verified: true,
+      created_at: new Date(Date.now() - 60 * 86400000).toISOString(),
+      updated_at: new Date().toISOString(),
+      last_login_at: new Date().toISOString(),
+    },
+    {
+      id: 'USR-002',
+      email: 'analyst@fraudshield.io',
+      username: 'analyst',
+      full_name: 'Elena Rostova (Senior Analyst)',
+      role: 'ANALYST',
+      is_active: true,
+      is_verified: true,
+      created_at: new Date(Date.now() - 45 * 86400000).toISOString(),
+      updated_at: new Date().toISOString(),
+      last_login_at: new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: 'USR-003',
+      email: 'viewer@fraudshield.io',
+      username: 'viewer',
+      full_name: 'Marcus Vance (Compliance Auditor)',
+      role: 'VIEWER',
+      is_active: true,
+      is_verified: true,
+      created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
+      updated_at: new Date().toISOString(),
+      last_login_at: new Date(Date.now() - 86400000).toISOString(),
+    },
+  ];
+
+  const firstNames = ['David', 'Sarah', 'James', 'Amina', 'Chen', 'Sophia', 'Liam', 'Maya', 'Lucas', 'Priya', 'Noah', 'Zoe', 'Tariq', 'Chloe', 'Gabriel', 'Isabella'];
+  const lastNames = ['Kim', 'Connor', 'Wilson', 'Diallo', 'Wei', 'Alvarez', 'Smith', 'Patel', 'Dubois', 'Sharma', 'Müller', 'Taylor', 'Mansour', 'Martin', 'Santos', 'Johnson'];
+  const rolesList: string[] = ['ANALYST', 'ANALYST', 'ADMIN', 'VIEWER', 'ANALYST'];
+
+  for (let i = 4; i <= 35; i++) {
+    const fn = firstNames[(i - 4) % firstNames.length];
+    const ln = lastNames[(i - 4) % lastNames.length];
+    const role = rolesList[(i - 4) % rolesList.length];
+    const username = `${fn.toLowerCase()}.${ln.toLowerCase()}`;
+    const email = `${username}@fraudshield.io`;
+    const isActive = i % 8 !== 0;
+
+    usersList.push({
+      id: `USR-${String(i).padStart(3, '0')}`,
+      email,
+      username,
+      full_name: `${fn} ${ln}`,
+      role,
+      is_active: isActive,
+      is_verified: true,
+      created_at: new Date(Date.now() - (i * 3 + 5) * 86400000).toISOString(),
+      updated_at: new Date(Date.now() - (i % 5) * 86400000).toISOString(),
+      last_login_at: new Date(Date.now() - ((i * 7) % 72 + 1) * 3600000).toISOString(),
+    });
+  }
+
+  return usersList;
+};
+
+export const FALLBACK_ADMIN_USERS: AdminUserListItem[] = GENERATE_FALLBACK_ADMIN_USERS();
 
 export const AdminUsers: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'users' | 'roles'>('users');
@@ -290,7 +322,9 @@ export const AdminUsers: React.FC = () => {
         } else if (statusFilter === 'inactive') {
           filtered = filtered.filter((u) => !u.is_active);
         }
-        setUsers(filtered);
+        const start = (page - 1) * pageSize;
+        const paginated = filtered.slice(start, start + pageSize);
+        setUsers(paginated);
         setTotalUsers(filtered.length);
       }
     } catch (err: any) {
@@ -313,7 +347,9 @@ export const AdminUsers: React.FC = () => {
       } else if (statusFilter === 'inactive') {
         filtered = filtered.filter((u) => !u.is_active);
       }
-      setUsers(filtered);
+      const start = (page - 1) * pageSize;
+      const paginated = filtered.slice(start, start + pageSize);
+      setUsers(paginated);
       setTotalUsers(filtered.length);
     } finally {
       setIsLoadingUsers(false);
@@ -454,6 +490,22 @@ export const AdminUsers: React.FC = () => {
   };
 
   const totalPages = Math.ceil(totalUsers / pageSize) || 1;
+
+  const getPageNumbers = () => {
+    const pages: number[] = [];
+    const maxVisible = 5;
+    let startPage = Math.max(1, page - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    if (endPage - startPage + 1 < maxVisible) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    for (let p = startPage; p <= endPage; p++) {
+      pages.push(p);
+    }
+    return pages;
+  };
 
   const safeRoles = useMemo(() => (Array.isArray(roles) ? roles : FALLBACK_ROLES), [roles]);
 
@@ -732,24 +784,59 @@ export const AdminUsers: React.FC = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="p-4 border-t border-soc-border flex items-center justify-between text-xs text-slate-400">
+            <div className="p-4 border-t border-soc-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
               <div>
                 Showing Page <strong className="text-white font-mono">{page}</strong> of{' '}
                 <strong className="text-white font-mono">{totalPages}</strong> ({totalUsers} total users)
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(parseInt(e.target.value, 10));
+                    setPage(1);
+                  }}
+                  className="bg-soc-bg border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 mr-2 font-mono cursor-pointer"
+                >
+                  <option value="5">5 per page</option>
+                  <option value="10">10 per page</option>
+                  <option value="25">25 per page</option>
+                  <option value="50">50 per page</option>
+                </select>
+
+                {/* Previous Button */}
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1 || isLoadingUsers}
-                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 disabled:opacity-40 flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+                  title="Previous Page"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Previous</span>
                 </button>
+
+                {/* Numbered Page Buttons */}
+                {getPageNumbers().map((pNum) => (
+                  <button
+                    key={pNum}
+                    onClick={() => setPage(pNum)}
+                    disabled={isLoadingUsers}
+                    className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all ${
+                      page === pNum
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                        : 'bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    {pNum}
+                  </button>
+                ))}
+
+                {/* Next Button */}
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages || isLoadingUsers}
-                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 disabled:opacity-40 flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+                  title="Next Page"
                 >
                   <span>Next</span>
                   <ChevronRight className="w-4 h-4" />
