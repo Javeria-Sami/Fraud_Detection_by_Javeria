@@ -14,6 +14,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Clock,
   User as UserIcon,
   Server,
@@ -513,90 +514,104 @@ export const AuditLogs: React.FC = () => {
         {/* Filter Controls Row (Single Clean Date Filter) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1 text-xs">
           {/* Action Filter */}
-          <select
-            value={selectedAction}
-            onChange={(e) => {
-              setSelectedAction(e.target.value);
-              setPage(1);
-            }}
-            className="bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
-          >
-            <option value="">All Actions</option>
-            <option value="LOGIN">LOGIN</option>
-            <option value="LOGIN_FAILED">LOGIN_FAILED</option>
-            <option value="USER_CREATE">USER_CREATE</option>
-            <option value="USER_STATUS_CHANGE">USER_STATUS_CHANGE</option>
-            <option value="USER_ROLE_CHANGE">USER_ROLE_CHANGE</option>
-            <option value="SETTING_UPDATE">SETTING_UPDATE</option>
-            <option value="RULE_UPDATE">RULE_UPDATE</option>
-            <option value="RULE_VERSION_ACTIVATE">RULE_VERSION_ACTIVATE</option>
-            <option value="ALERT_CONFIG_UPDATE">ALERT_CONFIG_UPDATE</option>
-            <option value="CASE_RESOLVED">CASE_RESOLVED</option>
-            <option value="MODEL_DEPLOYED">MODEL_DEPLOYED</option>
-            <option value="MODEL_RETRAINING_STARTED">MODEL_RETRAINING_STARTED</option>
-          </select>
+          <div className="relative flex items-center">
+            <select
+              value={selectedAction}
+              onChange={(e) => {
+                setSelectedAction(e.target.value);
+                setPage(1);
+              }}
+              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+            >
+              <option value="">All Actions</option>
+              <option value="LOGIN">LOGIN</option>
+              <option value="LOGIN_FAILED">LOGIN_FAILED</option>
+              <option value="USER_CREATE">USER_CREATE</option>
+              <option value="USER_STATUS_CHANGE">USER_STATUS_CHANGE</option>
+              <option value="USER_ROLE_CHANGE">USER_ROLE_CHANGE</option>
+              <option value="SETTING_UPDATE">SETTING_UPDATE</option>
+              <option value="RULE_UPDATE">RULE_UPDATE</option>
+              <option value="RULE_VERSION_ACTIVATE">RULE_VERSION_ACTIVATE</option>
+              <option value="ALERT_CONFIG_UPDATE">ALERT_CONFIG_UPDATE</option>
+              <option value="CASE_RESOLVED">CASE_RESOLVED</option>
+              <option value="MODEL_DEPLOYED">MODEL_DEPLOYED</option>
+              <option value="MODEL_RETRAINING_STARTED">MODEL_RETRAINING_STARTED</option>
+            </select>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
 
           {/* Resource Type */}
-          <select
-            value={selectedResourceType}
-            onChange={(e) => {
-              setSelectedResourceType(e.target.value);
-              setPage(1);
-            }}
-            className="bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
-          >
-            <option value="">All Resources</option>
-            <option value="User">User</option>
-            <option value="FraudRule">FraudRule</option>
-            <option value="Alert">Alert</option>
-            <option value="Case">Case</option>
-            <option value="MLModel">MLModel</option>
-            <option value="SystemSetting">SystemSetting</option>
-            <option value="Authentication">Authentication</option>
-          </select>
+          <div className="relative flex items-center">
+            <select
+              value={selectedResourceType}
+              onChange={(e) => {
+                setSelectedResourceType(e.target.value);
+                setPage(1);
+              }}
+              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+            >
+              <option value="">All Resources</option>
+              <option value="User">User</option>
+              <option value="FraudRule">FraudRule</option>
+              <option value="Alert">Alert</option>
+              <option value="Case">Case</option>
+              <option value="MLModel">MLModel</option>
+              <option value="SystemSetting">SystemSetting</option>
+              <option value="Authentication">Authentication</option>
+            </select>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
 
           {/* Severity */}
-          <select
-            value={selectedSeverity}
-            onChange={(e) => {
-              setSelectedSeverity(e.target.value);
-              setPage(1);
-            }}
-            className="bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
-          >
-            <option value="">All Severities</option>
-            <option value="INFO">INFO</option>
-            <option value="WARNING">WARNING</option>
-            <option value="HIGH">HIGH</option>
-            <option value="CRITICAL">CRITICAL</option>
-          </select>
+          <div className="relative flex items-center">
+            <select
+              value={selectedSeverity}
+              onChange={(e) => {
+                setSelectedSeverity(e.target.value);
+                setPage(1);
+              }}
+              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+            >
+              <option value="">All Severities</option>
+              <option value="INFO">INFO</option>
+              <option value="WARNING">WARNING</option>
+              <option value="HIGH">HIGH</option>
+              <option value="CRITICAL">CRITICAL</option>
+            </select>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
 
           {/* Outcome */}
-          <select
-            value={selectedOutcome}
-            onChange={(e) => {
-              setSelectedOutcome(e.target.value);
-              setPage(1);
-            }}
-            className="bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
-          >
-            <option value="">All Outcomes</option>
-            <option value="SUCCESS">SUCCESS</option>
-            <option value="FAILURE">FAILURE</option>
-            <option value="DENIED">DENIED</option>
-          </select>
+          <div className="relative flex items-center">
+            <select
+              value={selectedOutcome}
+              onChange={(e) => {
+                setSelectedOutcome(e.target.value);
+                setPage(1);
+              }}
+              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+            >
+              <option value="">All Outcomes</option>
+              <option value="SUCCESS">SUCCESS</option>
+              <option value="FAILURE">FAILURE</option>
+              <option value="DENIED">DENIED</option>
+            </select>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
 
           {/* Single Event Date Filter */}
-          <input
-            type="date"
-            value={dateFilter}
-            onChange={(e) => {
-              setDateFilter(e.target.value);
-              setPage(1);
-            }}
-            className="bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
-            title="Filter by Event Date"
-          />
+          <div className="relative flex items-center">
+            <input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => {
+                setDateFilter(e.target.value);
+                setPage(1);
+              }}
+              className="w-full bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+              title="Filter by Event Date"
+            />
+          </div>
         </div>
       </div>
 

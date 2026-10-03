@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Calendar, Filter, X, RotateCcw } from 'lucide-react';
+import { Search, Calendar, Filter, X, RotateCcw, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export interface FilterValues {
@@ -59,8 +59,8 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
       {/* Primary Bar: Search + Quick Dropdowns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
         {/* Search */}
-        <div className="lg:col-span-5 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+        <div className="lg:col-span-5 relative flex items-center">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchInput}
@@ -74,7 +74,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
                 setSearchInput('');
                 onFilterChange({ search: '' });
               }}
-              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -82,11 +82,11 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
         </div>
 
         {/* Risk Level */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 relative flex items-center">
           <select
             value={filters.risk_level}
             onChange={(e) => onFilterChange({ risk_level: e.target.value })}
-            className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans cursor-pointer"
           >
             <option value="">All Risk Tiers</option>
             <option value="CRITICAL">Critical Risk (90–100)</option>
@@ -94,14 +94,15 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             <option value="MEDIUM">Medium Risk (40–69)</option>
             <option value="LOW">Low Risk (0–39)</option>
           </select>
+          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Status */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 relative flex items-center">
           <select
             value={filters.status}
             onChange={(e) => onFilterChange({ status: e.target.value })}
-            className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans cursor-pointer"
           >
             <option value="">All Statuses</option>
             <option value="APPROVED">Approved</option>
@@ -113,6 +114,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             <option value="FAILED">Failed</option>
             <option value="DECLINED">Declined</option>
           </select>
+          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Advanced Filters Toggle */}
@@ -188,18 +190,21 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
           {/* Currency */}
           <div>
             <label className="text-[11px] font-semibold text-soc-muted block mb-1">Currency</label>
-            <select
-              value={filters.currency}
-              onChange={(e) => onFilterChange({ currency: e.target.value })}
-              className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-1.5 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
-            >
-              <option value="">All Currencies</option>
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="CAD">CAD ($)</option>
-              <option value="AUD">AUD ($)</option>
-            </select>
+            <div className="relative flex items-center">
+              <select
+                value={filters.currency}
+                onChange={(e) => onFilterChange({ currency: e.target.value })}
+                className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-8 py-1.5 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono cursor-pointer"
+              >
+                <option value="">All Currencies</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="CAD">CAD ($)</option>
+                <option value="AUD">AUD ($)</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
         </div>
       )}

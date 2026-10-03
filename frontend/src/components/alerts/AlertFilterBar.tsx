@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, X, Calendar, RotateCcw, Shield, Layers } from 'lucide-react';
+import { Search, Filter, X, Calendar, RotateCcw, Shield, Layers, ChevronDown } from 'lucide-react';
 
 export interface AlertFilterValues {
   search: string;
@@ -56,8 +56,8 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
       {/* Primary Filter Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {/* Search Bar */}
-        <div className="lg:col-span-2 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+        <div className="lg:col-span-2 relative flex items-center">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchInput}
@@ -71,7 +71,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
                 setSearchInput('');
                 onFilterChange({ search: '' });
               }}
-              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -79,11 +79,11 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
         </div>
 
         {/* Severity Selector */}
-        <div>
+        <div className="relative flex items-center">
           <select
             value={filters.severity}
             onChange={(e) => onFilterChange({ severity: e.target.value })}
-            className="w-full bg-soc-bg border border-soc-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
           >
             <option value="">All Severities</option>
             <option value="CRITICAL">Critical Severity</option>
@@ -91,14 +91,15 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             <option value="MEDIUM">Medium Severity</option>
             <option value="LOW">Low Severity</option>
           </select>
+          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Status Selector */}
-        <div>
+        <div className="relative flex items-center">
           <select
             value={filters.status}
             onChange={(e) => onFilterChange({ status: e.target.value })}
-            className="w-full bg-soc-bg border border-soc-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
           >
             <option value="">All Statuses</option>
             <option value="OPEN">Open (New & Active)</option>
@@ -109,6 +110,7 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             <option value="RESOLVED">Resolved</option>
             <option value="DISMISSED">Dismissed (False Positive)</option>
           </select>
+          <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
         {/* Advanced Filters Toggle & Reset */}
