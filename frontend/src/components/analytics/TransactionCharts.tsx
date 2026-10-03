@@ -177,15 +177,15 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
           <div className="h-64 w-full flex items-center">
             {data?.status_distribution && data.status_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
                   <Pie
                     data={data.status_distribution}
                     dataKey="count"
                     nameKey="status"
-                    cx="50%"
+                    cx="42%"
                     cy="50%"
-                    innerRadius={55}
-                    outerRadius={80}
+                    innerRadius={48}
+                    outerRadius={72}
                     paddingAngle={3}
                   >
                     {data.status_distribution.map((entry, index) => (
@@ -200,7 +200,7 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '10px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.status_distribution.find((d) => d.status === val);
                       return `${val}: ${item?.count || 0} (${item?.percentage || 0}%)`;
@@ -236,7 +236,7 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
                 <BarChart
                   data={data.category_distribution.slice(0, 7)}
                   layout="vertical"
-                  margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+                  margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" horizontal={false} />
                   <XAxis type="number" stroke="#94a3b8" fontSize={10} tickLine={false} />
@@ -244,9 +244,9 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
                     dataKey="category"
                     type="category"
                     stroke="#94a3b8"
-                    fontSize={10}
+                    fontSize={11}
                     tickLine={false}
-                    width={80}
+                    width={110}
                   />
                   <Tooltip contentStyle={customTooltipStyle} />
                   <Bar dataKey="count" name="Transactions" fill="#8B5CF6" radius={[0, 6, 6, 0]}>

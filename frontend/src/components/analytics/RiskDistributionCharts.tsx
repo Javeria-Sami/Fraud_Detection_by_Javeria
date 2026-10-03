@@ -135,15 +135,15 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
           <div className="h-64 w-full flex items-center">
             {data.risk_level_distribution && data.risk_level_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
                   <Pie
                     data={data.risk_level_distribution}
                     dataKey="count"
                     nameKey="risk_level"
-                    cx="36%"
+                    cx="42%"
                     cy="50%"
-                    innerRadius={50}
-                    outerRadius={75}
+                    innerRadius={48}
+                    outerRadius={72}
                     paddingAngle={3}
                   >
                     {data.risk_level_distribution.map((entry) => (
@@ -158,7 +158,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '10px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.risk_level_distribution.find((d) => d.risk_level === val);
                       return `${val}: ${item?.count || 0} (${item?.percentage || 0}%)`;

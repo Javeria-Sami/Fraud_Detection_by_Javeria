@@ -205,15 +205,15 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
           <div className="h-64 w-full flex items-center">
             {data.resolution_distribution && data.resolution_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
                   <Pie
                     data={data.resolution_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="36%"
+                    cx="42%"
                     cy="50%"
-                    innerRadius={50}
-                    outerRadius={75}
+                    innerRadius={48}
+                    outerRadius={72}
                     paddingAngle={3}
                   >
                     {data.resolution_distribution.map((entry, index) => (
@@ -228,7 +228,7 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.resolution_distribution.find((d) => d.label === val);
                       return `${val}: ${item?.count || 0}`;

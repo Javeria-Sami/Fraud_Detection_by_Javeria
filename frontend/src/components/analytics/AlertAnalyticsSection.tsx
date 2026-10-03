@@ -212,15 +212,15 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
           <div className="h-56 w-full flex items-center">
             {data.severity_distribution && data.severity_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
                   <Pie
                     data={data.severity_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="36%"
+                    cx="42%"
                     cy="50%"
-                    innerRadius={40}
-                    outerRadius={65}
+                    innerRadius={38}
+                    outerRadius={58}
                     paddingAngle={3}
                   >
                     {data.severity_distribution.map((entry) => (
@@ -235,7 +235,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '4px', lineHeight: '22px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '6px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.severity_distribution.find((d) => d.label === val);
                       return `${val}: ${item?.count || 0}`;
@@ -264,15 +264,15 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
           <div className="h-56 w-full flex items-center">
             {data.status_distribution && data.status_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
                   <Pie
                     data={data.status_distribution}
                     dataKey="count"
                     nameKey="label"
-                    cx="36%"
+                    cx="42%"
                     cy="50%"
-                    innerRadius={40}
-                    outerRadius={65}
+                    innerRadius={38}
+                    outerRadius={58}
                     paddingAngle={3}
                   >
                     {data.status_distribution.map((_, index) => (
@@ -284,7 +284,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     layout="vertical"
                     align="right"
                     verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '4px', lineHeight: '22px' }}
+                    wrapperStyle={{ fontSize: '11px', paddingLeft: '6px', lineHeight: '22px' }}
                     formatter={(val) => {
                       const item = data.status_distribution.find((d) => d.label === val);
                       return `${val}: ${item?.count || 0}`;
@@ -316,7 +316,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                 <BarChart
                   data={data.top_alert_reasons.slice(0, 5)}
                   layout="vertical"
-                  margin={{ top: 5, right: 15, left: 10, bottom: 5 }}
+                  margin={{ top: 5, right: 20, left: 5, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" horizontal={false} />
                   <XAxis type="number" stroke="#94a3b8" fontSize={10} tickLine={false} allowDecimals={false} />
@@ -326,11 +326,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
                     stroke="#94a3b8"
                     fontSize={11}
                     tickLine={false}
-                    width={110}
-                    tickFormatter={(val: string) => {
-                      if (!val) return '';
-                      return val.length > 15 ? `${val.slice(0, 13)}…` : val;
-                    }}
+                    width={130}
                   />
                   <Tooltip
                     contentStyle={customTooltipStyle}
