@@ -29,15 +29,15 @@ export const KPICard: React.FC<KPICardProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Card className={`p-5 ${className}`}>
-        <div className="animate-pulse space-y-3">
+      <Card className={`h-full ${className}`}>
+        <CardContent className="p-5 flex flex-col justify-between h-full space-y-3">
           <div className="flex justify-between items-center">
-            <div className="h-3.5 bg-slate-700/60 rounded w-24" />
-            <div className="h-8 w-8 bg-slate-700/60 rounded-lg" />
+            <div className="h-3.5 bg-slate-200/90 dark:bg-slate-700/60 rounded-md w-24 animate-pulse" />
+            <div className="h-8 w-8 bg-slate-200/90 dark:bg-slate-700/60 rounded-lg animate-pulse" />
           </div>
-          <div className="h-7 bg-slate-700/60 rounded w-32" />
-          <div className="h-3 bg-slate-700/40 rounded w-40" />
-        </div>
+          <div className="h-7 bg-slate-200/90 dark:bg-slate-700/60 rounded-md w-32 animate-pulse" />
+          <div className="h-3 bg-slate-200/70 dark:bg-slate-700/40 rounded-md w-40 animate-pulse" />
+        </CardContent>
       </Card>
     );
   }

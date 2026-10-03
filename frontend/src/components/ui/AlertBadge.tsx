@@ -54,8 +54,8 @@ export const AlertBadge: React.FC<AlertBadgeProps> = ({
       NEW: { bg: 'bg-rose-500/10', border: 'border-rose-500/30', text: 'text-rose-400', icon: ShieldAlert },
       ACKNOWLEDGED: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400', icon: Eye },
       INVESTIGATING: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', icon: Clock },
-      RESOLVED: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', icon: CheckCircle2 },
-      CLOSED: { bg: 'bg-slate-800/80', border: 'border-slate-700/80', text: 'text-slate-400', icon: Check },
+      RESOLVED: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-600 dark:text-emerald-400', icon: CheckCircle2 },
+      CLOSED: { bg: 'bg-slate-100 dark:bg-slate-800/80', border: 'border-slate-300 dark:border-slate-700/80', text: 'text-slate-700 dark:text-slate-300', icon: Check },
     };
     const current = statusConfigs[st] || statusConfigs.NEW;
     const Icon = current.icon;

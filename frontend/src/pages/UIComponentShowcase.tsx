@@ -143,20 +143,24 @@ export const UIComponentShowcase: React.FC = () => {
             </div>
           </div>
 
-          <div>
-            <div className="text-xs font-semibold text-soc-muted mb-2 uppercase tracking-wider font-mono">
-              Alert Severities & Status Badges
+          <div className="space-y-3">
+            <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider font-mono">
+              Alert Severities & Lifecycle Status Badges
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <AlertBadge severity="LOW" />
-              <AlertBadge severity="MEDIUM" />
-              <AlertBadge severity="HIGH" />
-              <AlertBadge severity="CRITICAL" />
-              <AlertBadge status="NEW" />
-              <AlertBadge status="ACKNOWLEDGED" />
-              <AlertBadge status="INVESTIGATING" />
-              <AlertBadge status="RESOLVED" />
-              <AlertBadge status="CLOSED" />
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <AlertBadge severity="LOW" />
+                <AlertBadge severity="MEDIUM" />
+                <AlertBadge severity="HIGH" />
+                <AlertBadge severity="CRITICAL" />
+              </div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <AlertBadge status="NEW" />
+                <AlertBadge status="ACKNOWLEDGED" />
+                <AlertBadge status="INVESTIGATING" />
+                <AlertBadge status="RESOLVED" />
+                <AlertBadge status="CLOSED" />
+              </div>
             </div>
           </div>
 

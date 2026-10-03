@@ -8,7 +8,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 }) => {
   return (
     <div
-      className={`animate-pulse rounded-md bg-slate-800/60 dark:bg-slate-800/80 ${className}`}
+      className={`animate-pulse rounded-md bg-slate-200/80 dark:bg-slate-800/80 ${className}`}
       {...props}
     />
   );

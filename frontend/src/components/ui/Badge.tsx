@@ -25,8 +25,8 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const variantStyles: Record<BadgeVariant, { container: string; dot: string }> = {
     default: {
-      container: "bg-slate-800/80 text-slate-300 border border-slate-700/80",
-      dot: "bg-slate-400",
+      container: "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700/80",
+      dot: "bg-slate-500 dark:bg-slate-400",
     },
     success: {
       container: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
