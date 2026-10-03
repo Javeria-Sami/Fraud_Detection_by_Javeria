@@ -440,7 +440,7 @@ export const Transactions: React.FC = () => {
           <Button
             size="sm"
             onClick={() => setShowIngestModal(true)}
-            className="text-xs flex items-center gap-1.5"
+            className="text-xs flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/20"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Ingest Test Txn</span>
@@ -450,7 +450,7 @@ export const Transactions: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={handleExportCSV}
-            className="text-xs flex items-center gap-1.5"
+            className="text-xs flex items-center gap-1.5 bg-white dark:bg-soc-surface border-slate-200 dark:border-soc-border text-slate-700 dark:text-soc-foreground hover:bg-blue-50 dark:hover:bg-soc-cardHover hover:text-blue-600 dark:hover:text-white hover:border-blue-300 transition-all shadow-sm"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -459,10 +459,10 @@ export const Transactions: React.FC = () => {
           <button
             type="button"
             onClick={fetchTransactions}
-            className="p-2 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 transition-colors"
+            className="p-2 rounded-lg bg-white dark:bg-soc-surface border border-slate-200 dark:border-soc-border hover:bg-blue-50 dark:hover:bg-soc-cardHover text-slate-600 dark:text-soc-muted hover:text-blue-600 dark:hover:text-white hover:border-blue-300 transition-all shadow-sm"
             title="Refresh Transactions"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-blue-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-blue-500' : ''}`} />
           </button>
         </div>
       </div>

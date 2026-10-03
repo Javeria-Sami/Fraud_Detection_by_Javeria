@@ -74,14 +74,23 @@
    ========================================================================== */
 
 html:not(.dark) {
-  /* Tables & Rows */
+  /* Tables & Rows - Premium Soft Indigo/Blue Tint on Hover */
   tr.hover\:bg-slate-800\/40:hover,
   tr.hover\:bg-slate-800\/50:hover,
   tr.hover\:bg-slate-800\/60:hover,
   tr.hover\:bg-slate-800:hover,
   tr.hover\:bg-soc-cardHover:hover,
+  tr.hover\:bg-blue-50\/60:hover,
   tbody tr:hover {
-    background-color: #F1F5F9 !important;
+    background: linear-gradient(90deg, rgba(239, 246, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%) !important;
+  }
+
+  /* Selected Table Row */
+  tr.bg-blue-600\/10,
+  tr.bg-blue-600\/15,
+  tr.bg-blue-50\/90 {
+    background: linear-gradient(90deg, #EFF6FF 0%, #F8FAFC 100%) !important;
+    border-left-color: #2563EB !important;
   }
 
   /* Table Headers */
@@ -93,7 +102,7 @@ html:not(.dark) {
     color: #475569 !important;
   }
   thead th:hover {
-    color: #0F172A !important;
+    color: #1D4ED8 !important;
   }
 
   /* Text Contrast & Readability */
@@ -119,15 +128,56 @@ html:not(.dark) {
     color: #0F172A !important;
   }
 
-  /* Buttons & Interactive Elements */
+  /* Buttons & Interactive Elements - Soft Blue Tint on Hover instead of Dark */
   button.hover\:bg-slate-800:hover,
   button.hover\:bg-slate-700:hover,
   button.hover\:bg-slate-900:hover,
+  button.hover\:bg-soc-cardHover:hover,
   a.hover\:bg-slate-800:hover,
   a.hover\:bg-slate-700:hover {
-    background-color: #E2E8F0 !important;
-    color: #0F172A !important;
-    border-color: #CBD5E1 !important;
+    background-color: #EFF6FF !important;
+    color: #1D4ED8 !important;
+    border-color: #BFDBFE !important;
+  }
+
+  /* Remove Black Button Backgrounds in Light Mode */
+  button.bg-slate-800,
+  button.bg-slate-900,
+  button.bg-slate-950,
+  button.bg-soc-bg:not([class*="bg-blue"]):not([class*="bg-rose"]):not([class*="bg-emerald"]) {
+    background-color: #FFFFFF !important;
+    color: #334155 !important;
+    border-color: #E2E8F0 !important;
+  }
+
+  button.bg-slate-800:hover,
+  button.bg-slate-900:hover,
+  button.bg-slate-950:hover,
+  button.bg-soc-bg:hover:not([class*="bg-blue"]):not([class*="bg-rose"]):not([class*="bg-emerald"]) {
+    background-color: #EFF6FF !important;
+    color: #1D4ED8 !important;
+    border-color: #93C5FD !important;
+  }
+
+  /* Active pagination buttons preserve royal blue background with pure white text */
+  button.bg-blue-600,
+  button.bg-indigo-600 {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: #1D4ED8 !important;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25) !important;
+  }
+
+  /* Inactive pagination buttons in light mode */
+  .pagination-inactive-btn {
+    background-color: #FFFFFF !important;
+    color: #334155 !important;
+    border-color: #E2E8F0 !important;
+  }
+  .pagination-inactive-btn:hover {
+    background-color: #EFF6FF !important;
+    color: #1D4ED8 !important;
+    border-color: #93C5FD !important;
   }
 
   /* Input, Select, Textarea in Light Mode */
@@ -135,6 +185,7 @@ html:not(.dark) {
   input[type="text"],
   input[type="password"],
   input[type="number"],
+  input[type="date"],
   input[type="datetime-local"],
   textarea {
     background-color: #FFFFFF !important;
@@ -211,14 +262,6 @@ html:not(.dark) {
     background-color: #FAF5FF !important;
     color: #7E22CE !important;
     border-color: #E9D5FF !important;
-  }
-
-  /* Active pagination buttons preserve pristine blue background with white text */
-  button.bg-blue-600,
-  button.bg-indigo-600 {
-    background-color: #2563EB !important;
-    color: #FFFFFF !important;
-    border-color: #1D4ED8 !important;
   }
 
   /* Dropdown & Modal Shadows */

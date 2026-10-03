@@ -79,7 +79,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage <= 1 || isLoading}
           onClick={() => onPageChange(1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
+          className="p-2 rounded-lg border border-slate-200 dark:border-soc-border bg-white dark:bg-soc-surface hover:bg-blue-50 dark:hover:bg-soc-cardHover disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 dark:text-soc-muted hover:text-blue-600 dark:hover:text-soc-foreground hover:border-blue-300 dark:hover:border-slate-600 transition-all shadow-sm"
           title="First Page"
         >
           <ChevronsLeft className="w-3.5 h-3.5" />
@@ -90,14 +90,14 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage <= 1 || isLoading}
           onClick={() => onPageChange(safePage - 1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
+          className="p-2 rounded-lg border border-slate-200 dark:border-soc-border bg-white dark:bg-soc-surface hover:bg-blue-50 dark:hover:bg-soc-cardHover disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 dark:text-soc-muted hover:text-blue-600 dark:hover:text-soc-foreground hover:border-blue-300 dark:hover:border-slate-600 transition-all shadow-sm"
           title="Previous Page"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
         </button>
 
         {/* Numbered Page Buttons */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           {getPageNumbers().map((p, idx) => {
             if (p === '...') {
               return (
@@ -114,10 +114,10 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
                 type="button"
                 disabled={isLoading}
                 onClick={() => onPageChange(pageNum)}
-                className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
+                className={`min-w-[32px] h-8 px-2.5 flex items-center justify-center rounded-lg border font-mono text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-cardHover hover:border-slate-400 dark:hover:border-slate-600'
+                    ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-md shadow-blue-500/25 ring-2 ring-blue-500/20'
+                    : 'bg-white dark:bg-soc-surface border-slate-200 dark:border-soc-border text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-white hover:border-blue-300 dark:hover:border-slate-600 shadow-sm'
                 }`}
               >
                 {pageNum}
@@ -131,7 +131,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage >= safeTotalPages || isLoading}
           onClick={() => onPageChange(safePage + 1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
+          className="p-2 rounded-lg border border-slate-200 dark:border-soc-border bg-white dark:bg-soc-surface hover:bg-blue-50 dark:hover:bg-soc-cardHover disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 dark:text-soc-muted hover:text-blue-600 dark:hover:text-soc-foreground hover:border-blue-300 dark:hover:border-slate-600 transition-all shadow-sm"
           title="Next Page"
         >
           <ChevronRight className="w-3.5 h-3.5" />
@@ -142,7 +142,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage >= safeTotalPages || isLoading}
           onClick={() => onPageChange(safeTotalPages)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
+          className="p-2 rounded-lg border border-slate-200 dark:border-soc-border bg-white dark:bg-soc-surface hover:bg-blue-50 dark:hover:bg-soc-cardHover disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 dark:text-soc-muted hover:text-blue-600 dark:hover:text-soc-foreground hover:border-blue-300 dark:hover:border-slate-600 transition-all shadow-sm"
           title="Last Page"
         >
           <ChevronsRight className="w-3.5 h-3.5" />

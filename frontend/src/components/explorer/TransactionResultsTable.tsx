@@ -102,10 +102,10 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
       {/* Desktop / Tablet Table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-soc-bg text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
+          <thead className="bg-slate-50/90 dark:bg-soc-bg text-slate-600 dark:text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 dark:border-soc-border select-none">
             <tr>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('timestamp')}
               >
                 <div className="flex items-center gap-1.5">
@@ -113,11 +113,11 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                   {renderSortIcon('timestamp')}
                 </div>
               </th>
-              <th className="py-3 px-4">Transaction ID</th>
-              <th className="py-3 px-4">User / Account</th>
-              <th className="py-3 px-4">Merchant</th>
+              <th className="py-3.5 px-4">Transaction ID</th>
+              <th className="py-3.5 px-4">User / Account</th>
+              <th className="py-3.5 px-4">Merchant</th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('amount')}
               >
                 <div className="flex items-center gap-1.5">
@@ -126,7 +126,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('risk_score')}
               >
                 <div className="flex items-center gap-1.5">
@@ -135,7 +135,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('status')}
               >
                 <div className="flex items-center gap-1.5">
@@ -143,64 +143,64 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                   {renderSortIcon('status')}
                 </div>
               </th>
-              <th className="py-3 px-4 text-right">Inspect</th>
+              <th className="py-3.5 px-4 text-right">Inspect</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-soc-border/50 font-mono">
+          <tbody className="divide-y divide-slate-200/80 dark:divide-soc-border/50 font-mono">
             {transactions.map((t) => {
               const isSelected = selectedId === t.id;
               return (
                 <tr
                   key={t.id}
                   onClick={() => onSelectTransaction(t.id)}
-                  className={`cursor-pointer transition-colors ${
+                  className={`cursor-pointer transition-all duration-150 group ${
                     isSelected
-                      ? 'bg-blue-600/15 border-l-2 border-l-blue-500'
-                      : 'hover:bg-soc-cardHover'
+                      ? 'bg-blue-50/90 dark:bg-blue-600/15 border-l-4 border-l-blue-600 dark:border-l-blue-500 shadow-sm'
+                      : 'hover:bg-blue-50/60 dark:hover:bg-slate-800/60'
                   }`}
                 >
-                  <td className="py-3 px-4 text-soc-muted font-sans text-[11px]">
-                    {t.timestamp ? new Date(t.timestamp).toLocaleString() : '-'}
+                  <td className="py-3.5 px-4 text-slate-600 dark:text-soc-muted font-sans text-[11px] whitespace-nowrap">
+                    {t.timestamp ? new Date(t.timestamp).toLocaleString([], { month: 'numeric', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '-'}
                   </td>
-                  <td className="py-3 px-4 font-bold text-blue-500">
+                  <td className="py-3.5 px-4 font-bold text-blue-600 dark:text-blue-400 font-mono tracking-tight group-hover:text-blue-700 dark:group-hover:text-blue-300">
                     {t.id}
                   </td>
-                  <td className="py-3 px-4 font-sans text-soc-foreground">
-                    <div className="font-medium">{t.user_name || t.user_id}</div>
-                    <div className="text-[10px] text-soc-muted font-mono">{t.user_id}</div>
+                  <td className="py-3.5 px-4 font-sans">
+                    <div className="font-semibold text-slate-900 dark:text-soc-foreground">{t.user_name || t.user_id}</div>
+                    <div className="text-[10px] text-slate-500 dark:text-soc-muted font-mono">{t.user_id}</div>
                   </td>
-                  <td className="py-3 px-4 font-sans text-soc-foreground">
-                    <div>{t.merchant_name}</div>
-                    <div className="text-[10px] text-soc-muted uppercase font-mono">
+                  <td className="py-3.5 px-4 font-sans">
+                    <div className="font-medium text-slate-800 dark:text-soc-foreground">{t.merchant_name}</div>
+                    <div className="text-[10px] text-slate-500 dark:text-soc-muted uppercase font-mono">
                       {t.merchant_category}
                     </div>
                   </td>
-                  <td className="py-3 px-4 font-bold text-soc-foreground text-sm">
+                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-soc-foreground text-sm font-mono whitespace-nowrap">
                     ${t.amount.toFixed(2)}{' '}
-                    <span className="text-[10px] text-soc-muted font-sans font-normal">
+                    <span className="text-[10px] text-slate-500 dark:text-soc-muted font-sans font-normal">
                       {t.currency}
                     </span>
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3.5 px-4 whitespace-nowrap">
                     <RiskScoreBadge score={t.risk_score} level={t.risk_level} size="sm" />
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3.5 px-4 whitespace-nowrap">
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded font-sans font-semibold border ${getStatusBadge(
+                      className={`text-[10px] px-2.5 py-0.5 rounded-full font-sans font-semibold border ${getStatusBadge(
                         t.status
                       )}`}
                     >
                       {t.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-right">
+                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         onSelectTransaction(t.id);
                       }}
-                      className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-blue-600 hover:text-white text-soc-muted transition-all"
+                      className="p-1.5 rounded-lg bg-white dark:bg-soc-surface border border-slate-200 dark:border-soc-border hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-500 dark:text-soc-muted transition-all shadow-sm"
                       title="Inspect Transaction"
                     >
                       <ChevronRight className="w-3.5 h-3.5" />
