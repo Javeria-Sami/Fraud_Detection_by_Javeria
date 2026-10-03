@@ -34,8 +34,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles: Record<ButtonVariant, string> = {
     primary: "bg-blue-600 hover:bg-blue-500 text-white shadow-sm shadow-blue-600/20 active:bg-blue-700",
-    secondary: "bg-soc-cardHover hover:bg-slate-700 text-soc-foreground border border-soc-border",
-    outline: "bg-transparent hover:bg-soc-cardHover text-soc-foreground border border-soc-border hover:border-slate-600",
+    secondary: "bg-soc-surface hover:bg-soc-cardHover text-soc-foreground border border-soc-border hover:border-slate-400 dark:hover:border-slate-600",
+    outline: "bg-transparent hover:bg-soc-cardHover text-soc-foreground border border-soc-border hover:border-slate-400 dark:hover:border-slate-600",
     ghost: "bg-transparent hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground",
     destructive: "bg-rose-600 hover:bg-rose-500 text-white shadow-sm shadow-rose-600/20 active:bg-rose-700",
   };

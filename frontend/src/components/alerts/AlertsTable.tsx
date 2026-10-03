@@ -115,12 +115,12 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
     <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-sm">
       {/* Desktop / Tablet Data Table */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-soc-bg/80 border-b border-soc-border text-slate-400 font-mono uppercase tracking-wider text-[10px]">
+        <table className="w-full text-left text-xs text-soc-foreground">
+          <thead className="bg-soc-bg/80 border-b border-soc-border text-soc-muted font-mono uppercase tracking-wider text-[10px]">
             <tr>
               <th
                 onClick={() => onSort('created_at')}
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors group"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors group"
               >
                 <div className="flex items-center gap-1.5">
                   <span>Timestamp</span>
@@ -132,7 +132,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
               <th
                 onClick={() => onSort('severity')}
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors group"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors group"
               >
                 <div className="flex items-center gap-1.5">
                   <span>Severity</span>
@@ -142,7 +142,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
               <th
                 onClick={() => onSort('risk_score')}
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors group"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors group"
               >
                 <div className="flex items-center gap-1.5">
                   <span>Risk Score</span>
@@ -154,7 +154,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
               <th
                 onClick={() => onSort('status')}
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors group"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors group"
               >
                 <div className="flex items-center gap-1.5">
                   <span>Status</span>
@@ -176,11 +176,11 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
                   key={alert.id}
                   onClick={() => onSelectAlert(alert.id)}
                   className={`cursor-pointer transition-colors group ${
-                    isSelected ? 'bg-blue-600/10 hover:bg-blue-600/15' : 'hover:bg-slate-800/40'
+                    isSelected ? 'bg-blue-600/10 hover:bg-blue-600/15' : 'hover:bg-soc-cardHover'
                   }`}
                 >
                   {/* Timestamp */}
-                  <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400 whitespace-nowrap">
+                  <td className="py-3.5 px-4 font-mono text-[11px] text-soc-muted whitespace-nowrap">
                     {alert.created_at
                       ? new Date(alert.created_at).toLocaleString([], {
                           month: 'short',
@@ -194,10 +194,10 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
 
                   {/* ID & Reason */}
                   <td className="py-3.5 px-4 max-w-xs">
-                    <div className="font-mono font-bold text-white text-xs group-hover:text-blue-400 transition-colors">
+                    <div className="font-mono font-bold text-soc-foreground text-xs group-hover:text-blue-500 transition-colors">
                       {alert.id}
                     </div>
-                    <p className="text-slate-400 text-[11px] truncate mt-0.5">
+                    <p className="text-soc-muted text-[11px] truncate mt-0.5">
                       {alert.alert_reason || alert.title || 'Anomaly Detection Triggered'}
                     </p>
                   </td>
@@ -217,7 +217,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
                     <Link
                       to={`/transactions/${alert.transaction_id}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 hover:underline"
+                      className="inline-flex items-center gap-1 text-blue-500 hover:text-blue-600 hover:underline"
                     >
                       <span>{alert.transaction_id}</span>
                       <ExternalLink className="w-3 h-3" />
@@ -236,14 +236,14 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
                   </td>
 
                   {/* Assigned Analyst */}
-                  <td className="py-3.5 px-4 font-mono text-[11px] text-slate-300 whitespace-nowrap">
+                  <td className="py-3.5 px-4 font-mono text-[11px] text-soc-foreground whitespace-nowrap">
                     {alert.assigned_to ? (
                       <span className="flex items-center gap-1">
-                        <User className="w-3 h-3 text-slate-400" />
+                        <User className="w-3 h-3 text-soc-muted" />
                         <span>{alert.assigned_to}</span>
                       </span>
                     ) : (
-                      <span className="text-slate-400 italic">Unassigned</span>
+                      <span className="text-soc-muted italic">Unassigned</span>
                     )}
                   </td>
 
@@ -254,7 +254,7 @@ export const AlertsTable: React.FC<AlertsTableProps> = ({
                         e.stopPropagation();
                         onSelectAlert(alert.id);
                       }}
-                      className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground transition-colors"
                       title="Investigate Alert"
                     >
                       <ChevronRight className="w-4 h-4" />

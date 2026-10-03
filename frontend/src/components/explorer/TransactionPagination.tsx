@@ -79,7 +79,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage <= 1 || isLoading}
           onClick={() => onPageChange(1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-bg hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
           title="First Page"
         >
           <ChevronsLeft className="w-3.5 h-3.5" />
@@ -90,7 +90,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage <= 1 || isLoading}
           onClick={() => onPageChange(safePage - 1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-bg hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
           title="Previous Page"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
@@ -101,7 +101,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           {getPageNumbers().map((p, idx) => {
             if (p === '...') {
               return (
-                <span key={`ellipsis-${idx}`} className="px-1.5 text-slate-500 font-mono text-xs select-none">
+                <span key={`ellipsis-${idx}`} className="px-1.5 text-slate-400 font-mono text-xs select-none">
                   ...
                 </span>
               );
@@ -117,7 +117,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
                 className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
                   isActive
                     ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                    : 'bg-soc-bg border-soc-border text-slate-300 hover:bg-slate-800 hover:text-white'
+                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-cardHover hover:border-slate-400 dark:hover:border-slate-600'
                 }`}
               >
                 {pageNum}
@@ -131,7 +131,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage >= safeTotalPages || isLoading}
           onClick={() => onPageChange(safePage + 1)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-bg hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
           title="Next Page"
         >
           <ChevronRight className="w-3.5 h-3.5" />
@@ -142,7 +142,7 @@ export const TransactionPagination: React.FC<TransactionPaginationProps> = ({
           type="button"
           disabled={safePage >= safeTotalPages || isLoading}
           onClick={() => onPageChange(safeTotalPages)}
-          className="p-1.5 rounded-lg border border-soc-border bg-soc-bg hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+          className="p-1.5 rounded-lg border border-soc-border bg-soc-surface hover:bg-soc-cardHover disabled:opacity-40 disabled:cursor-not-allowed text-soc-muted hover:text-soc-foreground transition-colors"
           title="Last Page"
         >
           <ChevronsRight className="w-3.5 h-3.5" />

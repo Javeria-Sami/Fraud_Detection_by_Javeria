@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root, html.light {
     --soc-bg: #F8FAFC;
     --soc-surface: #FFFFFF;
     --soc-card: #FFFFFF;
@@ -11,7 +11,7 @@
     --soc-border: #E2E8F0;
     --soc-accent: #2563EB;
     --soc-accent-hover: #1D4ED8;
-    --soc-muted: #64748B;
+    --soc-muted: #475569;
     --soc-foreground: #0F172A;
     color-scheme: light;
   }
@@ -32,11 +32,11 @@
   body {
     background-color: var(--soc-bg);
     color: var(--soc-foreground);
-    @apply antialiased font-sans transition-colors duration-150;
+    @apply antialiased font-sans transition-colors duration-200;
   }
 }
 
-/* Custom sleek scrollbar for dense operational dashboards */
+/* Custom sleek scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -67,4 +67,173 @@
 
 .animate-pulse-live {
   animation: pulse-live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==========================================================================
+   HCI & WCAG Light Mode Overrides for Flawless Contrast, Hover & Aesthetic
+   ========================================================================== */
+
+html:not(.dark) {
+  /* Tables & Rows */
+  tr.hover\:bg-slate-800\/40:hover,
+  tr.hover\:bg-slate-800\/50:hover,
+  tr.hover\:bg-slate-800\/60:hover,
+  tr.hover\:bg-slate-800:hover,
+  tr.hover\:bg-soc-cardHover:hover,
+  tbody tr:hover {
+    background-color: #F1F5F9 !important;
+  }
+
+  /* Table Headers */
+  thead {
+    background-color: #F8FAFC !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+  }
+  thead th {
+    color: #475569 !important;
+  }
+  thead th:hover {
+    color: #0F172A !important;
+  }
+
+  /* Text Contrast & Readability */
+  .text-slate-200,
+  .text-slate-300 {
+    color: #334155 !important;
+  }
+  .text-slate-400 {
+    color: #64748B !important;
+  }
+
+  /* Standalone white text inside light containers -> High-contrast slate-900 */
+  h1.text-white,
+  h2.text-white,
+  h3.text-white,
+  h4.text-white,
+  h5.text-white,
+  td.text-white,
+  th.text-white,
+  div.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-emerald"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *),
+  span.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-emerald"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *),
+  strong.text-white {
+    color: #0F172A !important;
+  }
+
+  /* Buttons & Interactive Elements */
+  button.hover\:bg-slate-800:hover,
+  button.hover\:bg-slate-700:hover,
+  button.hover\:bg-slate-900:hover,
+  a.hover\:bg-slate-800:hover,
+  a.hover\:bg-slate-700:hover {
+    background-color: #E2E8F0 !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
+  }
+
+  /* Input, Select, Textarea in Light Mode */
+  select,
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="datetime-local"],
+  textarea {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
+  }
+
+  select:focus,
+  input:focus,
+  textarea:focus {
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
+  }
+
+  select option {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+  }
+
+  /* Dark slate container backgrounds -> Clean slate surfaces in Light Mode */
+  .bg-slate-900:not(.badge):not(button[class*="bg-blue"]):not(button[class*="bg-rose"]):not(button[class*="bg-emerald"]),
+  .bg-slate-950:not(.badge),
+  .bg-slate-800:not(.badge):not(button[class*="bg-blue"]):not(button[class*="bg-rose"]):not(button[class*="bg-emerald"]) {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+    border-color: #E2E8F0 !important;
+  }
+
+  /* Borders & Dividers */
+  .border-slate-800,
+  .border-slate-700 {
+    border-color: #E2E8F0 !important;
+  }
+  .divide-slate-800\/60 > * + *,
+  .divide-slate-800\/50 > * + *,
+  .divide-slate-800\/40 > * + * {
+    border-color: #E2E8F0 !important;
+  }
+
+  /* Badges & Status Chips in Light Mode */
+  .bg-blue-500\/15,
+  .bg-blue-500\/10,
+  .bg-blue-600\/15,
+  .bg-blue-600\/10 {
+    background-color: #EFF6FF !important;
+    color: #1D4ED8 !important;
+    border-color: #BFDBFE !important;
+  }
+
+  .bg-amber-500\/15,
+  .bg-amber-500\/10 {
+    background-color: #FEFCE8 !important;
+    color: #B45309 !important;
+    border-color: #FDE68A !important;
+  }
+
+  .bg-rose-500\/15,
+  .bg-rose-500\/10,
+  .bg-rose-600\/15 {
+    background-color: #FEF2F2 !important;
+    color: #B91C1C !important;
+    border-color: #FECACA !important;
+  }
+
+  .bg-emerald-500\/15,
+  .bg-emerald-500\/10 {
+    background-color: #ECFDF5 !important;
+    color: #047857 !important;
+    border-color: #A7F3D0 !important;
+  }
+
+  .bg-purple-500\/15,
+  .bg-purple-500\/10 {
+    background-color: #FAF5FF !important;
+    color: #7E22CE !important;
+    border-color: #E9D5FF !important;
+  }
+
+  /* Active pagination buttons preserve pristine blue background with white text */
+  button.bg-blue-600,
+  button.bg-indigo-600 {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: #1D4ED8 !important;
+  }
+
+  /* Dropdown & Modal Shadows */
+  .shadow-soc-sm,
+  .shadow-sm {
+    box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.04) !important;
+  }
+  .shadow-soc-md,
+  .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05) !important;
+  }
+  .shadow-soc-lg,
+  .shadow-lg,
+  .shadow-xl,
+  .shadow-2xl {
+    box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05) !important;
+  }
 }

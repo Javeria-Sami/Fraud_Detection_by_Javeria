@@ -73,7 +73,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(1)}
           disabled={safePage <= 1}
-          className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="First Page"
         >
           <ChevronsLeft className="w-3.5 h-3.5" />
@@ -84,7 +84,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(safePage - 1)}
           disabled={safePage <= 1}
-          className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Previous Page"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
@@ -95,7 +95,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
           {getPageNumbers().map((p, idx) => {
             if (p === '...') {
               return (
-                <span key={`cases-ell-${idx}`} className="px-1.5 text-slate-500 font-mono text-xs select-none">
+                <span key={`cases-ell-${idx}`} className="px-1.5 text-slate-400 font-mono text-xs select-none">
                   ...
                 </span>
               );
@@ -110,7 +110,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
                 className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
                   isActive
                     ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                    : 'bg-soc-bg border-soc-border text-slate-300 hover:bg-slate-800 hover:text-white'
+                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-cardHover hover:border-slate-400 dark:hover:border-slate-600'
                 }`}
               >
                 {pageNum}
@@ -124,7 +124,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(safePage + 1)}
           disabled={safePage >= safeTotalPages}
-          className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Next Page"
         >
           <ChevronRight className="w-3.5 h-3.5" />
@@ -135,7 +135,7 @@ export const CasesPagination: React.FC<CasesPaginationProps> = ({
           type="button"
           onClick={() => onPageChange(safeTotalPages)}
           disabled={safePage >= safeTotalPages}
-          className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Last Page"
         >
           <ChevronsRight className="w-3.5 h-3.5" />

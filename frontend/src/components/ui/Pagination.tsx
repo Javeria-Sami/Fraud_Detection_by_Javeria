@@ -89,7 +89,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           {getPageNumbers().map((p, idx) => {
             if (p === '...') {
               return (
-                <span key={`gen-ell-${idx}`} className="px-1.5 text-slate-500 font-mono text-xs select-none">
+                <span key={`gen-ell-${idx}`} className="px-1.5 text-slate-400 font-mono text-xs select-none">
                   ...
                 </span>
               );
@@ -104,7 +104,7 @@ export const Pagination: React.FC<PaginationProps> = ({
                 className={`min-w-[28px] h-8 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
                   isActive
                     ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                    : 'bg-soc-bg border-soc-border text-slate-300 hover:bg-slate-800 hover:text-white'
+                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-cardHover hover:border-slate-400 dark:hover:border-slate-600'
                 }`}
               >
                 {pageNum}

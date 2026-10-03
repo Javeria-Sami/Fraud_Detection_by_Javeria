@@ -102,10 +102,10 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
       {/* Desktop / Tablet Table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-soc-bg/95 text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
+          <thead className="bg-soc-bg text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
             <tr>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('timestamp')}
               >
                 <div className="flex items-center gap-1.5">
@@ -117,7 +117,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
               <th className="py-3 px-4">User / Account</th>
               <th className="py-3 px-4">Merchant</th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('amount')}
               >
                 <div className="flex items-center gap-1.5">
@@ -126,7 +126,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('risk_score')}
               >
                 <div className="flex items-center gap-1.5">
@@ -135,7 +135,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-white transition-colors"
+                className="py-3 px-4 cursor-pointer hover:text-soc-foreground transition-colors"
                 onClick={() => onSortChange('status')}
               >
                 <div className="flex items-center gap-1.5">
@@ -156,26 +156,26 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                   className={`cursor-pointer transition-colors ${
                     isSelected
                       ? 'bg-blue-600/15 border-l-2 border-l-blue-500'
-                      : 'hover:bg-slate-800/60'
+                      : 'hover:bg-soc-cardHover'
                   }`}
                 >
-                  <td className="py-3 px-4 text-slate-400 font-sans text-[11px]">
+                  <td className="py-3 px-4 text-soc-muted font-sans text-[11px]">
                     {t.timestamp ? new Date(t.timestamp).toLocaleString() : '-'}
                   </td>
-                  <td className="py-3 px-4 font-bold text-blue-400">
+                  <td className="py-3 px-4 font-bold text-blue-500">
                     {t.id}
                   </td>
-                  <td className="py-3 px-4 font-sans text-slate-200">
+                  <td className="py-3 px-4 font-sans text-soc-foreground">
                     <div className="font-medium">{t.user_name || t.user_id}</div>
                     <div className="text-[10px] text-soc-muted font-mono">{t.user_id}</div>
                   </td>
-                  <td className="py-3 px-4 font-sans text-slate-300">
+                  <td className="py-3 px-4 font-sans text-soc-foreground">
                     <div>{t.merchant_name}</div>
                     <div className="text-[10px] text-soc-muted uppercase font-mono">
                       {t.merchant_category}
                     </div>
                   </td>
-                  <td className="py-3 px-4 font-bold text-white text-sm">
+                  <td className="py-3 px-4 font-bold text-soc-foreground text-sm">
                     ${t.amount.toFixed(2)}{' '}
                     <span className="text-[10px] text-soc-muted font-sans font-normal">
                       {t.currency}
@@ -200,7 +200,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                         e.stopPropagation();
                         onSelectTransaction(t.id);
                       }}
-                      className="p-1.5 rounded-lg bg-soc-bg border border-soc-border hover:bg-blue-600 hover:text-white text-slate-400 transition-all"
+                      className="p-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-blue-600 hover:text-white text-soc-muted transition-all"
                       title="Inspect Transaction"
                     >
                       <ChevronRight className="w-3.5 h-3.5" />
