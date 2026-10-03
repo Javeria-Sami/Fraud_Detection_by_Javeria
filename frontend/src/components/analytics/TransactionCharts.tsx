@@ -63,7 +63,7 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
   return (
     <div className="space-y-6">
       {/* Currencies Summary Banner */}
-      {data.currencies && data.currencies.length > 0 && (
+      {data?.currencies && data.currencies.length > 0 && (
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
             <Coins className="w-4 h-4 text-emerald-400" />
@@ -77,12 +77,12 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
               >
                 <span className="font-bold text-white">{curr.currency}</span>
                 <span className="text-slate-400">
-                  {curr.total_volume.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                  {(curr.total_volume ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </span>
-                <span className="text-slate-500">({curr.transaction_count} txns)</span>
-                {curr.flagged_volume > 0 && (
+                <span className="text-slate-500">({curr.transaction_count ?? 0} txns)</span>
+                {(curr.flagged_volume ?? 0) > 0 && (
                   <span className="text-amber-400 text-[10px] font-medium bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
-                    Flagged: {curr.flagged_volume.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    Flagged: {(curr.flagged_volume ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </span>
                 )}
               </div>
@@ -105,12 +105,12 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
               </p>
             </div>
             <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-              {data.volume_trend?.length || 0} Intervals
+              {data?.volume_trend?.length || 0} Intervals
             </span>
           </div>
 
           <div className="h-64 w-full">
-            {data.volume_trend && data.volume_trend.length > 0 ? (
+            {data?.volume_trend && data.volume_trend.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data.volume_trend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
@@ -169,12 +169,12 @@ export const TransactionCharts: React.FC<TransactionChartsProps> = ({ data, isLo
               </p>
             </div>
             <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-              {data.total_transactions.toLocaleString()} Txns
+              {(data?.total_transactions ?? 0).toLocaleString()} Txns
             </span>
           </div>
 
           <div className="h-64 w-full flex items-center">
-            {data.status_distribution && data.status_distribution.length > 0 ? (
+            {data?.status_distribution && data.status_distribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

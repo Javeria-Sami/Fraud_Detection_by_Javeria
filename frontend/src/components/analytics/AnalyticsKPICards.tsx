@@ -34,19 +34,34 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     );
   }
 
-  const formatCurrency = (amount: number, curr = 'USD') => {
+  const safeKpis: Partial<AnalyticsOverviewKPIs> = kpis || {};
+  const totalTxns = safeKpis.total_transactions ?? 0;
+  const highRiskTxns = safeKpis.high_risk_transactions ?? 0;
+  const critRiskTxns = safeKpis.critical_risk_transactions ?? 0;
+  const suspTxns = safeKpis.suspicious_transactions ?? 0;
+  const anomalyCount = safeKpis.anomaly_count ?? 0;
+  const anomalyRate = safeKpis.anomaly_rate ?? 0;
+  const activeAlerts = safeKpis.active_alerts ?? 0;
+  const critAlerts = safeKpis.critical_alerts ?? 0;
+  const openCases = safeKpis.open_cases ?? 0;
+  const highRiskUsers = safeKpis.high_risk_users ?? 0;
+  const totalVolume = safeKpis.total_volume_usd_equiv ?? 0;
+  const flaggedAmount = safeKpis.flagged_amount_usd_equiv ?? 0;
+  const currencies = safeKpis.currencies ?? [];
+
+  const formatCurrency = (amount?: number, curr = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: curr,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(amount ?? 0);
   };
 
   const cards = [
     {
       title: 'Total Transactions',
-      value: kpis.total_transactions.toLocaleString(),
-      subtext: `${kpis.currencies?.length || 0} active currencies`,
+      value: totalTxns.toLocaleString(),
+      subtext: `${currencies.length} active currencies`,
       icon: Activity,
       color: 'text-blue-400',
       bg: 'bg-blue-500/10',
@@ -54,11 +69,11 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'Total Volume (USD Equiv)',
-      value: formatCurrency(kpis.total_volume_usd_equiv),
-      subtext: kpis.currencies?.length
-        ? kpis.currencies
+      value: formatCurrency(totalVolume),
+      subtext: currencies.length
+        ? currencies
             .slice(0, 3)
-            .map((c) => `${c.currency}: ${c.transaction_count}`)
+            .map((c) => `${c.currency}: ${c.transaction_count ?? 0}`)
             .join(' | ')
         : 'All transaction streams',
       icon: DollarSign,
@@ -68,10 +83,9 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'High & Critical Risk',
-      value: (kpis.high_risk_transactions + kpis.critical_risk_transactions).toLocaleString(),
-      subtext: `${kpis.critical_risk_transactions} Critical (${(
-        ((kpis.high_risk_transactions + kpis.critical_risk_transactions) /
-          (kpis.total_transactions || 1)) *
+      value: (highRiskTxns + critRiskTxns).toLocaleString(),
+      subtext: `${critRiskTxns} Critical (${(
+        ((highRiskTxns + critRiskTxns) / (totalTxns || 1)) *
         100
       ).toFixed(1)}%)`,
       icon: Flame,
@@ -81,8 +95,8 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'Suspicious Amount (USD)',
-      value: formatCurrency(kpis.flagged_amount_usd_equiv),
-      subtext: `${kpis.suspicious_transactions.toLocaleString()} flagged txns`,
+      value: formatCurrency(flaggedAmount),
+      subtext: `${suspTxns.toLocaleString()} flagged txns`,
       icon: AlertTriangle,
       color: 'text-amber-400',
       bg: 'bg-amber-500/10',
@@ -90,8 +104,8 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'ML Anomaly Rate',
-      value: `${(kpis.anomaly_rate * 100).toFixed(2)}%`,
-      subtext: `${kpis.anomaly_count.toLocaleString()} detected anomalies`,
+      value: `${(anomalyRate * 100).toFixed(2)}%`,
+      subtext: `${anomalyCount.toLocaleString()} detected anomalies`,
       icon: BrainCircuit,
       color: 'text-purple-400',
       bg: 'bg-purple-500/10',
@@ -99,8 +113,8 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'Active Security Alerts',
-      value: kpis.active_alerts.toLocaleString(),
-      subtext: `${kpis.critical_alerts} critical severity`,
+      value: activeAlerts.toLocaleString(),
+      subtext: `${critAlerts} critical severity`,
       icon: BellRing,
       color: 'text-rose-400',
       bg: 'bg-rose-500/10',
@@ -108,7 +122,7 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'Open Investigations',
-      value: kpis.open_cases.toLocaleString(),
+      value: openCases.toLocaleString(),
       subtext: 'Active case dossiers',
       icon: FolderOpen,
       color: 'text-cyan-400',
@@ -117,7 +131,7 @@ export const AnalyticsKPICards: React.FC<AnalyticsKPICardsProps> = ({ kpis, isLo
     },
     {
       title: 'High Risk Users',
-      value: kpis.high_risk_users.toLocaleString(),
+      value: highRiskUsers.toLocaleString(),
       subtext: 'Entities with score ≥ 70',
       icon: Users,
       color: 'text-orange-400',

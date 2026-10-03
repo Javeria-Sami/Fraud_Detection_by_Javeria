@@ -58,6 +58,16 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
     return '#10B981';                     // Green
   };
 
+  const avgScore = data?.average_risk_score ?? 0;
+  const scoredTxns = data?.total_scored_transactions ?? 0;
+  const riskDist = data?.risk_level_distribution ?? [];
+  const riskHist = data?.risk_histogram ?? [];
+  const riskTrend = data?.risk_trend ?? [];
+
+  const elevatedRatio = riskDist
+    .filter((r) => r.risk_level === 'HIGH' || r.risk_level === 'CRITICAL')
+    .reduce((acc, curr) => acc + (curr.percentage ?? 0), 0);
+
   return (
     <div className="space-y-6">
       {/* Top Metric Header */}
@@ -71,7 +81,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
               Average Risk Score
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {data.average_risk_score.toFixed(1)}{' '}
+              {avgScore.toFixed(1)}{' '}
               <span className="text-xs font-normal text-slate-400">/ 100</span>
             </div>
           </div>
@@ -86,7 +96,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
               Scored Transactions
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {data.total_scored_transactions.toLocaleString()}
+              {scoredTxns.toLocaleString()}
             </div>
           </div>
         </div>
@@ -100,12 +110,7 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
               Elevated Risk Ratio
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {(
-                (data.risk_level_distribution
-                  .filter((r) => r.risk_level === 'HIGH' || r.risk_level === 'CRITICAL')
-                  .reduce((acc, curr) => acc + curr.percentage, 0))
-              ).toFixed(1)}
-              %
+              {elevatedRatio.toFixed(1)}%
             </div>
           </div>
         </div>

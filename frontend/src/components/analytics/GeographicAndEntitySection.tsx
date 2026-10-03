@@ -34,6 +34,11 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
     );
   }
 
+  const countries = geoData?.countries ?? [];
+  const cities = geoData?.cities ?? [];
+  const merchants = entityData?.top_merchants || (entityData as any)?.merchants || [];
+  const devices = entityData?.top_devices || (entityData as any)?.devices || [];
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -50,12 +55,12 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
               </p>
             </div>
             <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-              {geoData.countries?.length || 0} Countries
+              {countries.length} Countries
             </span>
           </div>
 
           <div className="overflow-x-auto">
-            {geoData.countries && geoData.countries.length > 0 ? (
+            {countries.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
@@ -67,30 +72,30 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {geoData.countries.slice(0, 8).map((c) => (
+                  {countries.slice(0, 8).map((c) => (
                     <tr key={c.country} className="hover:bg-slate-800/40">
                       <td className="py-2.5 font-medium text-white flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-blue-400" />
                         <span>{c.country}</span>
                       </td>
                       <td className="py-2.5 text-slate-300">
-                        {c.transaction_count.toLocaleString()}
+                        {(c.transaction_count ?? 0).toLocaleString()}
                       </td>
                       <td className="py-2.5 text-slate-300">
-                        {c.total_volume.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        {(c.total_volume ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                       </td>
-                      <td className="py-2.5 text-rose-400 font-semibold">{c.high_risk_count}</td>
+                      <td className="py-2.5 text-rose-400 font-semibold">{c.high_risk_count ?? 0}</td>
                       <td className="py-2.5">
                         <span
                           className={`font-medium ${
-                            c.high_risk_percentage > 20
+                            (c.high_risk_percentage ?? 0) > 20
                               ? 'text-rose-400'
-                              : c.high_risk_percentage > 5
+                              : (c.high_risk_percentage ?? 0) > 5
                               ? 'text-amber-400'
                               : 'text-emerald-400'
                           }`}
                         >
-                          {c.high_risk_percentage.toFixed(1)}%
+                          {(c.high_risk_percentage ?? 0).toFixed(1)}%
                         </span>
                       </td>
                     </tr>
@@ -118,12 +123,12 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
               </p>
             </div>
             <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-              {geoData.cities?.length || 0} Cities
+              {cities.length} Cities
             </span>
           </div>
 
           <div className="overflow-x-auto">
-            {geoData.cities && geoData.cities.length > 0 ? (
+            {cities.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
@@ -134,15 +139,15 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {geoData.cities.slice(0, 8).map((city) => (
+                  {cities.slice(0, 8).map((city) => (
                     <tr key={`${city.city}-${city.country}`} className="hover:bg-slate-800/40">
                       <td className="py-2.5 font-medium text-white">{city.city}</td>
                       <td className="py-2.5 text-slate-400">{city.country}</td>
                       <td className="py-2.5 text-slate-300">
-                        {city.transaction_count.toLocaleString()}
+                        {(city.transaction_count ?? 0).toLocaleString()}
                       </td>
                       <td className="py-2.5 font-semibold text-amber-400">
-                        {city.high_risk_count}
+                        {city.high_risk_count ?? 0}
                       </td>
                     </tr>
                   ))}
@@ -171,7 +176,7 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
           </div>
 
           <div className="overflow-x-auto">
-            {entityData.top_merchants && entityData.top_merchants.length > 0 ? (
+            {merchants.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
@@ -183,27 +188,27 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {entityData.top_merchants.slice(0, 8).map((m) => (
+                  {merchants.slice(0, 8).map((m: any) => (
                     <tr key={m.merchant_name} className="hover:bg-slate-800/40">
                       <td className="py-2.5 font-semibold text-white max-w-[140px] truncate">
                         {m.merchant_name}
                       </td>
                       <td className="py-2.5 text-slate-400">{m.merchant_category || 'N/A'}</td>
-                      <td className="py-2.5 text-slate-300">{m.transaction_count.toLocaleString()}</td>
+                      <td className="py-2.5 text-slate-300">{(m.transaction_count ?? 0).toLocaleString()}</td>
                       <td className="py-2.5 text-slate-300">
-                        {m.total_volume.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        {(m.total_volume ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                       </td>
                       <td className="py-2.5">
                         <span
                           className={`font-semibold ${
-                            m.high_risk_rate > 20
+                            (m.high_risk_rate ?? 0) > 20
                               ? 'text-rose-400'
-                              : m.high_risk_rate > 5
+                              : (m.high_risk_rate ?? 0) > 5
                               ? 'text-amber-400'
                               : 'text-emerald-400'
                           }`}
                         >
-                          {m.high_risk_rate.toFixed(1)}%
+                          {(m.high_risk_rate ?? 0).toFixed(1)}%
                         </span>
                       </td>
                     </tr>
@@ -233,7 +238,7 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
           </div>
 
           <div className="overflow-x-auto">
-            {entityData.top_devices && entityData.top_devices.length > 0 ? (
+            {devices.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
@@ -245,18 +250,18 @@ export const GeographicAndEntitySection: React.FC<GeographicAndEntitySectionProp
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {entityData.top_devices.slice(0, 8).map((d) => (
+                  {devices.slice(0, 8).map((d: any) => (
                     <tr key={d.device_id} className="hover:bg-slate-800/40">
                       <td className="py-2.5 font-mono text-[11px] text-slate-300 max-w-[130px] truncate">
                         {d.device_id}
                       </td>
                       <td className="py-2.5 font-semibold text-cyan-400 flex items-center gap-1">
                         <Users className="w-3 h-3" />
-                        <span>{d.distinct_users}</span>
+                        <span>{d.distinct_users ?? 1}</span>
                       </td>
-                      <td className="py-2.5 text-slate-300">{d.transaction_count}</td>
+                      <td className="py-2.5 text-slate-300">{d.transaction_count ?? 0}</td>
                       <td className="py-2.5 font-medium text-slate-200">
-                        {d.avg_risk_score.toFixed(1)}
+                        {(d.avg_risk_score ?? 0).toFixed(1)}
                       </td>
                       <td className="py-2.5">
                         {d.is_shared ? (

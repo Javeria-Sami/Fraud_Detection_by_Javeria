@@ -86,7 +86,7 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
               Total Alerts
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {data.total_alerts.toLocaleString()}
+              {(data?.total_alerts ?? 0).toLocaleString()}
             </div>
           </div>
         </div>
@@ -100,9 +100,9 @@ export const AlertAnalyticsSection: React.FC<AlertAnalyticsSectionProps> = ({
               Active / Critical
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {data.active_alerts}{' '}
+              {data?.active_alerts ?? 0}{' '}
               <span className="text-xs font-normal text-rose-400">
-                ({data.critical_alerts} crit)
+                ({data?.critical_alerts ?? 0} crit)
               </span>
             </div>
           </div>

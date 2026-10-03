@@ -409,6 +409,237 @@ export const MOCK_SYSTEM_SETTINGS: SystemSetting[] = [
   }
 ];
 
+export const MOCK_ANALYTICS_OVERVIEW: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  generated_at: new Date().toISOString(),
+  kpis: {
+    total_transactions: 12480,
+    total_volume_usd_equiv: 2450800,
+    currencies: [
+      { currency: 'USD', total_volume: 1850000, flagged_volume: 72000, transaction_count: 8500 },
+      { currency: 'EUR', total_volume: 420000, flagged_volume: 18000, transaction_count: 2400 },
+      { currency: 'GBP', total_volume: 180800, flagged_volume: 8500, transaction_count: 1580 },
+    ],
+    high_risk_transactions: 342,
+    critical_risk_transactions: 118,
+    suspicious_transactions: 460,
+    flagged_amount_usd_equiv: 98500,
+    anomaly_count: 512,
+    anomaly_rate: 0.041,
+    active_alerts: 14,
+    critical_alerts: 4,
+    open_cases: 6,
+    high_risk_users: 8,
+  }
+};
+
+export const MOCK_TRANSACTION_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_transactions: 12480,
+  volume_trend: [
+    { time: 'Week 1', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString(), transaction_count: 2850, flagged_count: 95, total_volume: 580000, avg_amount: 203, avg_risk_score: 24 },
+    { time: 'Week 2', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(), transaction_count: 3120, flagged_count: 114, total_volume: 620000, avg_amount: 198, avg_risk_score: 26 },
+    { time: 'Week 3', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), transaction_count: 3290, flagged_count: 128, total_volume: 645000, avg_amount: 196, avg_risk_score: 25 },
+    { time: 'Week 4', timestamp: new Date().toISOString(), transaction_count: 3220, flagged_count: 123, total_volume: 605800, avg_amount: 188, avg_risk_score: 23 },
+  ],
+  status_distribution: [
+    { status: 'APPROVED', count: 12020, volume: 2352300, percentage: 96.3 },
+    { status: 'FLAGGED', count: 342, volume: 68500, percentage: 2.7 },
+    { status: 'DECLINED', count: 118, volume: 30000, percentage: 1.0 },
+  ],
+  category_distribution: [
+    { category: 'Electronics & Retail', count: 4850, volume: 980000, percentage: 38.8 },
+    { category: 'Crypto & Exchange', count: 1240, volume: 540000, percentage: 9.9 },
+    { category: 'Food & Dining', count: 3200, volume: 240000, percentage: 25.6 },
+    { category: 'Transportation', count: 2190, volume: 160800, percentage: 17.5 },
+    { category: 'Other', count: 1000, volume: 530000, percentage: 8.2 },
+  ],
+  payment_method_distribution: [
+    { payment_method: 'CREDIT_CARD', count: 7200, volume: 1420000, percentage: 57.7 },
+    { payment_method: 'DEBIT_CARD', count: 3100, volume: 480800, percentage: 24.8 },
+    { payment_method: 'APPLE_PAY', count: 1420, volume: 210000, percentage: 11.4 },
+    { payment_method: 'CRYPTO', count: 760, volume: 340000, percentage: 6.1 },
+  ],
+  currencies: [
+    { currency: 'USD', total_volume: 1850000, flagged_volume: 72000, transaction_count: 8500 },
+    { currency: 'EUR', total_volume: 420000, flagged_volume: 18000, transaction_count: 2400 },
+    { currency: 'GBP', total_volume: 180800, flagged_volume: 8500, transaction_count: 1580 },
+  ]
+};
+
+export const MOCK_RISK_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_scored_transactions: 12480,
+  average_risk_score: 24.8,
+  risk_level_distribution: [
+    { risk_level: 'LOW', count: 10850, percentage: 86.9, total_volume: 2100000 },
+    { risk_level: 'MEDIUM', count: 1170, percentage: 9.4, total_volume: 252300 },
+    { risk_level: 'HIGH', count: 342, percentage: 2.7, total_volume: 68500 },
+    { risk_level: 'CRITICAL', count: 118, percentage: 1.0, total_volume: 30000 },
+  ],
+  risk_histogram: [
+    { bucket: '0-20', min_score: 0, max_score: 20, count: 8900, percentage: 71.3 },
+    { bucket: '21-40', min_score: 21, max_score: 40, count: 2120, percentage: 17.0 },
+    { bucket: '41-60', min_score: 41, max_score: 60, count: 1000, percentage: 8.0 },
+    { bucket: '61-80', min_score: 61, max_score: 80, count: 342, percentage: 2.7 },
+    { bucket: '81-100', min_score: 81, max_score: 100, count: 118, percentage: 1.0 },
+  ],
+  risk_trend: [
+    { time: 'Day 1-7', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString(), avg_risk_score: 23.4, high_risk_count: 82, critical_risk_count: 24 },
+    { time: 'Day 8-14', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(), avg_risk_score: 25.1, high_risk_count: 94, critical_risk_count: 32 },
+    { time: 'Day 15-21', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), avg_risk_score: 24.6, high_risk_count: 88, critical_risk_count: 30 },
+    { time: 'Day 22-30', timestamp: new Date().toISOString(), avg_risk_score: 25.8, high_risk_count: 78, critical_risk_count: 32 },
+  ]
+};
+
+export const MOCK_ALERT_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_alerts: 84,
+  active_alerts: 14,
+  critical_alerts: 4,
+  alert_trend: [
+    { time: 'W1', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString(), total_alerts: 18, critical_alerts: 4, resolved_alerts: 16 },
+    { time: 'W2', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(), total_alerts: 24, critical_alerts: 6, resolved_alerts: 22 },
+    { time: 'W3', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), total_alerts: 22, critical_alerts: 5, resolved_alerts: 20 },
+    { time: 'W4', timestamp: new Date().toISOString(), total_alerts: 20, critical_alerts: 4, resolved_alerts: 12 },
+  ],
+  severity_distribution: [
+    { label: 'CRITICAL', count: 19, percentage: 22.6 },
+    { label: 'HIGH', count: 35, percentage: 41.7 },
+    { label: 'MEDIUM', count: 24, percentage: 28.6 },
+    { label: 'LOW', count: 6, percentage: 7.1 },
+  ],
+  status_distribution: [
+    { label: 'RESOLVED', count: 70, percentage: 83.3 },
+    { label: 'OPEN', count: 8, percentage: 9.5 },
+    { label: 'INVESTIGATING', count: 6, percentage: 7.2 },
+  ],
+  top_alert_reasons: [
+    { label: 'Velocity Spike Exceeded Limit', count: 38, percentage: 45.2 },
+    { label: 'ML High Confidence Anomaly', count: 26, percentage: 31.0 },
+    { label: 'Crypto High Risk Gateway', count: 12, percentage: 14.3 },
+    { label: 'Cross-Border Geo Hop', count: 8, percentage: 9.5 },
+  ],
+  response_metrics: {
+    total_resolved: 70,
+    avg_resolution_time_minutes: 14.2,
+    median_resolution_time_minutes: 9.5,
+    total_active: 14,
+  }
+};
+
+export const MOCK_ML_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_predictions: 12480,
+  anomaly_count: 512,
+  anomaly_rate: 0.041,
+  avg_anomaly_score: 0.18,
+  score_histogram: [
+    { bucket: '0.0-0.2', min_score: 0.0, max_score: 0.2, count: 9800, percentage: 78.5 },
+    { bucket: '0.2-0.4', min_score: 0.2, max_score: 0.4, count: 1650, percentage: 13.2 },
+    { bucket: '0.4-0.6', min_score: 0.4, max_score: 0.6, count: 518, percentage: 4.2 },
+    { bucket: '0.6-0.8', min_score: 0.6, max_score: 0.8, count: 320, percentage: 2.6 },
+    { bucket: '0.8-1.0', min_score: 0.8, max_score: 1.0, count: 192, percentage: 1.5 },
+  ],
+  model_versions: [
+    { model_version: 'v1.0.0', prediction_count: 12480, anomaly_count: 512, avg_anomaly_score: 0.18, anomaly_rate: 0.041 }
+  ]
+};
+
+export const MOCK_RULE_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_rules: 3,
+  total_executions: 37440,
+  total_triggers: 642,
+  overall_trigger_rate: 0.017,
+  top_rules: [
+    { rule_id: 'RULE-001', rule_name: 'Velocity Spike Detection', category: 'VELOCITY', severity: 'CRITICAL', trigger_count: 342, execution_count: 12480, trigger_rate: 0.027 },
+    { rule_id: 'RULE-002', rule_name: 'Crypto High Risk Outflow', category: 'MERCHANT', severity: 'HIGH', trigger_count: 218, execution_count: 12480, trigger_rate: 0.017 },
+    { rule_id: 'RULE-003', rule_name: 'Cross-Border Geo-Hop', category: 'GEOGRAPHY', severity: 'CRITICAL', trigger_count: 82, execution_count: 12480, trigger_rate: 0.006 },
+  ]
+};
+
+export const MOCK_CASE_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  total_cases: 12,
+  open_cases: 6,
+  investigating_cases: 4,
+  resolved_cases: 2,
+  closed_cases: 0,
+  case_trend: [
+    { time: 'W1', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 21).toISOString(), total_cases: 3, critical_cases: 1, resolved_cases: 1 },
+    { time: 'W2', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(), total_cases: 4, critical_cases: 2, resolved_cases: 1 },
+    { time: 'W3', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), total_cases: 3, critical_cases: 1, resolved_cases: 0 },
+    { time: 'W4', timestamp: new Date().toISOString(), total_cases: 2, critical_cases: 1, resolved_cases: 0 },
+  ],
+  status_distribution: [
+    { label: 'OPEN', count: 6, percentage: 50 },
+    { label: 'INVESTIGATING', count: 4, percentage: 33.3 },
+    { label: 'RESOLVED', count: 2, percentage: 16.7 },
+  ],
+  severity_distribution: [
+    { label: 'CRITICAL', count: 5, percentage: 41.7 },
+    { label: 'HIGH', count: 5, percentage: 41.7 },
+    { label: 'MEDIUM', count: 2, percentage: 16.6 },
+  ],
+  resolution_distribution: [
+    { label: 'FRAUD_CONFIRMED', count: 2, percentage: 100 },
+  ],
+  analyst_workload: [
+    { analyst_email: 'analyst@fraudshield.io', active_cases: 10, resolved_cases: 2, avg_resolution_hours: 4.8 }
+  ]
+};
+
+export const MOCK_GEO_ANALYTICS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  countries: [
+    { country: 'United States', transaction_count: 6800, total_volume: 1350000, high_risk_count: 140, high_risk_percentage: 2.1 },
+    { country: 'United Kingdom', transaction_count: 2450, total_volume: 480000, high_risk_count: 85, high_risk_percentage: 3.5 },
+    { country: 'Singapore', transaction_count: 1420, total_volume: 340000, high_risk_count: 112, high_risk_percentage: 7.9 },
+    { country: 'Netherlands', transaction_count: 1100, total_volume: 180000, high_risk_count: 24, high_risk_percentage: 2.2 },
+    { country: 'Germany', transaction_count: 710, total_volume: 100800, high_risk_count: 15, high_risk_percentage: 2.1 },
+  ],
+  cities: [
+    { city: 'London', country: 'United Kingdom', transaction_count: 2100, high_risk_count: 75 },
+    { city: 'New York', country: 'United States', transaction_count: 1950, high_risk_count: 42 },
+    { city: 'Singapore', country: 'Singapore', transaction_count: 1420, high_risk_count: 112 },
+    { city: 'Amsterdam', country: 'Netherlands', transaction_count: 1100, high_risk_count: 24 },
+    { city: 'San Francisco', country: 'United States', transaction_count: 980, high_risk_count: 18 },
+  ]
+};
+
+export const MOCK_ENTITY_PATTERNS: any = {
+  time_range: '30d',
+  date_from: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+  date_to: new Date().toISOString(),
+  merchants: [
+    { merchant_name: 'Amazon Web Retail', merchant_category: 'Electronics & Retail', transaction_count: 4850, total_volume: 980000, high_risk_count: 82, high_risk_rate: 1.7 },
+    { merchant_name: 'Binance Global Exchange', merchant_category: 'Crypto & Exchange', transaction_count: 1240, total_volume: 540000, high_risk_count: 185, high_risk_rate: 14.9 },
+    { merchant_name: 'Apple Store Online', merchant_category: 'Electronics & Devices', transaction_count: 1420, total_volume: 210000, high_risk_count: 12, high_risk_rate: 0.8 },
+  ],
+  devices: [
+    { device_id: 'DEV-IPHONE-02', distinct_users: 2, transaction_count: 112, avg_risk_score: 85, is_shared: true },
+    { device_id: 'DEV-MACBOOK-01', distinct_users: 1, transaction_count: 48, avg_risk_score: 78, is_shared: false },
+    { device_id: 'DEV-IPHONE-15', distinct_users: 1, transaction_count: 65, avg_risk_score: 14, is_shared: false },
+  ]
+};
+
 export function extractSafeArray<T>(data: any, fallback: T[] = []): T[] {
   if (Array.isArray(data)) return data;
   if (data && Array.isArray(data.items)) return data.items;

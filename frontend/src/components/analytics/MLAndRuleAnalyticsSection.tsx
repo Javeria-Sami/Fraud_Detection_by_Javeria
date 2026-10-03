@@ -60,6 +60,15 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
     fontSize: '0.75rem',
   };
 
+  const anomalyRate = mlData?.anomaly_rate ?? 0;
+  const anomalyCount = mlData?.anomaly_count ?? 0;
+  const totalPredictions = mlData?.total_predictions ?? 0;
+  const avgAnomalyScore = mlData?.avg_anomaly_score ?? 0;
+  const totalExecutions = ruleData?.total_executions ?? 0;
+  const totalRules = ruleData?.total_rules ?? 0;
+  const totalTriggers = ruleData?.total_triggers ?? 0;
+  const overallTriggerRate = ruleData?.overall_trigger_rate ?? 0;
+
   return (
     <div className="space-y-6">
       {/* ML & Rules Top Summary */}
@@ -73,10 +82,10 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
               ML Anomaly Rate
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {(mlData.anomaly_rate * 100).toFixed(2)}%
+              {(anomalyRate * 100).toFixed(2)}%
             </div>
             <div className="text-[11px] text-slate-500">
-              {mlData.anomaly_count} of {mlData.total_predictions} scored
+              {anomalyCount} of {totalPredictions} scored
             </div>
           </div>
         </div>
@@ -90,7 +99,7 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
               Avg Anomaly Score
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {mlData.avg_anomaly_score.toFixed(3)}
+              {avgAnomalyScore.toFixed(3)}
             </div>
             <div className="text-[11px] text-slate-500">Isolation Forest Output</div>
           </div>
@@ -105,9 +114,9 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
               Rule Executions
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {ruleData.total_executions.toLocaleString()}
+              {totalExecutions.toLocaleString()}
             </div>
-            <div className="text-[11px] text-slate-500">{ruleData.total_rules} Active rules</div>
+            <div className="text-[11px] text-slate-500">{totalRules} Active rules</div>
           </div>
         </div>
 
@@ -120,10 +129,10 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
               Overall Rule Triggers
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {ruleData.total_triggers.toLocaleString()}
+              {totalTriggers.toLocaleString()}
             </div>
             <div className="text-[11px] text-amber-400">
-              {(ruleData.overall_trigger_rate * 100).toFixed(2)}% trigger rate
+              {(overallTriggerRate * 100).toFixed(2)}% trigger rate
             </div>
           </div>
         </div>
@@ -188,7 +197,7 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
           </div>
 
           <div className="overflow-x-auto">
-            {mlData.model_versions && mlData.model_versions.length > 0 ? (
+            {mlData?.model_versions && mlData.model_versions.length > 0 ? (
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
@@ -207,18 +216,18 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
                         <span>{ver.model_version}</span>
                       </td>
                       <td className="py-2.5 text-slate-300">
-                        {ver.prediction_count.toLocaleString()}
+                        {(ver.prediction_count ?? 0).toLocaleString()}
                       </td>
                       <td className="py-2.5 text-slate-300">
-                        {ver.anomaly_count.toLocaleString()}
+                        {(ver.anomaly_count ?? 0).toLocaleString()}
                       </td>
                       <td className="py-2.5">
                         <span className="text-rose-400 font-semibold">
-                          {(ver.anomaly_rate * 100).toFixed(2)}%
+                          {((ver.anomaly_rate ?? 0) * 100).toFixed(2)}%
                         </span>
                       </td>
                       <td className="py-2.5 text-slate-400">
-                        {ver.avg_anomaly_score.toFixed(3)}
+                        {(ver.avg_anomaly_score ?? 0).toFixed(3)}
                       </td>
                     </tr>
                   ))}
@@ -246,12 +255,12 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
             </p>
           </div>
           <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">
-            {ruleData.top_triggered_rules?.length || 0} Rules
+            {(ruleData?.top_triggered_rules || (ruleData as any)?.top_rules || []).length} Rules
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          {ruleData.top_triggered_rules && ruleData.top_triggered_rules.length > 0 ? (
+          {(ruleData?.top_triggered_rules || (ruleData as any)?.top_rules) && (ruleData.top_triggered_rules || (ruleData as any).top_rules).length > 0 ? (
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-800 text-slate-400">
@@ -264,7 +273,7 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {ruleData.top_triggered_rules.map((rule) => (
+                {(ruleData.top_triggered_rules || (ruleData as any).top_rules).map((rule: any) => (
                   <tr key={rule.rule_id} className="hover:bg-slate-800/40">
                     <td className="py-3 font-semibold text-white max-w-xs truncate">
                       {rule.rule_name}
@@ -281,10 +290,10 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
                       </span>
                     </td>
                     <td className="py-3 text-slate-300">
-                      {rule.execution_count.toLocaleString()}
+                      {(rule.execution_count ?? 0).toLocaleString()}
                     </td>
                     <td className="py-3 font-semibold text-amber-400">
-                      {rule.trigger_count.toLocaleString()}
+                      {(rule.trigger_count ?? 0).toLocaleString()}
                     </td>
                     <td className="py-3">
                       <div className="flex items-center gap-2">
@@ -292,12 +301,12 @@ export const MLAndRuleAnalyticsSection: React.FC<MLAndRuleAnalyticsSectionProps>
                           <div
                             className="bg-amber-500 h-full rounded-full"
                             style={{
-                              width: `${Math.min(100, rule.trigger_rate * 100)}%`,
+                              width: `${Math.min(100, (rule.trigger_rate ?? 0) * 100)}%`,
                             }}
                           />
                         </div>
                         <span className="text-slate-300 font-medium">
-                          {(rule.trigger_rate * 100).toFixed(1)}%
+                          {((rule.trigger_rate ?? 0) * 100).toFixed(1)}%
                         </span>
                       </div>
                     </td>

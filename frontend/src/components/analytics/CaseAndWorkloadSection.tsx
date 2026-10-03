@@ -68,6 +68,13 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
     fontSize: '0.75rem',
   };
 
+  const totalCases = data?.total_cases ?? 0;
+  const openCases = data?.open_cases ?? 0;
+  const investigatingCases = data?.investigating_cases ?? 0;
+  const resolvedCases = data?.resolved_cases ?? 0;
+  const closedCases = data?.closed_cases ?? 0;
+  const resolutionRate = (((resolvedCases + closedCases) / (totalCases || 1)) * 100).toFixed(1);
+
   return (
     <div className="space-y-6">
       {/* Case Lifecycle Summary Cards */}
@@ -80,7 +87,7 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Total Cases
             </div>
-            <div className="text-2xl font-bold text-white mt-1">{data.total_cases}</div>
+            <div className="text-2xl font-bold text-white mt-1">{totalCases}</div>
             <div className="text-[11px] text-slate-500">Recorded dossiers</div>
           </div>
         </div>
@@ -94,9 +101,9 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
               Active Investigation
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {data.open_cases + data.investigating_cases}
+              {openCases + investigatingCases}
             </div>
-            <div className="text-[11px] text-amber-400">{data.investigating_cases} in triage</div>
+            <div className="text-[11px] text-amber-400">{investigatingCases} in triage</div>
           </div>
         </div>
 
@@ -108,8 +115,8 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Resolved Cases
             </div>
-            <div className="text-2xl font-bold text-white mt-1">{data.resolved_cases}</div>
-            <div className="text-[11px] text-slate-500">{data.closed_cases} archived</div>
+            <div className="text-2xl font-bold text-white mt-1">{resolvedCases}</div>
+            <div className="text-[11px] text-slate-500">{closedCases} archived</div>
           </div>
         </div>
 
@@ -122,11 +129,7 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
               Resolution Rate
             </div>
             <div className="text-2xl font-bold text-white mt-1">
-              {(
-                ((data.resolved_cases + data.closed_cases) / (data.total_cases || 1)) *
-                100
-              ).toFixed(1)}
-              %
+              {resolutionRate}%
             </div>
             <div className="text-[11px] text-slate-500">Pipeline completion</div>
           </div>
@@ -271,18 +274,18 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {data.analyst_workload.map((analyst) => (
-                    <tr key={analyst.analyst_name} className="hover:bg-slate-800/40">
+                  {data.analyst_workload.map((analyst: any, idx: number) => (
+                    <tr key={analyst.analyst_name || analyst.analyst_email || `analyst-${idx}`} className="hover:bg-slate-800/40">
                       <td className="py-2.5 font-medium text-white flex items-center gap-1.5">
                         <UserCheck className="w-3.5 h-3.5 text-blue-400" />
-                        <span>{analyst.analyst_name}</span>
+                        <span>{analyst.analyst_name || analyst.analyst_email || 'SecOps Analyst'}</span>
                       </td>
-                      <td className="py-2.5 text-slate-300">{analyst.assigned_cases}</td>
+                      <td className="py-2.5 text-slate-300">{analyst.assigned_cases ?? analyst.active_cases ?? 0}</td>
                       <td className="py-2.5 font-semibold text-amber-400">
-                        {analyst.open_cases}
+                        {analyst.open_cases ?? analyst.active_cases ?? 0}
                       </td>
                       <td className="py-2.5 font-semibold text-emerald-400">
-                        {analyst.resolved_cases}
+                        {analyst.resolved_cases ?? 0}
                       </td>
                     </tr>
                   ))}
