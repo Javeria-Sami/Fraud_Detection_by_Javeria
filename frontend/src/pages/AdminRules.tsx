@@ -22,6 +22,11 @@ import {
   Activity,
   Flame,
   Zap,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  ChevronDown,
 } from 'lucide-react';
 
 type AdminTab = 'rules' | 'alerts';
@@ -338,6 +343,10 @@ export const AdminRules: React.FC = () => {
   const [selectedSeverity, setSelectedSeverity] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
 
+  // Pagination State
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(5);
+
   // Modal Dialog States
   const [editingRule, setEditingRule] = useState<AdminFraudRule | null>(null);
   const [historyRule, setHistoryRule] = useState<AdminFraudRule | null>(null);
@@ -633,100 +642,230 @@ export const AdminRules: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {safeRules.map((rule) => {
-                    if (!rule) return null;
-                    const triggerPct = (((rule.trigger_rate ?? 0) * 100)).toFixed(1);
-                    return (
-                      <tr key={rule.id || rule.rule_code} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="py-3.5 px-4 max-w-sm">
-                          <div className="font-bold text-white text-xs">{rule.name || rule.rule_code}</div>
-                          <div className="text-[10px] text-blue-400 font-mono mt-0.5">{rule.rule_code}</div>
-                          <div className="text-[11px] text-slate-400 mt-1 line-clamp-1">
-                            {rule.description || 'Deterministic security policy rule.'}
-                          </div>
-                        </td>
+                  {(() => {
+                    const totalPages = Math.max(1, Math.ceil(safeRules.length / pageSize));
+                    const safePage = Math.min(Math.max(1, page), totalPages);
+                    const paginatedRules = safeRules.slice((safePage - 1) * pageSize, safePage * pageSize);
+                    return paginatedRules.map((rule) => {
+                      if (!rule) return null;
+                      const triggerPct = (((rule.trigger_rate ?? 0) * 100)).toFixed(1);
+                      return (
+                        <tr key={rule.id || rule.rule_code} className="hover:bg-slate-800/40 transition-colors">
+                          <td className="py-3.5 px-4 max-w-sm">
+                            <div className="font-bold text-white text-xs">{rule.name || rule.rule_code}</div>
+                            <div className="text-[10px] text-blue-400 font-mono mt-0.5">{rule.rule_code}</div>
+                            <div className="text-[11px] text-slate-400 mt-1 line-clamp-1">
+                              {rule.description || 'Deterministic security policy rule.'}
+                            </div>
+                          </td>
 
-                        <td className="py-3.5 px-4">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-slate-800 text-slate-300 border border-slate-700">
-                            {rule.category || 'GENERAL'}
-                          </span>
-                        </td>
+                          <td className="py-3.5 px-4">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-slate-800 text-slate-300 border border-slate-700">
+                              {rule.category || 'GENERAL'}
+                            </span>
+                          </td>
 
-                        <td className="py-3.5 px-4 font-bold text-white text-sm font-mono">
-                          +{rule.weight ?? 0} pts
-                        </td>
+                          <td className="py-3.5 px-4 font-bold text-white text-sm font-mono">
+                            +{rule.weight ?? 0} pts
+                          </td>
 
-                        <td className="py-3.5 px-4">
-                          <SeverityBadge severity={rule.severity || 'MEDIUM'} size="sm" />
-                        </td>
+                          <td className="py-3.5 px-4">
+                            <SeverityBadge severity={rule.severity || 'MEDIUM'} size="sm" />
+                          </td>
 
-                        <td className="py-3.5 px-4">
-                          <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                            v{rule.version || '1.0'}
-                          </span>
-                        </td>
+                          <td className="py-3.5 px-4">
+                            <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                              v{rule.version || '1.0'}
+                            </span>
+                          </td>
 
-                        <td className="py-3.5 px-4">
-                          <div className="text-xs font-mono text-slate-200">
-                            {triggerPct}%
-                          </div>
-                          <div className="text-[10px] text-slate-500">
-                            {(rule.total_triggers || 0).toLocaleString()} of {(rule.total_executions || 0).toLocaleString()}
-                          </div>
-                        </td>
+                          <td className="py-3.5 px-4">
+                            <div className="text-xs font-mono text-slate-200">
+                              {triggerPct}%
+                            </div>
+                            <div className="text-[10px] text-slate-500">
+                              {(rule.total_triggers || 0).toLocaleString()} of {(rule.total_executions || 0).toLocaleString()}
+                            </div>
+                          </td>
 
-                        <td className="py-3.5 px-4">
-                          <button
-                            onClick={() => handleToggleActiveQuick(rule)}
-                            className="flex items-center gap-1.5 focus:outline-none"
-                            title="Click to toggle active status"
-                          >
-                            {rule.is_active ? (
-                              <span className="text-emerald-400 text-[10px] font-bold bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded flex items-center gap-1">
-                                <Check className="w-3 h-3" /> ACTIVE
-                              </span>
-                            ) : (
-                              <span className="text-slate-500 text-[10px] font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded">
-                                DISABLED
-                              </span>
-                            )}
-                          </button>
-                        </td>
-
-                        <td className="py-3.5 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
+                          <td className="py-3.5 px-4">
                             <button
-                              onClick={() => setSimulatingRule(rule)}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-white text-amber-400 border border-slate-700 transition-colors"
-                              title="Simulate rule evaluation on synthetic data"
+                              onClick={() => handleToggleActiveQuick(rule)}
+                              className="flex items-center gap-1.5 focus:outline-none"
+                              title="Click to toggle active status"
                             >
-                              <Sparkles className="w-3.5 h-3.5" />
+                              {rule.is_active ? (
+                                <span className="text-emerald-400 text-[10px] font-bold bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded flex items-center gap-1">
+                                  <Check className="w-3 h-3" /> ACTIVE
+                                </span>
+                              ) : (
+                                <span className="text-slate-500 text-[10px] font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded">
+                                  DISABLED
+                                </span>
+                              )}
                             </button>
+                          </td>
 
-                            <button
-                              onClick={() => setHistoryRule(rule)}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
-                              title="View immutable version timeline & diff"
-                            >
-                              <History className="w-3.5 h-3.5" />
-                            </button>
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                onClick={() => setSimulatingRule(rule)}
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-white text-amber-400 border border-slate-700 transition-colors"
+                                title="Simulate rule evaluation on synthetic data"
+                              >
+                                <Sparkles className="w-3.5 h-3.5" />
+                              </button>
 
-                            <button
-                              onClick={() => setEditingRule(rule)}
-                              className="px-2.5 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:border-blue-500 text-blue-300 hover:text-white text-xs font-semibold flex items-center gap-1 transition-all"
-                              title="Configure parameters & deploy new version"
-                            >
-                              <Edit2 className="w-3 h-3" />
-                              <span>Configure</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                              <button
+                                onClick={() => setHistoryRule(rule)}
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                                title="View immutable version timeline & diff"
+                              >
+                                <History className="w-3.5 h-3.5" />
+                              </button>
+
+                              <button
+                                onClick={() => setEditingRule(rule)}
+                                className="px-2.5 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:border-blue-500 text-blue-300 hover:text-white text-xs font-semibold flex items-center gap-1 transition-all"
+                                title="Configure parameters & deploy new version"
+                              >
+                                <Edit2 className="w-3 h-3" />
+                                <span>Configure</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    });
+                  })()}
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination Controls */}
+            {(() => {
+              const totalPages = Math.max(1, Math.ceil(safeRules.length / pageSize));
+              const safePage = Math.min(Math.max(1, page), totalPages);
+              const startItem = safeRules.length === 0 ? 0 : (safePage - 1) * pageSize + 1;
+              const endItem = Math.min(safePage * pageSize, safeRules.length);
+
+              const getPageNumbers = () => {
+                const pages: (number | string)[] = [];
+                if (totalPages <= 7) {
+                  for (let i = 1; i <= totalPages; i++) pages.push(i);
+                } else {
+                  if (safePage <= 3) {
+                    pages.push(1, 2, 3, 4, '...', totalPages);
+                  } else if (safePage >= totalPages - 2) {
+                    pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+                  } else {
+                    pages.push(1, '...', safePage - 1, safePage, safePage + 1, '...', totalPages);
+                  }
+                }
+                return pages;
+              };
+
+              return (
+                <div className="p-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-4">
+                    <div className="font-mono text-[11px]">
+                      Showing <strong className="text-white">{startItem}</strong> to{' '}
+                      <strong className="text-white">{endItem}</strong> of{' '}
+                      <strong className="text-white">{safeRules.length}</strong> rules
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] text-slate-400">Per page:</span>
+                      <div className="relative inline-flex items-center">
+                        <select
+                          value={pageSize}
+                          onChange={(e) => {
+                            setPageSize(parseInt(e.target.value, 10));
+                            setPage(1);
+                          }}
+                          className="appearance-none bg-slate-950 border border-slate-700/80 rounded-lg pl-2.5 pr-7 py-1 text-xs text-white focus:outline-none focus:border-blue-500 font-mono cursor-pointer"
+                        >
+                          <option value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                        </select>
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => setPage(1)}
+                      disabled={safePage <= 1}
+                      className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      title="First Page"
+                    >
+                      <ChevronsLeft className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPage(safePage - 1)}
+                      disabled={safePage <= 1}
+                      className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      title="Previous Page"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {getPageNumbers().map((pNum, idx) => {
+                        if (pNum === '...') {
+                          return (
+                            <span key={`rule-ell-${idx}`} className="px-1.5 text-slate-500 font-mono text-xs select-none">
+                              ...
+                            </span>
+                          );
+                        }
+                        const num = Number(pNum);
+                        const isActive = num === safePage;
+                        return (
+                          <button
+                            key={`rule-page-${num}`}
+                            type="button"
+                            onClick={() => setPage(num)}
+                            className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
+                              isActive
+                                ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
+                                : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white'
+                            }`}
+                          >
+                            {num}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setPage(safePage + 1)}
+                      disabled={safePage >= totalPages}
+                      className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      title="Next Page"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPage(totalPages)}
+                      disabled={safePage >= totalPages}
+                      className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      title="Last Page"
+                    >
+                      <ChevronsRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
