@@ -84,13 +84,13 @@ export const KPICard: React.FC<KPICardProps> = ({
           </div>
         </div>
 
-        <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-2xl font-bold font-mono text-soc-foreground tracking-tight">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-2xl font-bold font-mono text-soc-foreground tracking-tight leading-tight">
             {value}
           </span>
           {trend && (
             <span
-              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border ${getTrendColor()}`}
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium border shadow-sm ${getTrendColor()}`}
             >
               {getTrendIcon()}
               <span>{trend}</span>

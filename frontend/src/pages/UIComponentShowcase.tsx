@@ -185,7 +185,7 @@ export const UIComponentShowcase: React.FC = () => {
         <h3 className="text-sm font-semibold text-soc-muted uppercase tracking-wider font-mono mb-3">
           3. KPI Metrics & Trend Cards
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <KPICard
             title="Total Volume"
             value="$1,489,200"
@@ -210,11 +210,6 @@ export const UIComponentShowcase: React.FC = () => {
             trendDirection="neutral"
             description="P99 stream pipeline execution"
             icon={Zap}
-          />
-          <KPICard
-            title="Skeleton Loader"
-            value=""
-            isLoading={true}
           />
         </div>
       </div>
