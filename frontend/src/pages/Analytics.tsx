@@ -250,13 +250,13 @@ export const Analytics: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Workspace Header */}
-      <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-soc-card border border-soc-border p-5 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-blue-400" />
+          <h1 className="text-xl font-bold text-soc-foreground tracking-tight flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-blue-500" />
             <span>Security & Fraud Analytics Workspace</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-soc-muted mt-1">
             Aggregated intelligence across live transaction flows, risk deciles, ML anomaly models,
             and analyst resolution pipelines.
           </p>
@@ -267,19 +267,19 @@ export const Analytics: React.FC = () => {
           <button
             onClick={() => fetchData(true)}
             disabled={isLoading || isRefreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-soc-foreground bg-soc-surface hover:bg-soc-card border border-soc-border hover:border-blue-400 transition-colors disabled:opacity-50 shadow-sm"
             title="Refresh analytics data"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-blue-500 ${isRefreshing ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
           </button>
 
           <button
             onClick={handleExportData}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-soc-foreground bg-soc-surface hover:bg-soc-card border border-soc-border hover:border-blue-400 transition-colors shadow-sm"
             title="Export tab dataset as JSON report"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-blue-500" />
             <span>Export Report</span>
           </button>
         </div>
@@ -295,7 +295,7 @@ export const Analytics: React.FC = () => {
       />
 
       {/* Navigation Tab Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-800">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-soc-border">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -303,10 +303,10 @@ export const Analytics: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id as AnalyticsTab)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-150 ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-150 ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-surface'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

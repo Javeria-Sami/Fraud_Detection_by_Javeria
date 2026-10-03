@@ -47,10 +47,10 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   if (isLoading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-10 bg-slate-800/60 rounded-xl w-full" />
+        <div className="h-10 bg-soc-card rounded-xl w-full" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-44 bg-slate-800/40 rounded-xl border border-slate-800" />
+            <div key={i} className="h-44 bg-soc-card rounded-2xl border border-soc-border" />
           ))}
         </div>
       </div>
@@ -59,17 +59,17 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   if (!data || data.total_results === 0) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-12 text-center max-w-lg mx-auto shadow-xl">
-        <div className="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-700/50">
-          <SearchX className="w-8 h-8 text-slate-400" />
+      <div className="bg-soc-card border border-soc-border rounded-2xl p-12 text-center max-w-lg mx-auto shadow-sm">
+        <div className="w-16 h-16 bg-soc-surface rounded-2xl flex items-center justify-center mx-auto mb-4 border border-soc-border">
+          <SearchX className="w-8 h-8 text-soc-muted" />
         </div>
-        <h3 className="text-lg font-bold text-slate-100 mb-1">No Historical Records Found</h3>
-        <p className="text-sm text-slate-400 mb-6">
+        <h3 className="text-lg font-bold text-soc-foreground mb-1">No Historical Records Found</h3>
+        <p className="text-sm text-soc-muted mb-6">
           No records match your query and filter criteria across transactions, alerts, cases, or profiles.
         </p>
-        <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 text-left text-xs text-slate-400 space-y-1.5">
-          <span className="font-semibold text-slate-300 block mb-1">Search recommendations:</span>
-          <p>• Verify exact identifier spelling (e.g. <code className="text-cyan-400">TXN-001</code>, <code className="text-amber-400">ALR-001</code>, <code className="text-purple-400">CASE-001</code>).</p>
+        <div className="bg-soc-surface p-4 rounded-xl border border-soc-border text-left text-xs text-soc-muted space-y-1.5">
+          <span className="font-semibold text-soc-foreground block mb-1">Search recommendations:</span>
+          <p>• Verify exact identifier spelling (e.g. <code className="text-blue-500 font-bold">TXN-001</code>, <code className="text-amber-500 font-bold">ALR-001</code>, <code className="text-purple-500 font-bold">CASE-001</code>).</p>
           <p>• Widen or clear the date range boundary in Advanced Filters.</p>
           <p>• Lower the minimum risk threshold or enable all entity types.</p>
         </div>
@@ -91,17 +91,17 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   const executionTime = data.execution_time_ms ?? 0;
 
   const renderRiskBadge = (score: number, level?: string) => {
-    let color = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+    let color = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30';
     let icon = <ShieldCheck className="w-3 h-3" />;
 
     if (score >= 85 || level === 'CRITICAL') {
-      color = 'bg-rose-500/15 text-rose-400 border-rose-500/30';
+      color = 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30';
       icon = <Flame className="w-3 h-3" />;
     } else if (score >= 60 || level === 'HIGH') {
-      color = 'bg-orange-500/15 text-orange-400 border-orange-500/30';
+      color = 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/30';
       icon = <AlertTriangle className="w-3 h-3" />;
     } else if (score >= 30 || level === 'MEDIUM') {
-      color = 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+      color = 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30';
     }
 
     return (
@@ -132,7 +132,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   return (
     <div className="space-y-4">
       {/* Category Tabs Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-soc-border pb-2">
         <div className="flex flex-wrap gap-1">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
@@ -143,14 +143,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 onClick={() => onTabChange(tab.key)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
                   isActive
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-surface border border-transparent'
                 }`}
               >
                 <span>{tab.label}</span>
                 <span
-                  className={`text-[10px] px-2 py-0.2 rounded-full font-mono ${
-                    isActive ? 'bg-cyan-500/30 text-cyan-200' : 'bg-slate-800 text-slate-400'
+                  className={`text-[10px] px-2 py-0.2 rounded-full font-mono font-bold ${
+                    isActive ? 'bg-blue-700 text-white' : 'bg-soc-surface text-soc-muted border border-soc-border'
                   }`}
                 >
                   {tab.count}
@@ -160,9 +160,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
           })}
         </div>
 
-        <div className="text-xs text-slate-400 font-mono">
-          Found <span className="font-bold text-slate-200">{totalResults}</span> results in{' '}
-          <span className="text-cyan-400">{executionTime.toFixed(1)}ms</span>
+        <div className="text-xs text-soc-muted font-mono">
+          Found <span className="font-bold text-soc-foreground">{totalResults}</span> results in{' '}
+          <span className="text-blue-600 dark:text-blue-400 font-bold">{executionTime.toFixed(1)}ms</span>
         </div>
       </div>
 
@@ -172,8 +172,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {(activeTab === 'all' || activeTab === 'transactions') && transactions.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-emerald-400" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-emerald-500" />
                 Transactions ({data.transactions?.total || transactions.length})
               </h4>
             </div>
@@ -182,34 +182,34 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={txn.id}
                   onClick={() => navigate(`/transactions/${txn.id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-emerald-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-emerald-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <div className="font-mono text-xs font-bold text-emerald-400 group-hover:text-emerald-300">
+                      <div className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:underline">
                         {txn.id}
                       </div>
-                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-slate-800 border border-slate-700 text-slate-300 rounded">
+                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-soc-surface border border-soc-border text-soc-muted rounded">
                         {txn.status}
                       </span>
                     </div>
 
-                    <div className="text-lg font-bold text-slate-100 mb-1 font-mono">
+                    <div className="text-lg font-bold text-soc-foreground mb-1 font-mono">
                       {txn.currency} {txn.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </div>
 
-                    <div className="space-y-1 text-xs text-slate-400 mb-3">
-                      {txn.merchant_name && <div>Merchant: <span className="text-slate-200">{txn.merchant_name}</span></div>}
-                      {txn.user_id && <div>User ID: <span className="text-slate-300 font-mono">{txn.user_id}</span></div>}
+                    <div className="space-y-1 text-xs text-soc-muted mb-3">
+                      {txn.merchant_name && <div>Merchant: <span className="text-soc-foreground font-medium">{txn.merchant_name}</span></div>}
+                      {txn.user_id && <div>User ID: <span className="text-soc-foreground font-mono">{txn.user_id}</span></div>}
                       {(txn.city || txn.country) && (
-                        <div>Location: <span className="text-slate-300">{[txn.city, txn.country].filter(Boolean).join(', ')}</span></div>
+                        <div>Location: <span className="text-soc-foreground">{[txn.city, txn.country].filter(Boolean).join(', ')}</span></div>
                       )}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
                     <div>{renderRiskBadge(txn.risk_score, txn.risk_level)}</div>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">View Detail</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -223,8 +223,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Alerts Section */}
         {(activeTab === 'all' || activeTab === 'alerts') && alerts.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Bell className="w-4 h-4 text-amber-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+              <Bell className="w-4 h-4 text-amber-500" />
               Alerts ({data.alerts?.total || alerts.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -232,31 +232,31 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={alr.id}
                   onClick={() => navigate(`/alerts/${alr.id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-amber-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-amber-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <div className="font-mono text-xs font-bold text-amber-400 group-hover:text-amber-300">
+                      <div className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 group-hover:underline">
                         {alr.id}
                       </div>
-                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-slate-800 border border-slate-700 text-slate-300 rounded">
+                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-soc-surface border border-soc-border text-soc-muted rounded">
                         {alr.status}
                       </span>
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-100 mb-2 line-clamp-2">
+                    <div className="text-sm font-bold text-soc-foreground mb-2 line-clamp-2">
                       {alr.title}
                     </div>
 
-                    <div className="space-y-1 text-xs text-slate-400 mb-3">
-                      {alr.transaction_id && <div>Txn ID: <span className="text-slate-300 font-mono">{alr.transaction_id}</span></div>}
-                      {alr.assigned_to && <div>Assigned: <span className="text-slate-300">{alr.assigned_to}</span></div>}
+                    <div className="space-y-1 text-xs text-soc-muted mb-3">
+                      {alr.transaction_id && <div>Txn ID: <span className="text-soc-foreground font-mono">{alr.transaction_id}</span></div>}
+                      {alr.assigned_to && <div>Assigned: <span className="text-soc-foreground font-medium">{alr.assigned_to}</span></div>}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
                     <div>{renderRiskBadge(alr.risk_score, alr.severity)}</div>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">View Alert</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -270,8 +270,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Cases Section */}
         {(activeTab === 'all' || activeTab === 'cases') && cases.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-purple-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-purple-500" />
               Investigation Cases ({data.cases?.total || cases.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -279,33 +279,33 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={c.id}
                   onClick={() => navigate(`/cases/${c.id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-purple-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-purple-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-purple-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <div className="font-mono text-xs font-bold text-purple-400 group-hover:text-purple-300">
+                      <div className="font-mono text-xs font-bold text-purple-600 dark:text-purple-400 group-hover:underline">
                         {c.id}
                       </div>
-                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-slate-800 border border-slate-700 text-slate-300 rounded">
+                      <span className="px-2 py-0.5 text-[10px] font-semibold uppercase bg-soc-surface border border-soc-border text-soc-muted rounded">
                         {c.status}
                       </span>
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-100 mb-2 line-clamp-2">
+                    <div className="text-sm font-bold text-soc-foreground mb-2 line-clamp-2">
                       {c.title}
                     </div>
 
-                    <div className="space-y-1 text-xs text-slate-400 mb-3">
-                      {c.assigned_to && <div>Lead: <span className="text-slate-300">{c.assigned_to}</span></div>}
-                      {c.user_id && <div>Target User: <span className="text-slate-300 font-mono">{c.user_id}</span></div>}
+                    <div className="space-y-1 text-xs text-soc-muted mb-3">
+                      {c.assigned_to && <div>Lead: <span className="text-soc-foreground font-medium">{c.assigned_to}</span></div>}
+                      {c.user_id && <div>Target User: <span className="text-soc-foreground font-mono">{c.user_id}</span></div>}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 text-[11px] font-bold uppercase bg-purple-950/40 text-purple-300 border border-purple-800/40 rounded">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
+                    <span className="px-2 py-0.5 text-[11px] font-bold uppercase bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 rounded">
                       {c.severity}
                     </span>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">Open Case</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -319,8 +319,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Users Section */}
         {(activeTab === 'all' || activeTab === 'users') && users.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <User className="w-4 h-4 text-blue-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+              <User className="w-4 h-4 text-blue-500" />
               Users ({data.users?.total || users.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -328,29 +328,29 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={u.user_id}
                   onClick={() => navigate(`/risk-profiles?tab=users&id=${u.user_id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-blue-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-blue-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-blue-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <div className="font-mono text-xs font-bold text-blue-400 group-hover:text-blue-300">
+                      <div className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline">
                         {u.user_id}
                       </div>
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-100 mb-1">
+                    <div className="text-sm font-bold text-soc-foreground mb-1">
                       {u.full_name || u.user_id}
                     </div>
-                    {u.email && <div className="text-xs text-slate-400 mb-3">{u.email}</div>}
+                    {u.email && <div className="text-xs text-soc-muted mb-3">{u.email}</div>}
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 mb-3 bg-slate-950/40 p-2 rounded-lg border border-slate-800/60">
-                      <div>Total Txns: <span className="font-bold text-slate-200">{u.total_transactions}</span></div>
-                      <div>Flagged: <span className="font-bold text-rose-400">{u.flagged_transactions}</span></div>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-soc-muted mb-3 bg-soc-surface p-2.5 rounded-xl border border-soc-border">
+                      <div>Total Txns: <span className="font-bold text-soc-foreground font-mono">{u.total_transactions}</span></div>
+                      <div>Flagged: <span className="font-bold text-rose-600 dark:text-rose-400 font-mono">{u.flagged_transactions}</span></div>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
                     <div>{renderRiskBadge(u.risk_score, u.risk_level)}</div>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">Risk Profile</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -364,8 +364,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Devices Section */}
         {(activeTab === 'all' || activeTab === 'devices') && devices.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-indigo-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-indigo-500" />
               Devices ({data.devices?.total || devices.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -373,22 +373,22 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={d.device_id}
                   onClick={() => navigate(`/risk-profiles?tab=devices&id=${d.device_id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-indigo-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-indigo-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-indigo-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
-                    <div className="font-mono text-xs font-bold text-indigo-400 group-hover:text-indigo-300 mb-2 truncate">
+                    <div className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 group-hover:underline mb-2 truncate">
                       {d.device_id}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 mb-3 bg-slate-950/40 p-2 rounded-lg border border-slate-800/60">
-                      <div>Users Linked: <span className="font-bold text-slate-200">{d.distinct_users_count}</span></div>
-                      <div>Total Txns: <span className="font-bold text-slate-200">{d.total_transactions}</span></div>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-soc-muted mb-3 bg-soc-surface p-2.5 rounded-xl border border-soc-border">
+                      <div>Users Linked: <span className="font-bold text-soc-foreground font-mono">{d.distinct_users_count}</span></div>
+                      <div>Total Txns: <span className="font-bold text-soc-foreground font-mono">{d.total_transactions}</span></div>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
                     <div>{renderRiskBadge(d.risk_score, d.risk_level)}</div>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">Device Profile</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -402,8 +402,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Merchants Section */}
         {(activeTab === 'all' || activeTab === 'merchants') && merchants.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Store className="w-4 h-4 text-rose-400" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-soc-muted flex items-center gap-2">
+              <Store className="w-4 h-4 text-rose-500" />
               Merchants ({data.merchants?.total || merchants.length})
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -411,29 +411,29 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <div
                   key={m.merchant_id}
                   onClick={() => navigate(`/risk-profiles?tab=merchants&id=${m.merchant_id}`)}
-                  className="bg-slate-900/80 border border-slate-800 hover:border-rose-500/50 rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-rose-950/20 cursor-pointer group flex flex-col justify-between"
+                  className="bg-soc-card border border-soc-border hover:border-rose-400 hover:bg-soc-surface rounded-2xl p-4 transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between"
                 >
                   <div>
-                    <div className="font-mono text-xs font-bold text-rose-400 group-hover:text-rose-300 mb-1">
+                    <div className="font-mono text-xs font-bold text-rose-600 dark:text-rose-400 group-hover:underline mb-1">
                       {m.merchant_id}
                     </div>
 
-                    <div className="text-sm font-semibold text-slate-100 mb-1">
+                    <div className="text-sm font-bold text-soc-foreground mb-1">
                       {m.merchant_name}
                     </div>
                     {m.merchant_category && (
-                      <div className="text-xs text-slate-400 mb-3">{m.merchant_category}</div>
+                      <div className="text-xs text-soc-muted mb-3">{m.merchant_category}</div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 mb-3 bg-slate-950/40 p-2 rounded-lg border border-slate-800/60">
-                      <div>Total Txns: <span className="font-bold text-slate-200">{m.total_transactions}</span></div>
-                      <div>Failed: <span className="font-bold text-rose-400">{m.failed_transactions}</span></div>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-soc-muted mb-3 bg-soc-surface p-2.5 rounded-xl border border-soc-border">
+                      <div>Total Txns: <span className="font-bold text-soc-foreground font-mono">{m.total_transactions}</span></div>
+                      <div>Failed: <span className="font-bold text-rose-600 dark:text-rose-400 font-mono">{m.failed_transactions}</span></div>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-soc-border flex items-center justify-between text-xs">
                     <div>{renderRiskBadge(m.risk_score, m.risk_level)}</div>
-                    <div className="flex items-center gap-1 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                    <div className="flex items-center gap-1 text-soc-muted group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                       <span className="text-[11px]">Merchant Profile</span>
                       <ExternalLink className="w-3 h-3" />
                     </div>
@@ -466,9 +466,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         );
 
         return (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-800 text-xs">
-            <span className="text-xs text-slate-400 font-mono">
-              Page <strong className="text-white">{currentPage}</strong> of <strong className="text-white">{totalPages}</strong>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-soc-border text-xs">
+            <span className="text-xs text-soc-muted font-mono">
+              Page <strong className="text-soc-foreground font-bold">{currentPage}</strong> of <strong className="text-soc-foreground font-bold">{totalPages}</strong>
             </span>
 
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -476,7 +476,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 type="button"
                 onClick={() => onPageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage <= 1}
-                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="px-3 py-1.5 bg-soc-surface hover:bg-soc-card disabled:opacity-40 text-soc-foreground border border-soc-border rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors shadow-sm"
                 title="Previous Page"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -491,8 +491,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     onClick={() => onPageChange(pNum)}
                     className={`min-w-[28px] h-7 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
                       currentPage === pNum
-                        ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                        ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm'
+                        : 'bg-soc-surface border-soc-border text-soc-muted hover:text-soc-foreground hover:bg-soc-card'
                     }`}
                   >
                     {pNum}
@@ -504,7 +504,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 type="button"
                 onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage >= totalPages}
-                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="px-3 py-1.5 bg-soc-surface hover:bg-soc-card disabled:opacity-40 text-soc-foreground border border-soc-border rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors shadow-sm"
                 title="Next Page"
               >
                 <span>Next</span>

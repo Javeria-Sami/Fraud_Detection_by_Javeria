@@ -97,30 +97,30 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const renderEntityIcon = (type: string) => {
     switch (type) {
       case 'transaction':
-        return <CreditCard className="w-4 h-4 text-emerald-400" />;
+        return <CreditCard className="w-4 h-4 text-emerald-500" />;
       case 'alert':
-        return <Bell className="w-4 h-4 text-amber-400" />;
+        return <Bell className="w-4 h-4 text-amber-500" />;
       case 'case':
-        return <Briefcase className="w-4 h-4 text-purple-400" />;
+        return <Briefcase className="w-4 h-4 text-purple-500" />;
       case 'user':
-        return <User className="w-4 h-4 text-blue-400" />;
+        return <User className="w-4 h-4 text-blue-500" />;
       case 'device':
-        return <Smartphone className="w-4 h-4 text-indigo-400" />;
+        return <Smartphone className="w-4 h-4 text-indigo-500" />;
       case 'merchant':
-        return <Store className="w-4 h-4 text-rose-400" />;
+        return <Store className="w-4 h-4 text-rose-500" />;
       default:
-        return <Search className="w-4 h-4 text-slate-400" />;
+        return <Search className="w-4 h-4 text-soc-muted" />;
     }
   };
 
   return (
     <div className="relative w-full">
       <div className="relative flex items-center">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-soc-muted">
           {isLoading ? (
-            <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />
+            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
           ) : (
-            <Search className="w-5 h-5 text-slate-400" />
+            <Search className="w-5 h-5 text-soc-muted" />
           )}
         </div>
 
@@ -135,7 +135,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           }}
           placeholder={placeholder}
           maxLength={150}
-          className="w-full pl-11 pr-24 py-3.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 shadow-inner backdrop-blur-sm transition-all"
+          className="w-full pl-11 pr-24 py-3.5 bg-soc-card border border-soc-border rounded-xl text-soc-foreground placeholder:text-soc-muted text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 shadow-sm backdrop-blur-sm transition-all"
         />
 
         <div className="absolute inset-y-0 right-0 pr-3 flex items-center gap-2">
@@ -147,7 +147,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 setSuggestions([]);
                 setShowDropdown(false);
               }}
-              className="p-1 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
+              className="p-1 text-soc-muted hover:text-soc-foreground rounded-lg hover:bg-soc-surface transition-colors"
               title="Clear search"
             >
               <X className="w-4 h-4" />
@@ -158,7 +158,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             type="button"
             onClick={() => onSearch()}
             disabled={isLoading}
-            className="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-xs font-semibold rounded-lg shadow-sm shadow-cyan-600/30 transition-all flex items-center gap-1.5"
+            className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg shadow-sm transition-all flex items-center gap-1.5"
           >
             {isLoading ? 'Searching...' : 'Search'}
           </button>
@@ -169,39 +169,39 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       {showDropdown && suggestions.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 left-0 right-0 mt-2 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden backdrop-blur-md animate-fadeIn"
+          className="absolute z-50 left-0 right-0 mt-2 bg-soc-card border border-soc-border rounded-xl shadow-xl overflow-hidden backdrop-blur-md animate-fadeIn"
         >
-          <div className="px-3 py-2 bg-slate-800/60 border-b border-slate-700/60 text-xs font-semibold text-slate-400 uppercase tracking-wider flex justify-between items-center">
+          <div className="px-3.5 py-2 bg-soc-surface border-b border-soc-border text-xs font-semibold text-soc-muted uppercase tracking-wider flex justify-between items-center">
             <span>Matching Identifiers & Entities</span>
-            {isFetchingSuggestions && <Loader2 className="w-3 h-3 animate-spin text-cyan-400" />}
+            {isFetchingSuggestions && <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500" />}
           </div>
-          <div className="max-h-72 overflow-y-auto divide-y divide-slate-800/60">
+          <div className="max-h-72 overflow-y-auto divide-y divide-soc-border">
             {suggestions.map((item, idx) => (
               <button
                 key={`${item.entity_type}-${item.id}-${idx}`}
                 type="button"
                 onClick={() => handleSelectSuggestion(item)}
-                className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-slate-800/80 transition-colors ${
-                  idx === activeSuggestionIndex ? 'bg-slate-800 text-cyan-400' : 'text-slate-200'
+                className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-soc-surface transition-colors ${
+                  idx === activeSuggestionIndex ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold' : 'text-soc-foreground'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-1.5 bg-slate-800 rounded-md border border-slate-700/50">
+                  <div className="p-1.5 bg-soc-surface rounded-md border border-soc-border">
                     {renderEntityIcon(item.entity_type)}
                   </div>
                   <div>
-                    <div className="text-sm font-medium font-mono text-slate-100">{item.id}</div>
+                    <div className="text-sm font-medium font-mono text-soc-foreground">{item.id}</div>
                     {item.label !== item.id && (
-                      <div className="text-xs text-slate-400">{item.label}</div>
+                      <div className="text-xs text-soc-muted">{item.label}</div>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="inline-block px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-slate-800 border border-slate-700 text-slate-300 rounded">
+                  <span className="inline-block px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-soc-surface border border-soc-border text-soc-muted rounded">
                     {item.entity_type}
                   </span>
                   {item.subtext && (
-                    <div className="text-[11px] text-slate-400 mt-0.5">{item.subtext}</div>
+                    <div className="text-[11px] text-soc-muted mt-0.5">{item.subtext}</div>
                   )}
                 </div>
               </button>

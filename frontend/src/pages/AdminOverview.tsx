@@ -130,24 +130,24 @@ export const AdminOverview: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 self-start sm:self-auto">
-          <div className="text-right hidden md:block font-mono text-[11px] text-slate-400">
+          <div className="text-right hidden md:block font-mono text-[11px] text-soc-muted">
             <div>Auto-refresh: 30s</div>
-            <div className="text-slate-500">Updated: {lastRefreshed.toLocaleTimeString()}</div>
+            <div className="text-soc-muted">Updated: {lastRefreshed.toLocaleTimeString()}</div>
           </div>
 
           <button
             onClick={() => fetchData(true)}
             disabled={isRefreshing}
-            className="px-3.5 py-2 rounded-xl bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-md disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-soc-surface hover:bg-soc-card border border-soc-border hover:border-blue-400 text-soc-foreground text-xs font-semibold flex items-center gap-2 transition-all shadow-sm disabled:opacity-50"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-500' : 'text-blue-500'}`} />
             <span>Refresh</span>
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-3">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-3">
           <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
@@ -156,95 +156,95 @@ export const AdminOverview: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* 1. Platform Health */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-soc-muted font-mono">
                 Platform State
               </span>
-              <div className="text-2xl font-extrabold text-white">
+              <div className="text-2xl font-extrabold text-soc-foreground">
                 {overview?.platform?.overall_status || 'HEALTHY'}
               </div>
             </div>
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500">
               <Activity className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-slate-400">
-            <span>Database: <strong className="text-emerald-400 font-mono">{overview?.platform?.database_status || 'HEALTHY'}</strong></span>
-            <span>API: <strong className="text-emerald-400 font-mono">{overview?.platform?.api_status || 'ONLINE'}</strong></span>
+          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-soc-muted">
+            <span>Database: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">{overview?.platform?.database_status || 'HEALTHY'}</strong></span>
+            <span>API: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">{overview?.platform?.api_status || 'ONLINE'}</strong></span>
           </div>
         </div>
 
         {/* 2. User & Access Summary */}
         <Link
           to="/admin/users"
-          className="bg-soc-card hover:bg-slate-800/80 border border-soc-border hover:border-blue-500/40 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col justify-between transition-all group"
+          className="bg-soc-card hover:bg-soc-surface border border-soc-border hover:border-blue-500/40 rounded-2xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all group"
         >
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-soc-muted font-mono">
                 Operator Accounts
               </span>
-              <div className="text-2xl font-extrabold text-white flex items-center gap-2">
+              <div className="text-2xl font-extrabold text-soc-foreground flex items-center gap-2">
                 <span>{overview?.users?.total_users ?? 0}</span>
-                <span className="text-xs font-semibold text-emerald-400 font-mono">
+                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 font-mono">
                   ({overview?.users?.active_users ?? 0} active)
                 </span>
               </div>
             </div>
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500 group-hover:bg-blue-500/20 transition-colors">
               <Users className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-slate-400">
+          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-soc-muted">
             <span>{overview?.users?.admin_count ?? 0} Admins · {overview?.users?.analyst_count ?? 0} Analysts</span>
-            <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+            <ArrowUpRight className="w-4 h-4 text-soc-muted group-hover:text-blue-500 transition-colors" />
           </div>
         </Link>
 
         {/* 3. Fraud Rules & Alert Engine */}
         <Link
           to="/admin/rules"
-          className="bg-soc-card hover:bg-slate-800/80 border border-soc-border hover:border-purple-500/40 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col justify-between transition-all group"
+          className="bg-soc-card hover:bg-soc-surface border border-soc-border hover:border-purple-500/40 rounded-2xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all group"
         >
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-soc-muted font-mono">
                 Fraud Rules Engine
               </span>
-              <div className="text-2xl font-extrabold text-white flex items-center gap-2">
+              <div className="text-2xl font-extrabold text-soc-foreground flex items-center gap-2">
                 <span>{overview?.detection?.active_fraud_rules ?? 0}</span>
-                <span className="text-xs font-semibold text-purple-400 font-mono">
+                <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 font-mono">
                   / {overview?.detection?.total_fraud_rules ?? 0} rules
                 </span>
               </div>
             </div>
-            <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 group-hover:bg-purple-500/20 transition-colors">
+            <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-500 group-hover:bg-purple-500/20 transition-colors">
               <Sliders className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-slate-400">
+          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-soc-muted">
             <span>{overview?.detection?.active_alert_configs ?? 0} Alert Types Enabled</span>
-            <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
+            <ArrowUpRight className="w-4 h-4 text-soc-muted group-hover:text-purple-500 transition-colors" />
           </div>
         </Link>
 
         {/* 4. Active ML Model */}
         <Link
           to="/models"
-          className="bg-soc-card hover:bg-slate-800/80 border border-soc-border hover:border-amber-500/40 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col justify-between transition-all group"
+          className="bg-soc-card hover:bg-soc-surface border border-soc-border hover:border-amber-500/40 rounded-2xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all group"
         >
           <div className="flex items-start justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-soc-muted font-mono">
                 Production ML Model
               </span>
-              <div className="text-lg font-bold text-white font-mono truncate max-w-[170px]" title={overview?.ml?.deployed_model_version}>
+              <div className="text-lg font-bold text-soc-foreground font-mono truncate max-w-[170px]" title={overview?.ml?.deployed_model_version}>
                 {overview?.ml?.deployed_model_version || 'v1.0.0-prod'}
               </div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 group-hover:bg-amber-500/20 transition-colors">
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 group-hover:bg-amber-500/20 transition-colors">
               <Cpu className="w-5 h-5" />
             </div>
           </div>
@@ -352,10 +352,10 @@ export const AdminOverview: React.FC = () => {
         </div>
 
         {/* Administrative Quick Actions */}
-        <div className="lg:col-span-2 bg-soc-card border border-soc-border rounded-2xl p-5 shadow-lg space-y-4">
+        <div className="lg:col-span-2 bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm space-y-4">
           <div className="flex items-center gap-2 border-b border-soc-border pb-3">
-            <Sliders className="w-4 h-4 text-blue-400" />
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+            <Sliders className="w-4 h-4 text-blue-500" />
+            <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider">
               Administrative Control Centers
             </h3>
           </div>
@@ -363,17 +363,17 @@ export const AdminOverview: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <Link
               to="/admin/users"
-              className="p-4 rounded-xl bg-soc-bg hover:bg-slate-800/80 border border-soc-border hover:border-blue-500/40 transition-all flex items-start gap-3.5 group"
+              className="p-4 rounded-xl bg-soc-surface hover:bg-blue-50/40 dark:hover:bg-slate-800/80 border border-soc-border hover:border-blue-400 transition-all flex items-start gap-3.5 group shadow-sm"
             >
-              <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20">
+              <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-500 group-hover:bg-blue-500/20">
                 <Users className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="text-xs font-bold text-white group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                <div className="text-xs font-bold text-soc-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
                   <span>User & Role Access</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-soc-muted group-hover:text-blue-500" />
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-soc-muted leading-relaxed">
                   Provision operators, configure RBAC roles, inspect effective permissions, and manage account statuses.
                 </p>
               </div>
@@ -381,17 +381,17 @@ export const AdminOverview: React.FC = () => {
 
             <Link
               to="/admin/rules"
-              className="p-4 rounded-xl bg-soc-bg hover:bg-slate-800/80 border border-soc-border hover:border-purple-500/40 transition-all flex items-start gap-3.5 group"
+              className="p-4 rounded-xl bg-soc-surface hover:bg-purple-50/40 dark:hover:bg-slate-800/80 border border-soc-border hover:border-purple-400 transition-all flex items-start gap-3.5 group shadow-sm"
             >
-              <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20">
+              <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-500 group-hover:bg-purple-500/20">
                 <Sliders className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="text-xs font-bold text-white group-hover:text-purple-400 transition-colors flex items-center gap-1.5">
+                <div className="text-xs font-bold text-soc-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors flex items-center gap-1.5">
                   <span>Fraud Rules & Policies</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-soc-muted group-hover:text-purple-500" />
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-soc-muted leading-relaxed">
                   Calibrate rule weights, manage immutable version history, simulate dry-runs, and tune alert policies.
                 </p>
               </div>
@@ -399,17 +399,17 @@ export const AdminOverview: React.FC = () => {
 
             <Link
               to="/admin/settings"
-              className="p-4 rounded-xl bg-soc-bg hover:bg-slate-800/80 border border-soc-border hover:border-emerald-500/40 transition-all flex items-start gap-3.5 group"
+              className="p-4 rounded-xl bg-soc-surface hover:bg-emerald-50/40 dark:hover:bg-slate-800/80 border border-soc-border hover:border-emerald-400 transition-all flex items-start gap-3.5 group shadow-sm"
             >
-              <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20">
+              <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500/20">
                 <Settings className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="text-xs font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                <div className="text-xs font-bold text-soc-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                   <span>System Policies & Thresholds</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-soc-muted group-hover:text-emerald-500" />
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-soc-muted leading-relaxed">
                   Adjust multi-tier risk score boundaries, auto-block ceilings, alert cooldown intervals, and timeouts.
                 </p>
               </div>
@@ -417,17 +417,17 @@ export const AdminOverview: React.FC = () => {
 
             <Link
               to="/admin/audit-logs"
-              className="p-4 rounded-xl bg-soc-bg hover:bg-slate-800/80 border border-soc-border hover:border-amber-500/40 transition-all flex items-start gap-3.5 group"
+              className="p-4 rounded-xl bg-soc-surface hover:bg-amber-50/40 dark:hover:bg-slate-800/80 border border-soc-border hover:border-amber-400 transition-all flex items-start gap-3.5 group shadow-sm"
             >
-              <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20">
+              <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500/20">
                 <History className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                <div className="text-xs font-bold text-soc-foreground group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
                   <span>Audit Trail & Activity</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-soc-muted group-hover:text-amber-500" />
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-soc-muted leading-relaxed">
                   Review tamper-evident audit logs of all administrative actions, rule modifications, and status changes.
                 </p>
               </div>
