@@ -61,12 +61,23 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
   }
 
   const customTooltipStyle = {
-    backgroundColor: 'var(--soc-card, #FFFFFF)',
-    borderColor: 'var(--soc-border, #E2E8F0)',
+    backgroundColor: 'var(--soc-card)',
+    borderColor: 'var(--soc-border)',
     borderRadius: '0.75rem',
-    color: 'var(--soc-foreground, #0F172A)',
+    color: 'var(--soc-foreground)',
     fontSize: '0.75rem',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+  };
+
+  const customItemStyle = {
+    color: 'var(--soc-foreground)',
+    fontSize: '0.75rem',
+  };
+
+  const customLabelStyle = {
+    color: 'var(--soc-foreground)',
+    fontWeight: 600,
+    fontSize: '0.75rem',
   };
 
   const totalCases = data?.total_cases ?? 0;
@@ -202,40 +213,52 @@ export const CaseAndWorkloadSection: React.FC<CaseAndWorkloadSectionProps> = ({
             </p>
           </div>
 
-          <div className="h-64 w-full flex items-center">
+          <div className="h-64 w-full flex items-center justify-between">
             {data.resolution_distribution && data.resolution_distribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                  <Pie
-                    data={data.resolution_distribution}
-                    dataKey="count"
-                    nameKey="label"
-                    cx="42%"
-                    cy="50%"
-                    innerRadius={48}
-                    outerRadius={72}
-                    paddingAngle={3}
-                  >
-                    {data.resolution_distribution.map((entry, index) => (
-                      <Cell
-                        key={`res-${index}`}
-                        fill={RESOLUTION_COLORS[entry.label] || PALETTE[index % PALETTE.length]}
+              <>
+                <div className="w-1/2 h-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={data.resolution_distribution}
+                        dataKey="count"
+                        nameKey="label"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={48}
+                        outerRadius={72}
+                        paddingAngle={3}
+                      >
+                        {data.resolution_distribution.map((entry, index) => (
+                          <Cell
+                            key={`res-${index}`}
+                            fill={RESOLUTION_COLORS[entry.label] || PALETTE[index % PALETTE.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={customTooltipStyle}
+                        itemStyle={customItemStyle}
+                        labelStyle={customLabelStyle}
                       />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={customTooltipStyle} />
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px', lineHeight: '22px' }}
-                    formatter={(val) => {
-                      const item = data.resolution_distribution.find((d) => d.label === val);
-                      return `${val}: ${item?.count || 0}`;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="w-1/2 flex flex-col justify-center space-y-2 pl-4">
+                  {data.resolution_distribution.map((item) => (
+                    <div key={item.label} className="flex items-center justify-between text-xs pr-2">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span
+                          className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                          style={{ backgroundColor: RESOLUTION_COLORS[item.label] || '#64748B' }}
+                        />
+                        <span className="font-semibold text-soc-muted truncate">{item.label}</span>
+                      </div>
+                      <span className="font-mono font-bold text-soc-foreground ml-2">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No resolution finding records

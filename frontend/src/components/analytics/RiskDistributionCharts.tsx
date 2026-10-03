@@ -44,12 +44,23 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
   }
 
   const customTooltipStyle = {
-    backgroundColor: 'var(--soc-card, #FFFFFF)',
-    borderColor: 'var(--soc-border, #E2E8F0)',
+    backgroundColor: 'var(--soc-card)',
+    borderColor: 'var(--soc-border)',
     borderRadius: '0.75rem',
-    color: 'var(--soc-foreground, #0F172A)',
+    color: 'var(--soc-foreground)',
     fontSize: '0.75rem',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+  };
+
+  const customItemStyle = {
+    color: 'var(--soc-foreground)',
+    fontSize: '0.75rem',
+  };
+
+  const customLabelStyle = {
+    color: 'var(--soc-foreground)',
+    fontWeight: 600,
+    fontSize: '0.75rem',
   };
 
   const getHistogramColor = (minScore: number) => {
@@ -132,40 +143,54 @@ export const RiskDistributionCharts: React.FC<RiskDistributionChartsProps> = ({
             </div>
           </div>
 
-          <div className="h-64 w-full flex items-center">
+          <div className="h-64 w-full flex items-center justify-between">
             {data.risk_level_distribution && data.risk_level_distribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                  <Pie
-                    data={data.risk_level_distribution}
-                    dataKey="count"
-                    nameKey="risk_level"
-                    cx="42%"
-                    cy="50%"
-                    innerRadius={48}
-                    outerRadius={72}
-                    paddingAngle={3}
-                  >
-                    {data.risk_level_distribution.map((entry) => (
-                      <Cell
-                        key={`cell-${entry.risk_level}`}
-                        fill={RISK_COLORS[entry.risk_level] || '#64748B'}
+              <>
+                <div className="w-1/2 h-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={data.risk_level_distribution}
+                        dataKey="count"
+                        nameKey="risk_level"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={48}
+                        outerRadius={72}
+                        paddingAngle={3}
+                      >
+                        {data.risk_level_distribution.map((entry) => (
+                          <Cell
+                            key={`cell-${entry.risk_level}`}
+                            fill={RISK_COLORS[entry.risk_level] || '#64748B'}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={customTooltipStyle}
+                        itemStyle={customItemStyle}
+                        labelStyle={customLabelStyle}
                       />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={customTooltipStyle} />
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    wrapperStyle={{ fontSize: '11px', paddingLeft: '8px', lineHeight: '22px' }}
-                    formatter={(val) => {
-                      const item = data.risk_level_distribution.find((d) => d.risk_level === val);
-                      return `${val}: ${item?.count || 0} (${item?.percentage || 0}%)`;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="w-1/2 flex flex-col justify-center space-y-2.5 pl-4">
+                  {data.risk_level_distribution.map((item) => (
+                    <div key={item.risk_level} className="flex items-center justify-between text-xs pr-2">
+                      <div className="flex items-center gap-2 truncate">
+                        <span
+                          className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                          style={{ backgroundColor: RISK_COLORS[item.risk_level] || '#64748B' }}
+                        />
+                        <span className="font-semibold text-soc-muted truncate">{item.risk_level}</span>
+                      </div>
+                      <span className="font-mono font-bold text-soc-foreground ml-2">
+                        {item.count} ({item.percentage}%)
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full w-full text-xs text-soc-muted">
                 No risk tier data available
