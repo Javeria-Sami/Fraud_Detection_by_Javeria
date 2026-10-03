@@ -60,14 +60,14 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
       </div>
 
       {/* Grid of Key Quality Signals */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
         {/* 1. Data Freshness */}
-        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
-          <div className="flex items-center justify-between gap-1.5">
-            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
-              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="truncate">Data Freshness</span>
-            </span>
+        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
+          <div className="flex items-start justify-between gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
+              <Clock className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Data Freshness</span>
+            </div>
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap border ${
                 safeDq.data_freshness_status === 'FRESH'
@@ -78,21 +78,21 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
               {safeDq.data_freshness_status || 'FRESH'}
             </span>
           </div>
-          <div className="my-2.5">
-            <div className="text-base font-bold font-mono text-white tracking-tight">
+          <div className="space-y-1">
+            <div className="text-lg font-bold font-mono text-white tracking-tight">
               {formatLag(safeDq.freshness_lag_seconds ?? 0)}
             </div>
-            <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">Time since latest transaction event</p>
+            <p className="text-[11px] text-slate-400 leading-snug">Time since latest transaction event</p>
           </div>
         </div>
 
         {/* 2. Schema Version */}
-        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
-          <div className="flex items-center justify-between gap-1.5">
-            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-              <span className="truncate">Schema Version</span>
-            </span>
+        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
+          <div className="flex items-start justify-between gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
+              <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Schema Version</span>
+            </div>
             {!safeDq.has_schema_issues ? (
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
                 COMPATIBLE
@@ -103,21 +103,21 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
               </span>
             )}
           </div>
-          <div className="my-2.5">
-            <div className="text-base font-bold font-mono text-cyan-300 tracking-tight">
+          <div className="space-y-1">
+            <div className="text-lg font-bold font-mono text-cyan-300 tracking-tight">
               {modelFeatureVersion || '1.0.0'}
             </div>
-            <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">Expected feature schema & transforms</p>
+            <p className="text-[11px] text-slate-400 leading-snug">Expected feature schema & transformations</p>
           </div>
         </div>
 
         {/* 3. Invalid Values Counter */}
-        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
-          <div className="flex items-center justify-between gap-1.5">
-            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="truncate">Invalid Values</span>
-            </span>
+        <div className="p-4 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between space-y-3 min-w-0">
+          <div className="flex items-start justify-between gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-xs min-w-0">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Invalid Values</span>
+            </div>
             {totalInvalid === 0 ? (
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
                 CLEAN (0)
@@ -128,19 +128,14 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
               </span>
             )}
           </div>
-          <div className="my-2.5 space-y-1.5">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
-                NaN: <strong className={nanCount > 0 ? "text-rose-400" : "text-emerald-400"}>{nanCount}</strong>
-              </span>
-              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
-                Inf: <strong className={infCount > 0 ? "text-rose-400" : "text-emerald-400"}>{infCount}</strong>
-              </span>
-              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
-                OOB: <strong className={oobCount > 0 ? "text-rose-400" : "text-emerald-400"}>{oobCount}</strong>
-              </span>
+          <div className="space-y-1">
+            <div className="text-lg font-bold font-mono text-emerald-400 tracking-tight">
+              {totalInvalid === 0 ? '0 Violations' : `${totalInvalid} Violations`}
             </div>
-            <p className="text-[10px] text-slate-400 leading-snug">Numeric integrity violations</p>
+            <div className="text-[11px] font-mono text-slate-300">
+              NaN: <span className={nanCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{nanCount}</span> · Inf: <span className={infCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{infCount}</span> · OOB: <span className={oobCount > 0 ? "text-rose-400 font-bold" : "text-emerald-400"}>{oobCount}</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-snug">Numeric integrity violations</p>
           </div>
         </div>
       </div>
