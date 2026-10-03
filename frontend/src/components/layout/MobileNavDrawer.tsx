@@ -16,7 +16,9 @@ import {
   History,
   Shield,
   Palette,
-  ShieldCheck
+  ShieldCheck,
+  Bell,
+  Activity
 } from 'lucide-react';
 
 export interface MobileNavDrawerProps {
@@ -25,9 +27,9 @@ export interface MobileNavDrawerProps {
 }
 
 export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClose }) => {
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
-  const isAnalystOrAdmin = user?.role === 'admin' || user?.role === 'analyst';
+  const { user, hasRole } = useAuth();
+  const isAdmin = hasRole ? hasRole('admin') : user?.role === 'admin';
+  const isAnalystOrAdmin = hasRole ? hasRole(['admin', 'analyst']) : (user?.role === 'admin' || user?.role === 'analyst');
 
   const navItems = [
     { label: 'SOC Dashboard', path: '/', icon: LayoutDashboard, access: 'all' },
@@ -35,13 +37,16 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
     { label: 'Alerts Triage', path: '/alerts', icon: AlertTriangle, access: 'all' },
     { label: 'Case Management', path: '/cases', icon: FolderLock, access: 'analyst' },
     { label: '360° Risk Profiles', path: '/risk-profiles', icon: UserCheck, access: 'all' },
+    { label: 'Notification Center', path: '/notifications', icon: Bell, access: 'all' },
+    { label: 'Historical Search', path: '/search', icon: History, access: 'all' },
     { label: 'Analytics & Insights', path: '/analytics', icon: BarChart3, access: 'all' },
     { label: 'ML Models & Drift', path: '/models', icon: Cpu, access: 'all' },
-    { label: 'UI Component Library', path: '/ui-components', icon: Palette, access: 'all' },
+    { label: 'UI Component Showcase', path: '/ui-components', icon: Palette, access: 'all' },
   ];
 
   const adminItems = [
     { label: 'Admin Overview', path: '/admin', icon: ShieldCheck, access: 'admin' },
+    { label: 'Observability & Health', path: '/admin/observability', icon: Activity, access: 'admin' },
     { label: 'Fraud Rules Engine', path: '/admin/rules', icon: Sliders, access: 'admin' },
     { label: 'User & Role Access', path: '/admin/users', icon: Users, access: 'admin' },
     { label: 'Risk Thresholds', path: '/admin/settings', icon: Settings, access: 'admin' },
@@ -71,6 +76,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  end={item.path === '/'}
                   onClick={onClose}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
@@ -102,6 +108,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  end={item.path === '/admin'}
                   onClick={onClose}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${

@@ -62,6 +62,7 @@ export const Sidebar: React.FC = () => {
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  end={item.path === '/'}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
@@ -92,6 +93,7 @@ export const Sidebar: React.FC = () => {
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  end={item.path === '/admin'}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
