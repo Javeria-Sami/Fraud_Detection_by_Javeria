@@ -128,15 +128,26 @@ html:not(.dark) {
     color: #0F172A !important;
   }
 
-  /* Buttons & Interactive Elements - Soft Blue Tint on Hover instead of Dark */
+  /* Buttons, Links & Interactive Divs - Soft Blue Tint on Hover instead of Dark */
   button.hover\:bg-slate-800:hover,
   button.hover\:bg-slate-700:hover,
   button.hover\:bg-slate-900:hover,
   button.hover\:bg-soc-cardHover:hover,
   a.hover\:bg-slate-800:hover,
-  a.hover\:bg-slate-700:hover {
+  a.hover\:bg-slate-700:hover,
+  div.hover\:bg-slate-800:hover,
+  div.hover\:bg-slate-800\/80:hover,
+  div.hover\:bg-slate-800\/60:hover,
+  div.hover\:bg-slate-800\/50:hover,
+  div.hover\:bg-slate-800\/40:hover,
+  div.hover\:bg-slate-700:hover,
+  div.hover\:bg-slate-900:hover,
+  div.hover\:bg-soc-surface:hover,
+  .hover\:bg-slate-800:hover,
+  .hover\:bg-slate-800\/80:hover,
+  .hover\:bg-slate-800\/60:hover {
     background-color: #EFF6FF !important;
-    color: #1D4ED8 !important;
+    color: #1E293B !important;
     border-color: #BFDBFE !important;
   }
 
