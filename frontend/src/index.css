@@ -105,26 +105,47 @@ html:not(.dark) {
     color: #1D4ED8 !important;
   }
 
-  /* Text Contrast & Readability */
+  /* Text Contrast & Readability in Light Mode */
+  .text-slate-50,
+  .text-slate-100,
   .text-slate-200,
-  .text-slate-300 {
-    color: #334155 !important;
-  }
-  .text-slate-400 {
-    color: #64748B !important;
+  .text-slate-300,
+  .text-gray-100,
+  .text-gray-200,
+  .text-gray-300,
+  .text-zinc-100,
+  .text-zinc-200,
+  .text-zinc-300 {
+    color: #1E293B !important;
   }
 
-  /* Standalone white text inside light containers -> High-contrast slate-900 */
+  .text-slate-400,
+  .text-slate-500,
+  .text-gray-400,
+  .text-gray-500,
+  .text-zinc-400,
+  .text-zinc-500 {
+    color: #475569 !important;
+  }
+
+  /* Universal high-contrast text for light mode - prevents white-on-white text */
+  p.text-white,
+  label.text-white,
+  a.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-indigo"] *),
+  li.text-white,
+  dt.text-white,
+  dd.text-white,
   h1.text-white,
   h2.text-white,
   h3.text-white,
   h4.text-white,
   h5.text-white,
+  h6.text-white,
   td.text-white,
   th.text-white,
-  div.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-emerald"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *),
-  span.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-emerald"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *),
-  strong.text-white {
+  strong.text-white,
+  span.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-red"] *):not([class*="bg-emerald"] *):not([class*="bg-green"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *),
+  div.text-white:not(button *):not([class*="bg-blue"] *):not([class*="bg-rose"] *):not([class*="bg-red"] *):not([class*="bg-emerald"] *):not([class*="bg-green"] *):not([class*="bg-indigo"] *):not([class*="bg-purple"] *):not([class*="bg-amber"] *) {
     color: #0F172A !important;
   }
 
