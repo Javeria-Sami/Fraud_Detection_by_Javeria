@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, AlertTriangle, CheckCircle, Clock, ShieldCheck } from 'lucide-react';
+import { Database, AlertTriangle, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   dataQuality: {
@@ -32,15 +32,10 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
   const missingEntries = Object.entries(safeDq.missing_rates || {}).filter(
     ([, rate]) => rate > 0
   );
-  const nanEntries = Object.entries(safeDq.nan_counts || {}).filter(
-    ([, count]) => count > 0
-  );
-  const infEntries = Object.entries(safeDq.inf_counts || {}).filter(
-    ([, count]) => count > 0
-  );
-  const oobEntries = Object.entries(safeDq.out_of_bounds_counts || {}).filter(
-    ([, count]) => count > 0
-  );
+  const nanCount = Object.values(safeDq.nan_counts || {}).reduce((acc, c) => acc + c, 0);
+  const infCount = Object.values(safeDq.inf_counts || {}).reduce((acc, c) => acc + c, 0);
+  const oobCount = Object.values(safeDq.out_of_bounds_counts || {}).reduce((acc, c) => acc + c, 0);
+  const totalInvalid = nanCount + infCount + oobCount;
 
   const formatLag = (secs: number) => {
     if (secs < 60) return `${secs.toFixed(0)}s lag`;
@@ -58,81 +53,95 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
           </h3>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-            {safeDq.total_records ?? 0} Records Evaluated
+          <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 whitespace-nowrap">
+            {(safeDq.total_records ?? 0).toLocaleString()} Records Evaluated
           </span>
         </div>
       </div>
 
       {/* Grid of Key Quality Signals */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-        {/* Freshness */}
-        <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              <span>Data Freshness</span>
+        {/* 1. Data Freshness */}
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between gap-1.5">
+            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
+              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="truncate">Data Freshness</span>
             </span>
             <span
-              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap border ${
                 safeDq.data_freshness_status === 'FRESH'
-                  ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'bg-amber-500/20 text-amber-400'
+                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
               }`}
             >
               {safeDq.data_freshness_status || 'FRESH'}
             </span>
           </div>
-          <div className="mt-2 text-base font-bold font-mono text-white">
-            {formatLag(safeDq.freshness_lag_seconds ?? 0)}
+          <div className="my-2.5">
+            <div className="text-base font-bold font-mono text-white tracking-tight">
+              {formatLag(safeDq.freshness_lag_seconds ?? 0)}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">Time since latest transaction event</p>
           </div>
-          <p className="text-[10px] text-slate-500 mt-0.5">Time since latest transaction event</p>
         </div>
 
-        {/* Feature Store Compatibility */}
-        <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Schema Version</span>
+        {/* 2. Schema Version */}
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between gap-1.5">
+            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="truncate">Schema Version</span>
             </span>
             {!safeDq.has_schema_issues ? (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
                 COMPATIBLE
               </span>
             ) : (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 whitespace-nowrap">
                 MISMATCH
               </span>
             )}
           </div>
-          <div className="mt-2 text-sm font-bold font-mono text-cyan-300">
-            {modelFeatureVersion || 'features-v1'}
+          <div className="my-2.5">
+            <div className="text-base font-bold font-mono text-cyan-300 tracking-tight">
+              {modelFeatureVersion || '1.0.0'}
+            </div>
+            <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">Expected feature schema & transforms</p>
           </div>
-          <p className="text-[10px] text-slate-500 mt-0.5">Expected feature schema & transformations</p>
         </div>
 
-        {/* Anomaly / Invalid Values Counter */}
-        <div className="p-3 bg-soc-bg border border-soc-border rounded-xl">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-              <span>Invalid Values</span>
+        {/* 3. Invalid Values Counter */}
+        <div className="p-3.5 bg-soc-bg border border-soc-border rounded-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between gap-1.5">
+            <span className="text-slate-400 font-semibold text-xs flex items-center gap-1.5 truncate">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Invalid Values</span>
             </span>
-            {nanEntries.length === 0 && infEntries.length === 0 && oobEntries.length === 0 ? (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">
+            {totalInvalid === 0 ? (
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 whitespace-nowrap">
                 CLEAN (0)
               </span>
             ) : (
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400">
-                ISSUES DETECTED
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 whitespace-nowrap">
+                {totalInvalid} DETECTED
               </span>
             )}
           </div>
-          <div className="mt-2 text-sm font-bold font-mono text-slate-200">
-            NaN: {nanEntries.reduce((acc, [, c]) => acc + c, 0)} | Inf: {infEntries.reduce((acc, [, c]) => acc + c, 0)} | Out-of-Bounds: {oobEntries.reduce((acc, [, c]) => acc + c, 0)}
+          <div className="my-2.5 space-y-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
+                NaN: <strong className={nanCount > 0 ? "text-rose-400" : "text-emerald-400"}>{nanCount}</strong>
+              </span>
+              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
+                Inf: <strong className={infCount > 0 ? "text-rose-400" : "text-emerald-400"}>{infCount}</strong>
+              </span>
+              <span className="px-2 py-0.5 rounded bg-soc-card border border-soc-border font-mono text-[11px] font-semibold text-slate-300">
+                OOB: <strong className={oobCount > 0 ? "text-rose-400" : "text-emerald-400"}>{oobCount}</strong>
+              </span>
+            </div>
+            <p className="text-[10px] text-slate-400 leading-snug">Numeric integrity violations</p>
           </div>
-          <p className="text-[10px] text-slate-500 mt-0.5">Numeric integrity violations</p>
         </div>
       </div>
 
@@ -158,3 +167,4 @@ export const DataQualityCard: React.FC<Props> = ({ dataQuality, modelFeatureVers
     </div>
   );
 };
+
