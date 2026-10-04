@@ -168,9 +168,9 @@ export const AlertConfigPanel: React.FC = () => {
 
   if (isLoading && !config) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[300px] gap-3 animate-pulse">
+      <div className="bg-soc-card border border-soc-border rounded-2xl p-8 flex flex-col items-center justify-center min-h-[300px] gap-3 animate-pulse shadow-sm">
         <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-        <span className="text-xs text-slate-400 font-mono">Loading Alert Engine Parameters...</span>
+        <span className="text-xs text-soc-muted font-mono">Loading Alert Engine Parameters...</span>
       </div>
     );
   }
@@ -183,27 +183,27 @@ export const AlertConfigPanel: React.FC = () => {
   return (
     <form onSubmit={handleSave} className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-soc-card border border-soc-border p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
         <div>
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <BellRing className="w-5 h-5 text-rose-400" />
+          <h2 className="text-base font-bold text-soc-foreground flex items-center gap-2">
+            <BellRing className="w-5 h-5 text-rose-500" />
             <span>Alert Engine Dynamic Calibration</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-soc-muted mt-0.5">
             Configure risk score dispatch thresholds, deduplication windows, ML alert gates, and alert storm suppression.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {config?.updated_at && (
-            <span className="text-[11px] text-slate-400">
+            <span className="text-[11px] text-soc-muted">
               Last saved: {new Date(config.updated_at).toLocaleString()} by {config.updated_by || 'system'}
             </span>
           )}
           <button
             type="button"
             onClick={fetchConfig}
-            className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 text-xs flex items-center gap-1 transition-colors"
+            className="p-2 bg-soc-surface hover:bg-soc-cardHover border border-soc-border rounded-lg text-soc-muted hover:text-soc-foreground text-xs flex items-center gap-1 transition-colors"
             title="Reload configuration"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -216,8 +216,8 @@ export const AlertConfigPanel: React.FC = () => {
         <div
           className={`p-3.5 rounded-xl border text-xs flex items-center gap-2 ${
             feedback.type === 'success'
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+              : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
           }`}
         >
           {feedback.type === 'success' ? (
@@ -232,13 +232,13 @@ export const AlertConfigPanel: React.FC = () => {
       {/* Threshold Sliders Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* High Risk Threshold */}
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-3">
+        <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
-            <div className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-orange-400" />
+            <div className="text-xs font-semibold text-soc-foreground flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 text-orange-500" />
               <span>High Risk Threshold</span>
             </div>
-            <span className="text-sm font-bold text-orange-400 font-mono">{safeHigh.toFixed(1)}</span>
+            <span className="text-sm font-bold text-orange-600 dark:text-orange-400 font-mono">{safeHigh.toFixed(1)}</span>
           </div>
           <input
             type="range"
@@ -249,19 +249,19 @@ export const AlertConfigPanel: React.FC = () => {
             onChange={(e) => setHighThreshold(parseFloat(e.target.value) || 50)}
             className="w-full accent-orange-500"
           />
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-soc-muted">
             Transactions with composite risk score ≥ this value dispatch High Risk alerts (P2).
           </p>
         </div>
 
         {/* Critical Risk Threshold */}
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-3">
+        <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
-            <div className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-              <Flame className="w-4 h-4 text-rose-400" />
+            <div className="text-xs font-semibold text-soc-foreground flex items-center gap-2">
+              <Flame className="w-4 h-4 text-rose-500" />
               <span>Critical Risk Threshold</span>
             </div>
-            <span className="text-sm font-bold text-rose-400 font-mono">{safeCritical.toFixed(1)}</span>
+            <span className="text-sm font-bold text-rose-600 dark:text-rose-400 font-mono">{safeCritical.toFixed(1)}</span>
           </div>
           <input
             type="range"
@@ -272,19 +272,19 @@ export const AlertConfigPanel: React.FC = () => {
             onChange={(e) => setCriticalThreshold(parseFloat(e.target.value) || 70)}
             className="w-full accent-rose-500"
           />
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-soc-muted">
             Transactions with risk score ≥ this value generate Critical operational alerts (P1).
           </p>
         </div>
 
         {/* ML Anomaly Threshold */}
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-3">
+        <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
-            <div className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-              <BrainCircuit className="w-4 h-4 text-purple-400" />
+            <div className="text-xs font-semibold text-soc-foreground flex items-center gap-2">
+              <BrainCircuit className="w-4 h-4 text-purple-500" />
               <span>ML Anomaly Probability</span>
             </div>
-            <span className="text-sm font-bold text-purple-400 font-mono">{(safeMl * 100).toFixed(0)}%</span>
+            <span className="text-sm font-bold text-purple-600 dark:text-purple-400 font-mono">{(safeMl * 100).toFixed(0)}%</span>
           </div>
           <input
             type="range"
@@ -295,22 +295,22 @@ export const AlertConfigPanel: React.FC = () => {
             onChange={(e) => setMlThreshold(parseFloat(e.target.value) || 0.5)}
             className="w-full accent-purple-500"
           />
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-soc-muted">
             Isolation Forest probability floor required to dispatch standalone ML anomaly alerts.
           </p>
         </div>
       </div>
 
       {/* Cooldown and Storm Suppression Settings */}
-      <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-4">
-        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <Clock className="w-4 h-4 text-blue-400" />
+      <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-4 shadow-sm">
+        <h3 className="text-xs font-semibold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+          <Clock className="w-4 h-4 text-blue-500" />
           <span>Deduplication & Alert Storm Suppression</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Cooldown Window (Seconds)
             </label>
             <input
@@ -320,35 +320,35 @@ export const AlertConfigPanel: React.FC = () => {
               step="30"
               value={safeCooldown}
               onChange={(e) => setCooldownSecs(parseInt(e.target.value, 10) || 0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-blue-500"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground font-mono focus:outline-none focus:border-blue-500"
             />
-            <span className="text-[11px] text-slate-500 mt-1 block">
+            <span className="text-[11px] text-soc-muted mt-1 block">
               {(safeCooldown / 60).toFixed(1)} minutes between identical entity alert triggers.
             </span>
           </div>
 
-          <div className="flex items-center gap-3 sm:mt-6 p-3 bg-slate-950/60 border border-slate-800 rounded-xl">
+          <div className="flex items-center gap-3 sm:mt-6 p-3 bg-soc-surface border border-soc-border rounded-xl">
             <input
               type="checkbox"
               id="enableCooldownCheck"
               checked={enableCooldown}
               onChange={(e) => setEnableCooldown(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-600 focus:ring-0"
+              className="w-4 h-4 rounded border-soc-border bg-soc-surface text-blue-600 focus:ring-0"
             />
-            <label htmlFor="enableCooldownCheck" className="text-xs text-slate-300 font-semibold cursor-pointer">
+            <label htmlFor="enableCooldownCheck" className="text-xs text-soc-foreground font-semibold cursor-pointer">
               Enforce Active Cooldown Suppression
             </label>
           </div>
 
-          <div className="flex items-center gap-3 sm:mt-6 p-3 bg-slate-950/60 border border-slate-800 rounded-xl">
+          <div className="flex items-center gap-3 sm:mt-6 p-3 bg-soc-surface border border-soc-border rounded-xl">
             <input
               type="checkbox"
               id="enableCriticalOverrideCheck"
               checked={enableCriticalOverride}
               onChange={(e) => setEnableCriticalOverride(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-rose-600 focus:ring-0"
+              className="w-4 h-4 rounded border-soc-border bg-soc-surface text-rose-600 focus:ring-0"
             />
-            <label htmlFor="enableCriticalOverrideCheck" className="text-xs text-slate-300 font-semibold cursor-pointer">
+            <label htmlFor="enableCriticalOverrideCheck" className="text-xs text-soc-foreground font-semibold cursor-pointer">
               Critical Alerts Bypass Cooldown (P1 Priority)
             </label>
           </div>
@@ -356,12 +356,12 @@ export const AlertConfigPanel: React.FC = () => {
       </div>
 
       {/* Enabled Alert Types Checklist */}
-      <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-3">
-        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <Layers className="w-4 h-4 text-emerald-400" />
+      <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-3 shadow-sm">
+        <h3 className="text-xs font-semibold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+          <Layers className="w-4 h-4 text-emerald-500" />
           <span>Active Alert Type Dispatch Registry</span>
         </h3>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-soc-muted">
           Unchecking an alert type suppresses automated generation while preserving historical incidents.
         </p>
 
@@ -373,19 +373,19 @@ export const AlertConfigPanel: React.FC = () => {
                 key={t.key}
                 className={`p-3 rounded-xl border flex items-center gap-3 cursor-pointer transition-all ${
                   isChecked
-                    ? 'bg-slate-950/80 border-slate-700 text-white'
-                    : 'bg-slate-950/30 border-slate-800/60 text-slate-500'
+                    ? 'bg-soc-surface border-blue-500/40 text-soc-foreground shadow-sm'
+                    : 'bg-soc-surface/50 border-soc-border text-soc-muted opacity-60'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={() => handleTypeToggle(t.key)}
-                  className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-600 focus:ring-0"
+                  className="w-4 h-4 rounded border-soc-border bg-soc-surface text-blue-600 focus:ring-0"
                 />
                 <div className="text-xs">
-                  <div className="font-semibold">{t.label}</div>
-                  <div className="text-[10px] font-mono text-slate-400">{t.key}</div>
+                  <div className="font-semibold text-soc-foreground">{t.label}</div>
+                  <div className="text-[10px] font-mono text-soc-muted">{t.key}</div>
                 </div>
               </label>
             );
@@ -394,9 +394,9 @@ export const AlertConfigPanel: React.FC = () => {
       </div>
 
       {/* Audit Justification & Save */}
-      <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl space-y-4">
+      <div className="bg-soc-card border border-soc-border p-5 rounded-2xl space-y-4 shadow-sm">
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             Calibration Audit Justification
           </label>
           <input
@@ -404,7 +404,7 @@ export const AlertConfigPanel: React.FC = () => {
             value={reasonInput}
             onChange={(e) => setReasonInput(e.target.value)}
             placeholder="e.g., Calibrated high-risk score threshold from 70 to 75 to reduce analyst false positive workload."
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+            className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground placeholder-soc-muted focus:outline-none focus:border-blue-500"
           />
         </div>
 
@@ -412,7 +412,7 @@ export const AlertConfigPanel: React.FC = () => {
           <button
             type="submit"
             disabled={isSaving}
-            className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 disabled:opacity-50 transition-all"
+            className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-blue-500/20 disabled:opacity-50 transition-all cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>{isSaving ? 'Deploying Configuration...' : 'Save & Deploy Alert Calibration'}</span>

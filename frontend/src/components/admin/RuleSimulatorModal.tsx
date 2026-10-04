@@ -112,26 +112,26 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+      <div className="bg-soc-card border border-soc-border rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div className="flex justify-between items-center border-b border-soc-border pb-3">
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
+            <h3 className="text-sm font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-500" />
               <span>Safe Rule Simulation Bench</span>
             </h3>
-            <span className="text-xs text-slate-400">
-              Testing <strong className="text-white">{rule.name}</strong> ({rule.rule_code}) in isolated sandbox
+            <span className="text-xs text-soc-muted">
+              Testing <strong className="text-soc-foreground">{rule.name}</strong> ({rule.rule_code}) in isolated sandbox
             </span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
+          <button onClick={onClose} className="text-soc-muted hover:text-soc-foreground p-1 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Safety Disclaimer */}
-        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-400 flex items-center gap-2">
+        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <Zap className="w-4 h-4 flex-shrink-0" />
           <span>
             <strong>Zero Side-Effect Guarantee:</strong> Simulation runs purely in-memory. No production executions, transactions, or alerts will be written.
@@ -141,7 +141,7 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
         <div className="flex-1 overflow-y-auto space-y-5 pr-1">
           {/* Preset Selector */}
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <label className="text-xs font-semibold text-soc-foreground block mb-2">
               Select Synthetic Transaction Scenario
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -150,10 +150,10 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handlePresetSelect(idx)}
-                  className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs transition-all cursor-pointer ${
                     selectedPreset === idx
-                      ? 'bg-blue-600/20 border-blue-500 text-white font-semibold shadow-sm'
-                      : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                      ? 'bg-blue-600/10 border-blue-500 text-blue-600 dark:text-blue-400 font-semibold shadow-sm'
+                      : 'bg-soc-surface border-soc-border text-soc-muted hover:text-soc-foreground hover:bg-soc-cardHover'
                   }`}
                 >
                   <div className="line-clamp-2">{preset.label}</div>
@@ -163,44 +163,44 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
           </div>
 
           {/* Transaction Parameters Sandbox */}
-          <div className="bg-slate-950/60 border border-slate-800/80 p-4 rounded-xl space-y-3">
-            <div className="text-xs font-semibold text-slate-300 border-b border-slate-800 pb-2">
+          <div className="bg-soc-surface border border-soc-border p-4 rounded-xl space-y-3">
+            <div className="text-xs font-semibold text-soc-foreground border-b border-soc-border pb-2">
               Customizable Transaction Fields
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-[11px] font-medium text-slate-400 block mb-1">
+                <label className="text-[11px] font-medium text-soc-muted block mb-1">
                   Amount ($)
                 </label>
                 <input
                   type="number"
                   value={txnInput.amount || 0}
                   onChange={(e) => handleFieldChange('amount', parseFloat(e.target.value) || 0)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono"
+                  className="w-full bg-soc-card border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-soc-foreground font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-slate-400 block mb-1">
+                <label className="text-[11px] font-medium text-soc-muted block mb-1">
                   Failed Attempts
                 </label>
                 <input
                   type="number"
                   value={txnInput.failed_attempts || 0}
                   onChange={(e) => handleFieldChange('failed_attempts', parseInt(e.target.value, 10) || 0)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono"
+                  className="w-full bg-soc-card border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-soc-foreground font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-slate-400 block mb-1">
+                <label className="text-[11px] font-medium text-soc-muted block mb-1">
                   Merchant Category
                 </label>
                 <input
                   type="text"
                   value={txnInput.merchant_category || ''}
                   onChange={(e) => handleFieldChange('merchant_category', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono"
+                  className="w-full bg-soc-card border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-soc-foreground font-mono"
                 />
               </div>
             </div>
@@ -208,7 +208,7 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
 
           {/* Error Banner */}
           {errorMessage && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs flex items-center gap-2">
+            <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 flex-shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -216,14 +216,14 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
 
           {/* Simulation Output Card */}
           {simulationResult && (
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4 animate-in fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="bg-soc-surface border border-soc-border rounded-xl p-4 space-y-4 animate-in fade-in shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-soc-border pb-3">
                 <div className="flex items-center gap-3">
                   <div
                     className={`p-3 rounded-xl border ${
                       simulationResult.triggered
-                        ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
-                        : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                        ? 'bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                        : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
                     }`}
                   >
                     {simulationResult.triggered ? (
@@ -233,16 +233,16 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
                     )}
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
                       Simulation Verdict
                     </div>
-                    <div className="text-lg font-bold text-white flex items-center gap-2">
+                    <div className="text-lg font-bold text-soc-foreground flex items-center gap-2">
                       <span>{simulationResult.triggered ? 'RULE TRIGGERED' : 'RULE PASSED (NOT TRIGGERED)'}</span>
                       <span
                         className={`text-xs px-2 py-0.5 rounded font-mono ${
                           simulationResult.triggered
-                            ? 'bg-rose-500/20 text-rose-300'
-                            : 'bg-emerald-500/20 text-emerald-300'
+                            ? 'bg-rose-500/20 text-rose-600 dark:text-rose-300'
+                            : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300'
                         }`}
                       >
                         +{simulationResult.score} pts
@@ -251,16 +251,16 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-400 flex items-center gap-1 font-mono">
-                  <Clock className="w-3.5 h-3.5 text-slate-500" />
+                <div className="text-xs text-soc-muted flex items-center gap-1 font-mono">
+                  <Clock className="w-3.5 h-3.5 text-soc-muted" />
                   <span>{simulationResult.execution_time_ms} ms</span>
                 </div>
               </div>
 
               {/* Natural Language Reason */}
               <div>
-                <div className="text-xs font-semibold text-slate-400 mb-1">Evaluation Explanation:</div>
-                <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-200">
+                <div className="text-xs font-semibold text-soc-muted mb-1">Evaluation Explanation:</div>
+                <div className="p-3 bg-soc-card border border-soc-border rounded-lg text-xs text-soc-foreground">
                   {simulationResult.explanation}
                 </div>
               </div>
@@ -268,14 +268,14 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
               {/* Feature Values Snapshot */}
               {simulationResult.matched_features && Object.keys(simulationResult.matched_features).length > 0 && (
                 <div>
-                  <div className="text-xs font-semibold text-slate-400 mb-1.5">
+                  <div className="text-xs font-semibold text-soc-muted mb-1.5">
                     Evaluated Feature Variables:
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
                     {Object.entries(simulationResult.matched_features).map(([k, v]) => (
-                      <div key={k} className="p-2 bg-slate-900/80 border border-slate-800/80 rounded-lg">
-                        <span className="text-slate-500 block text-[10px]">{k}</span>
-                        <span className="text-white font-bold">{String(v)}</span>
+                      <div key={k} className="p-2 bg-soc-card border border-soc-border rounded-lg">
+                        <span className="text-soc-muted block text-[10px]">{k}</span>
+                        <span className="text-soc-foreground font-bold">{String(v)}</span>
                       </div>
                     ))}
                   </div>
@@ -286,11 +286,11 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+        <div className="pt-3 border-t border-soc-border flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+            className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-xs font-semibold transition-colors cursor-pointer"
           >
             Close Sandbox
           </button>
@@ -298,7 +298,7 @@ export const RuleSimulatorModal: React.FC<RuleSimulatorModalProps> = ({
             type="button"
             onClick={handleRunSimulation}
             disabled={isSimulating}
-            className="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-amber-500/20 disabled:opacity-50 transition-all"
+            className="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-amber-500/20 disabled:opacity-50 transition-all cursor-pointer"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{isSimulating ? 'Evaluating...' : 'Run Simulation'}</span>

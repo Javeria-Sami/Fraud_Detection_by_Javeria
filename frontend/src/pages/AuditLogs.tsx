@@ -387,20 +387,20 @@ export const AuditLogs: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-sm">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400">
               <History className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-xl font-bold text-soc-foreground tracking-tight flex items-center gap-2">
                 <span>Security Audit Trail & Compliance Workspace</span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                   Tamper-Resistant
                 </span>
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Immutable, attributed record of administrative operations, security events, fraud rule lifecycle, and model retraining.
               </p>
             </div>
@@ -438,59 +438,59 @@ export const AuditLogs: React.FC = () => {
         {/* 2. Events Today */}
         <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Events Today</span>
-            <div className="text-xl font-extrabold text-emerald-400">{stats?.events_today ?? 48}</div>
+            <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">Events Today</span>
+            <div className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">{stats?.events_today ?? 48}</div>
           </div>
-          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <Clock className="w-4 h-4" />
           </div>
         </div>
 
         {/* 3. High / Critical Events */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-lg flex items-center justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">High / Critical Events</span>
-            <div className="text-xl font-extrabold text-amber-400">{stats?.high_critical_count ?? 12}</div>
+            <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">High / Critical Events</span>
+            <div className="text-xl font-extrabold text-amber-600 dark:text-amber-400">{stats?.high_critical_count ?? 12}</div>
           </div>
-          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <ShieldAlert className="w-4 h-4" />
           </div>
         </div>
 
         {/* 4. Failed / Denied Actions */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-lg flex items-center justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Failed / Denied</span>
-            <div className="text-xl font-extrabold text-rose-400">{stats?.failed_denied_count ?? 5}</div>
+            <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">Failed / Denied</span>
+            <div className="text-xl font-extrabold text-rose-600 dark:text-rose-400">{stats?.failed_denied_count ?? 5}</div>
           </div>
-          <div className="p-2 rounded-xl bg-rose-500/10 text-rose-400">
+          <div className="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
             <XCircle className="w-4 h-4" />
           </div>
         </div>
 
         {/* 5. Admin Policy Mutations */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-lg flex items-center justify-between">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Admin Mutations</span>
-            <div className="text-xl font-extrabold text-purple-400">{stats?.admin_actions_count ?? 86}</div>
+            <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">Admin Mutations</span>
+            <div className="text-xl font-extrabold text-purple-600 dark:text-purple-400">{stats?.admin_actions_count ?? 86}</div>
           </div>
-          <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400">
+          <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
             <Layers className="w-4 h-4" />
           </div>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-soc-card border border-soc-border p-4 rounded-2xl shadow-lg space-y-3">
+      <div className="bg-soc-card border border-soc-border p-4 rounded-2xl shadow-sm space-y-3">
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-soc-muted absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by Action, Actor Email, Resource ID, Request ID, or Details text..."
-              className="w-full bg-soc-bg border border-soc-border rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-sans"
+              className="w-full bg-soc-surface border border-soc-border rounded-xl pl-9 pr-3 py-2 text-xs text-soc-foreground placeholder-soc-muted focus:outline-none focus:border-blue-500 font-sans"
             />
           </div>
 
@@ -504,7 +504,7 @@ export const AuditLogs: React.FC = () => {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="px-3 py-2 rounded-xl bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-400 hover:text-white text-xs font-semibold"
+              className="px-3 py-2 rounded-xl bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-xs font-semibold transition-colors"
             >
               Reset
             </button>
@@ -521,7 +521,7 @@ export const AuditLogs: React.FC = () => {
                 setSelectedAction(e.target.value);
                 setPage(1);
               }}
-              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              className="w-full appearance-none bg-soc-surface border border-soc-border rounded-xl pl-2.5 pr-8 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 cursor-pointer"
             >
               <option value="">All Actions</option>
               <option value="LOGIN">LOGIN</option>
@@ -537,7 +537,7 @@ export const AuditLogs: React.FC = () => {
               <option value="MODEL_DEPLOYED">MODEL_DEPLOYED</option>
               <option value="MODEL_RETRAINING_STARTED">MODEL_RETRAINING_STARTED</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-soc-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Resource Type */}
@@ -548,7 +548,7 @@ export const AuditLogs: React.FC = () => {
                 setSelectedResourceType(e.target.value);
                 setPage(1);
               }}
-              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              className="w-full appearance-none bg-soc-surface border border-soc-border rounded-xl pl-2.5 pr-8 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 cursor-pointer"
             >
               <option value="">All Resources</option>
               <option value="User">User</option>
@@ -559,7 +559,7 @@ export const AuditLogs: React.FC = () => {
               <option value="SystemSetting">SystemSetting</option>
               <option value="Authentication">Authentication</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-soc-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Severity */}
@@ -570,7 +570,7 @@ export const AuditLogs: React.FC = () => {
                 setSelectedSeverity(e.target.value);
                 setPage(1);
               }}
-              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              className="w-full appearance-none bg-soc-surface border border-soc-border rounded-xl pl-2.5 pr-8 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 cursor-pointer"
             >
               <option value="">All Severities</option>
               <option value="INFO">INFO</option>
@@ -578,7 +578,7 @@ export const AuditLogs: React.FC = () => {
               <option value="HIGH">HIGH</option>
               <option value="CRITICAL">CRITICAL</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-soc-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Outcome */}
@@ -589,14 +589,14 @@ export const AuditLogs: React.FC = () => {
                 setSelectedOutcome(e.target.value);
                 setPage(1);
               }}
-              className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-2.5 pr-8 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              className="w-full appearance-none bg-soc-surface border border-soc-border rounded-xl pl-2.5 pr-8 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 cursor-pointer"
             >
               <option value="">All Outcomes</option>
               <option value="SUCCESS">SUCCESS</option>
               <option value="FAILURE">FAILURE</option>
               <option value="DENIED">DENIED</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-soc-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Single Event Date Filter */}
@@ -608,7 +608,7 @@ export const AuditLogs: React.FC = () => {
                 setDateFilter(e.target.value);
                 setPage(1);
               }}
-              className="w-full bg-soc-bg border border-soc-border rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+              className="w-full bg-soc-surface border border-soc-border rounded-xl px-2.5 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               title="Filter by Event Date"
             />
           </div>
@@ -616,17 +616,17 @@ export const AuditLogs: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-3">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-3">
           <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Main Audit Data Table */}
-      <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-soc-bg/85 text-slate-400 uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
+            <thead className="bg-soc-bg text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
               <tr>
                 <th className="py-3.5 px-4">
                   <div
@@ -638,7 +638,7 @@ export const AuditLogs: React.FC = () => {
                         setSortOrder('desc');
                       }
                     }}
-                    className="flex items-center gap-1 cursor-pointer hover:text-white"
+                    className="flex items-center gap-1 cursor-pointer hover:text-soc-foreground"
                   >
                     <span>Timestamp (UTC)</span>
                     <ArrowUpDown className="w-3 h-3" />
@@ -653,21 +653,21 @@ export const AuditLogs: React.FC = () => {
                 <th className="py-3.5 px-4 text-right">Inspect</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-soc-border/60 font-sans">
+            <tbody className="divide-y divide-soc-border font-sans">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-400">
-                    <RefreshCw className="w-5 h-5 animate-spin text-blue-400 mx-auto mb-2" />
+                  <td colSpan={8} className="py-16 text-center text-soc-muted">
+                    <RefreshCw className="w-5 h-5 animate-spin text-blue-500 mx-auto mb-2" />
                     <span>Querying immutable security audit logs...</span>
                   </td>
                 </tr>
               ) : logs.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-400">
+                  <td colSpan={8} className="py-16 text-center text-soc-muted">
                     <div className="space-y-1">
-                      <History className="w-6 h-6 text-slate-500 mx-auto mb-1" />
-                      <div className="font-semibold text-white">No audit records found</div>
-                      <p className="text-xs text-slate-500">Try broadening your search query or date filter.</p>
+                      <History className="w-6 h-6 text-soc-muted mx-auto mb-1" />
+                      <div className="font-semibold text-soc-foreground">No audit records found</div>
+                      <p className="text-xs text-soc-muted">Try broadening your search query or date filter.</p>
                     </div>
                   </td>
                 </tr>
@@ -676,22 +676,22 @@ export const AuditLogs: React.FC = () => {
                   <tr
                     key={log.id}
                     onClick={() => setSelectedLog(log)}
-                    className="hover:bg-slate-800/60 cursor-pointer transition-colors"
+                    className="hover:bg-soc-cardHover cursor-pointer transition-colors"
                   >
                     {/* Timestamp */}
-                    <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px] whitespace-nowrap">
+                    <td className="py-3.5 px-4 font-mono text-soc-muted text-[11px] whitespace-nowrap">
                       {log.timestamp ? new Date(log.timestamp).toLocaleString() : '—'}
                     </td>
 
                     {/* Actor */}
                     <td className="py-3.5 px-4 max-w-[200px] truncate">
-                      <div className="font-bold text-white truncate" title={log.actor_email}>
+                      <div className="font-bold text-soc-foreground truncate text-xs" title={log.actor_email}>
                         {log.actor_email}
                       </div>
-                      <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400 uppercase">
+                      <div className="flex items-center gap-1 text-[10px] font-mono text-soc-muted uppercase mt-0.5">
                         <span>{log.actor_role}</span>
                         {log.actor_type && log.actor_type !== 'USER' && (
-                          <span className="px-1 py-0.2 rounded bg-slate-800 text-blue-400 border border-slate-700">
+                          <span className="px-1 py-0.2 rounded bg-soc-surface text-blue-600 dark:text-blue-400 border border-soc-border">
                             {log.actor_type}
                           </span>
                         )}
@@ -700,15 +700,15 @@ export const AuditLogs: React.FC = () => {
 
                     {/* Action */}
                     <td className="py-3.5 px-4">
-                      <span className="font-mono font-bold text-white text-[11px] bg-slate-800/90 px-2 py-1 rounded border border-slate-700/60">
+                      <span className="font-mono font-bold text-blue-600 dark:text-blue-300 text-[11px] bg-blue-500/10 dark:bg-blue-950/40 px-2 py-1 rounded border border-blue-500/20 inline-block">
                         {log.action}
                       </span>
                     </td>
 
                     {/* Resource Target */}
                     <td className="py-3.5 px-4">
-                      <div className="text-slate-300 font-semibold">{log.target_entity}</div>
-                      <div className="text-[11px] font-mono text-blue-400 truncate max-w-[140px]" title={log.target_id}>
+                      <div className="text-soc-foreground font-semibold text-xs">{log.target_entity}</div>
+                      <div className="text-[11px] font-mono text-blue-600 dark:text-blue-400 truncate max-w-[140px]" title={log.target_id}>
                         {log.target_id}
                       </div>
                     </td>
@@ -724,11 +724,11 @@ export const AuditLogs: React.FC = () => {
                     </td>
 
                     {/* Request Trace */}
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400 truncate max-w-[120px]">
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-soc-muted truncate max-w-[120px]">
                       {log.request_id ? (
                         <span title={log.request_id}>#{log.request_id.slice(-8)}</span>
                       ) : (
-                        <span className="text-slate-600">—</span>
+                        <span className="text-soc-muted/50">—</span>
                       )}
                     </td>
 
@@ -739,7 +739,7 @@ export const AuditLogs: React.FC = () => {
                           e.stopPropagation();
                           setSelectedLog(log);
                         }}
-                        className="p-1.5 rounded-lg bg-soc-bg hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                        className="p-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground border border-soc-border transition-colors"
                         title="Inspect Complete Audit Event"
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -753,10 +753,10 @@ export const AuditLogs: React.FC = () => {
         </div>
 
         {/* Fully Functional Dynamic Pagination Toolbar */}
-        <div className="p-4 border-t border-soc-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+        <div className="p-4 border-t border-soc-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-soc-muted">
           <div>
-            Showing Page <strong className="text-white font-mono">{page}</strong> of{' '}
-            <strong className="text-white font-mono">{totalPages}</strong> ({totalCount} total audit records)
+            Showing Page <strong className="text-soc-foreground font-mono">{page}</strong> of{' '}
+            <strong className="text-soc-foreground font-mono">{totalPages}</strong> ({totalCount} total audit records)
           </div>
           <div className="flex items-center gap-1.5">
             <select
@@ -765,7 +765,7 @@ export const AuditLogs: React.FC = () => {
                 setPageSize(parseInt(e.target.value, 10));
                 setPage(1);
               }}
-              className="bg-soc-bg border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 mr-2 font-mono cursor-pointer"
+              className="bg-soc-surface border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 mr-2 font-mono cursor-pointer"
             >
               <option value="5">5 per page</option>
               <option value="10">10 per page</option>
@@ -777,7 +777,7 @@ export const AuditLogs: React.FC = () => {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1 || isLoading}
-              className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+              className="px-3 py-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
               title="Previous Page"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -793,7 +793,7 @@ export const AuditLogs: React.FC = () => {
                 className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all ${
                   page === pNum
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                    : 'bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white'
+                    : 'bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground'
                 }`}
               >
                 {pNum}
@@ -804,7 +804,7 @@ export const AuditLogs: React.FC = () => {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages || isLoading}
-              className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+              className="px-3 py-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
               title="Next Page"
             >
               <span>Next</span>
@@ -822,37 +822,37 @@ export const AuditLogs: React.FC = () => {
             <div className="flex justify-between items-start border-b border-soc-border pb-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-base text-white">{selectedLog.action}</span>
+                  <span className="font-mono font-bold text-base text-soc-foreground">{selectedLog.action}</span>
                   {getSeverityBadge(selectedLog.severity)}
                   {getOutcomeBadge(selectedLog.outcome || selectedLog.status)}
                 </div>
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+                <div className="flex items-center gap-2 text-xs font-mono text-soc-muted">
                   <span>ID: {selectedLog.id}</span>
                   <button
                     onClick={() => handleCopy(selectedLog.id, 'log-id')}
-                    className="p-1 hover:text-white text-slate-500"
+                    className="p-1 hover:text-soc-foreground text-soc-muted"
                     title="Copy Event ID"
                   >
-                    {copiedId === 'log-id' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedId === 'log-id' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
-              <button onClick={() => setSelectedLog(null)} className="text-slate-400 hover:text-white p-1">
+              <button onClick={() => setSelectedLog(null)} className="text-soc-muted hover:text-soc-foreground p-1 rounded-lg">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Description / Summary Details */}
             {selectedLog.details && (
-              <div className="p-3.5 rounded-xl bg-soc-bg border border-soc-border space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Event Summary</span>
-                <p className="text-xs text-slate-200 leading-relaxed">{selectedLog.details}</p>
+              <div className="p-3.5 rounded-xl bg-soc-surface border border-soc-border space-y-1">
+                <span className="text-[10px] uppercase font-bold text-soc-muted font-mono">Event Summary</span>
+                <p className="text-xs text-soc-foreground leading-relaxed">{selectedLog.details}</p>
               </div>
             )}
 
             {/* Error Message If Any */}
             {selectedLog.error_message && (
-              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 space-y-1">
+              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 space-y-1">
                 <span className="text-[10px] uppercase font-bold font-mono">Error Diagnostics</span>
                 <p className="text-xs font-mono">{selectedLog.error_message}</p>
               </div>
@@ -861,52 +861,52 @@ export const AuditLogs: React.FC = () => {
             {/* Core Attribution Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
               {/* Actor & Auth Context */}
-              <div className="bg-soc-bg border border-soc-border rounded-xl p-4 space-y-2.5">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-soc-border/40 pb-2">
-                  <UserIcon className="w-3.5 h-3.5 text-blue-400" />
+              <div className="bg-soc-surface border border-soc-border rounded-xl p-4 space-y-2.5">
+                <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5 border-b border-soc-border pb-2">
+                  <UserIcon className="w-3.5 h-3.5 text-blue-500" />
                   <span>Actor & Identity</span>
                 </h3>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Actor Email:</span>
-                  <strong className="text-white font-mono">{selectedLog.actor_email}</strong>
+                  <span className="text-soc-muted">Actor Email:</span>
+                  <strong className="text-soc-foreground font-mono">{selectedLog.actor_email}</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Actor Role:</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-blue-500/20 text-blue-400">
+                  <span className="text-soc-muted">Actor Role:</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-blue-500/20 text-blue-600 dark:text-blue-400">
                     {selectedLog.actor_role}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Actor Type:</span>
-                  <span className="font-mono text-slate-200">{selectedLog.actor_type || 'USER'}</span>
+                  <span className="text-soc-muted">Actor Type:</span>
+                  <span className="font-mono text-soc-foreground">{selectedLog.actor_type || 'USER'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Client IP Address:</span>
-                  <span className="font-mono text-slate-200">{selectedLog.ip_address || '127.0.0.1'}</span>
+                  <span className="text-soc-muted">Client IP Address:</span>
+                  <span className="font-mono text-soc-foreground">{selectedLog.ip_address || '127.0.0.1'}</span>
                 </div>
               </div>
 
               {/* Resource Target & Tracing */}
-              <div className="bg-soc-bg border border-soc-border rounded-xl p-4 space-y-2.5">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-soc-border/40 pb-2">
-                  <Server className="w-3.5 h-3.5 text-purple-400" />
+              <div className="bg-soc-surface border border-soc-border rounded-xl p-4 space-y-2.5">
+                <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5 border-b border-soc-border pb-2">
+                  <Server className="w-3.5 h-3.5 text-purple-500" />
                   <span>Resource & Trace</span>
                 </h3>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Resource Entity:</span>
-                  <strong className="text-white">{selectedLog.target_entity}</strong>
+                  <span className="text-soc-muted">Resource Entity:</span>
+                  <strong className="text-soc-foreground">{selectedLog.target_entity}</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Resource ID:</span>
-                  <span className="font-mono text-blue-400 text-[11px]">{selectedLog.target_id}</span>
+                  <span className="text-soc-muted">Resource ID:</span>
+                  <span className="font-mono text-blue-600 dark:text-blue-400 text-[11px] font-semibold">{selectedLog.target_id}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Originating Source:</span>
-                  <span className="font-mono text-slate-200">{selectedLog.source || 'API'}</span>
+                  <span className="text-soc-muted">Originating Source:</span>
+                  <span className="font-mono text-soc-foreground">{selectedLog.source || 'API'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Request Correlation ID:</span>
-                  <span className="font-mono text-slate-300 text-[11px]">{selectedLog.request_id || '—'}</span>
+                  <span className="text-soc-muted">Request Correlation ID:</span>
+                  <span className="font-mono text-soc-muted text-[11px]">{selectedLog.request_id || '—'}</span>
                 </div>
               </div>
             </div>
@@ -914,13 +914,13 @@ export const AuditLogs: React.FC = () => {
             {/* Before / After State Diffs */}
             {(selectedLog.diff_old || selectedLog.diff_new) && (
               <div className="space-y-2">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-emerald-500" />
                   <span>State Change Delta (Before / After Diffs)</span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                   {/* Previous State */}
-                  <div className="p-3.5 bg-black/50 border border-soc-border rounded-xl space-y-1.5">
+                  <div className="p-3.5 bg-slate-950 border border-soc-border rounded-xl space-y-1.5">
                     <div className="text-[10px] uppercase font-bold text-rose-400 mb-1 flex items-center justify-between">
                       <span>Previous State (diff_old)</span>
                       <span className="text-slate-500">Before</span>
@@ -931,7 +931,7 @@ export const AuditLogs: React.FC = () => {
                   </div>
 
                   {/* Applied State */}
-                  <div className="p-3.5 bg-black/50 border border-soc-border rounded-xl space-y-1.5">
+                  <div className="p-3.5 bg-slate-950 border border-soc-border rounded-xl space-y-1.5">
                     <div className="text-[10px] uppercase font-bold text-emerald-400 mb-1 flex items-center justify-between">
                       <span>Applied State (diff_new)</span>
                       <span className="text-slate-500">After</span>
@@ -947,11 +947,11 @@ export const AuditLogs: React.FC = () => {
             {/* Structured Metadata Payload */}
             {selectedLog.metadata && Object.keys(selectedLog.metadata).length > 0 && (
               <div className="space-y-2">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-amber-400" />
+                <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-amber-500" />
                   <span>Sanitized Event Metadata</span>
                 </h3>
-                <div className="p-3.5 bg-black/50 border border-soc-border rounded-xl">
+                <div className="p-3.5 bg-slate-950 border border-soc-border rounded-xl">
                   <pre className="text-slate-300 text-[11px] font-mono overflow-x-auto whitespace-pre-wrap max-h-40">
                     {JSON.stringify(selectedLog.metadata, null, 2)}
                   </pre>
@@ -960,11 +960,11 @@ export const AuditLogs: React.FC = () => {
             )}
 
             {/* Timestamps & Immutability Attestation */}
-            <div className="p-4 rounded-xl bg-soc-bg border border-soc-border/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-400">
+            <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-soc-muted">
               <div>
-                Recorded at: <strong className="text-slate-200">{selectedLog.timestamp || selectedLog.created_at}</strong>
+                Recorded at: <strong className="text-soc-foreground">{selectedLog.timestamp || selectedLog.created_at}</strong>
               </div>
-              <div className="flex items-center gap-1.5 text-emerald-400 text-[11px]">
+              <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-[11px]">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Cryptographically Immutable Log</span>
               </div>

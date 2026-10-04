@@ -79,18 +79,18 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+      <div className="bg-soc-card border border-soc-border rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div className="flex justify-between items-center border-b border-soc-border pb-3">
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <History className="w-4 h-4 text-blue-400" />
+            <h3 className="text-sm font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+              <History className="w-4 h-4 text-blue-500" />
               <span>Version History & Audit Timeline</span>
             </h3>
-            <span className="text-xs text-blue-400 font-mono">{rule.name} ({rule.rule_code})</span>
+            <span className="text-xs text-blue-600 dark:text-blue-400 font-mono font-semibold">{rule.name} ({rule.rule_code})</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
+          <button onClick={onClose} className="text-soc-muted hover:text-soc-foreground p-1 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -100,8 +100,8 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
           <div
             className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
               actionMessage.type === 'success'
-                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
             }`}
           >
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
@@ -119,35 +119,35 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
                   key={ver.id}
                   className={`p-4 rounded-xl border transition-all ${
                     isActive
-                      ? 'bg-blue-950/30 border-blue-500/40 shadow-sm'
-                      : 'bg-slate-950/50 border-slate-800/80 hover:border-slate-700'
+                      ? 'bg-blue-500/10 border-blue-500/40 shadow-sm'
+                      : 'bg-soc-surface border-soc-border hover:bg-soc-cardHover'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-slate-800 text-slate-300 font-mono font-bold text-xs">
+                      <div className="p-2 rounded-lg bg-soc-card border border-soc-border text-soc-foreground font-mono font-bold text-xs">
                         v{ver.version}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-white text-xs">
+                          <span className="font-semibold text-soc-foreground text-xs">
                             Weight: +{ver.weight} pts
                           </span>
                           {isActive ? (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                               <CheckCircle2 className="w-3 h-3" /> ACTIVE
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-400">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-soc-card border border-soc-border text-soc-muted">
                               RETIRED
                             </span>
                           )}
                         </div>
-                        <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                        <div className="text-[11px] text-soc-muted flex items-center gap-2 mt-0.5">
                           <span>By: {ver.created_by}</span>
                           <span>•</span>
                           <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-slate-500" />
+                            <Clock className="w-3 h-3 text-soc-muted" />
                             {ver.created_at ? new Date(ver.created_at).toLocaleString() : 'N/A'}
                           </span>
                         </div>
@@ -158,10 +158,10 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
                       {!isActive && activeVersion && (
                         <button
                           onClick={() => handleCompareWithActive(ver.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
                           title="Compare diff with current active version"
                         >
-                          <GitCompare className="w-3.5 h-3.5 text-purple-400" />
+                          <GitCompare className="w-3.5 h-3.5 text-purple-500" />
                           <span>Compare Diff</span>
                         </button>
                       )}
@@ -170,7 +170,7 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
                         <button
                           onClick={() => handleActivate(ver)}
                           disabled={isActivating}
-                          className="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           <RotateCcw className="w-3.5 h-3.5" />
                           <span>Activate / Rollback</span>
@@ -180,16 +180,16 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
                   </div>
 
                   {/* Configuration Preview Snippet */}
-                  <div className="mt-3 pt-2.5 border-t border-slate-800/60 font-mono text-[11px] text-slate-400 flex flex-wrap gap-x-4 gap-y-1">
+                  <div className="mt-3 pt-2.5 border-t border-soc-border font-mono text-[11px] text-soc-muted flex flex-wrap gap-x-4 gap-y-1">
                     {ver.configuration && Object.keys(ver.configuration).length > 0 ? (
                       Object.entries(ver.configuration).map(([k, v]) => (
                         <div key={k} className="flex items-center gap-1">
-                          <span className="text-slate-500">{k}:</span>
-                          <span className="text-slate-300 font-semibold">{String(v)}</span>
+                          <span className="text-soc-muted">{k}:</span>
+                          <span className="text-soc-foreground font-semibold">{String(v)}</span>
                         </div>
                       ))
                     ) : (
-                      <span className="text-slate-600 italic">No custom parameters</span>
+                      <span className="text-soc-muted italic">No custom parameters</span>
                     )}
                   </div>
                 </div>
@@ -199,17 +199,17 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
 
           {/* Version Comparison Diff Section */}
           {comparisonResult && (
-            <div className="bg-slate-950 border border-purple-500/30 rounded-xl p-4 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-white">
-                  <GitCompare className="w-4 h-4 text-purple-400" />
+            <div className="bg-soc-surface border border-purple-500/30 rounded-xl p-4 space-y-3 shadow-sm">
+              <div className="flex items-center justify-between border-b border-soc-border pb-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-soc-foreground">
+                  <GitCompare className="w-4 h-4 text-purple-500" />
                   <span>
                     Comparison: Active v{comparisonResult.version_a} vs Selected v{comparisonResult.version_b}
                   </span>
                 </div>
                 <button
                   onClick={() => setComparisonResult(null)}
-                  className="text-xs text-slate-400 hover:text-white"
+                  className="text-xs text-soc-muted hover:text-soc-foreground cursor-pointer"
                 >
                   Close Diff
                 </button>
@@ -218,21 +218,21 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400 text-[11px]">
+                    <tr className="border-b border-soc-border text-soc-muted text-[11px]">
                       <th className="pb-2">Parameter Field</th>
                       <th className="pb-2">Active (v{comparisonResult.version_a})</th>
                       <th className="pb-2">Target (v{comparisonResult.version_b})</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    <tr className="hover:bg-slate-900/40">
-                      <td className="py-2 text-slate-400">Score Weight</td>
-                      <td className="py-2 text-slate-200">+{comparisonResult.weight_a} pts</td>
+                  <tbody className="divide-y divide-soc-border">
+                    <tr className="hover:bg-soc-cardHover">
+                      <td className="py-2 text-soc-muted">Score Weight</td>
+                      <td className="py-2 text-soc-foreground">+{comparisonResult.weight_a} pts</td>
                       <td
                         className={`py-2 font-bold ${
                           comparisonResult.weight_a !== comparisonResult.weight_b
-                            ? 'text-amber-400'
-                            : 'text-slate-200'
+                            ? 'text-amber-600 dark:text-amber-400'
+                            : 'text-soc-foreground'
                         }`}
                       >
                         +{comparisonResult.weight_b} pts
@@ -241,13 +241,13 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
                     {comparisonResult.configuration_diff.map((diff) => (
                       <tr
                         key={diff.field}
-                        className={diff.changed ? 'bg-amber-500/5' : 'hover:bg-slate-900/40'}
+                        className={diff.changed ? 'bg-amber-500/10' : 'hover:bg-soc-cardHover'}
                       >
-                        <td className="py-2 text-slate-400">{diff.field}</td>
-                        <td className="py-2 text-slate-300">{JSON.stringify(diff.value_a)}</td>
+                        <td className="py-2 text-soc-muted">{diff.field}</td>
+                        <td className="py-2 text-soc-foreground">{JSON.stringify(diff.value_a)}</td>
                         <td
                           className={`py-2 font-bold ${
-                            diff.changed ? 'text-amber-400' : 'text-slate-300'
+                            diff.changed ? 'text-amber-600 dark:text-amber-400' : 'text-soc-foreground'
                           }`}
                         >
                           {JSON.stringify(diff.value_b)}
@@ -262,11 +262,11 @@ export const RuleVersionHistoryModal: React.FC<RuleVersionHistoryModalProps> = (
         </div>
 
         {/* Footer */}
-        <div className="pt-3 border-t border-slate-800 flex justify-end">
+        <div className="pt-3 border-t border-soc-border flex justify-end">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+            className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-xs font-semibold transition-colors cursor-pointer"
           >
             Close Timeline
           </button>

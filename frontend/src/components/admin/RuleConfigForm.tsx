@@ -136,7 +136,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Baseline Multiplier Threshold
             </label>
             <div className="flex items-center gap-2">
@@ -147,17 +147,17 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
                 max="100"
                 value={configValues.multiplier || 5.0}
                 onChange={(e) => handleParamChange('multiplier', parseFloat(e.target.value) || 1)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
               />
-              <span className="text-xs text-slate-400 font-mono">x</span>
+              <span className="text-xs text-soc-muted font-mono">x</span>
             </div>
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Triggers when transaction exceeds user average by this factor.
             </p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Absolute Minimum Amount ($)
             </label>
             <input
@@ -166,9 +166,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               step="100"
               value={configValues.min_amount || 1000}
               onChange={(e) => handleParamChange('min_amount', parseFloat(e.target.value) || 0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Minimum dollar floor before multiplier evaluation is enforced.
             </p>
           </div>
@@ -180,7 +180,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Max Transactions Allowed
             </label>
             <input
@@ -189,15 +189,15 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="50"
               value={configValues.count_threshold || 4}
               onChange={(e) => handleParamChange('count_threshold', parseInt(e.target.value, 10) || 1)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Transaction count limit within the sliding window.
             </p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Sliding Window Duration (Minutes)
             </label>
             <input
@@ -206,9 +206,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="1440"
               value={configValues.window_minutes || 5}
               onChange={(e) => handleParamChange('window_minutes', parseInt(e.target.value, 10) || 1)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Lookback interval for counting consecutive transactions.
             </p>
           </div>
@@ -219,19 +219,19 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
     if (code === 'NEW_DEVICE') {
       return (
         <div>
-          <div className="flex items-center gap-3 p-3 bg-slate-900/80 border border-slate-700/60 rounded-xl">
+          <div className="flex items-center gap-3 p-3 bg-soc-surface border border-soc-border rounded-xl">
             <input
               type="checkbox"
               id="newDeviceEnabled"
               checked={configValues.enabled !== false}
               onChange={(e) => handleParamChange('enabled', e.target.checked)}
-              className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-600 focus:ring-0"
+              className="w-4 h-4 rounded border-soc-border bg-soc-surface text-blue-600 focus:ring-0"
             />
-            <label htmlFor="newDeviceEnabled" className="text-xs text-slate-200 font-semibold cursor-pointer">
+            <label htmlFor="newDeviceEnabled" className="text-xs text-soc-foreground font-semibold cursor-pointer">
               Enforce Device Fingerprint Novelty Check
             </label>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1.5">
+          <p className="text-[11px] text-soc-muted mt-1.5">
             Evaluates unrecognized hardware hashes, user-agent transitions, and unknown device IDs.
           </p>
         </div>
@@ -242,7 +242,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Max Geographic Velocity (km/h)
             </label>
             <input
@@ -252,15 +252,15 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               step="50"
               value={configValues.max_geo_speed_kmh || 700}
               onChange={(e) => handleParamChange('max_geo_speed_kmh', parseFloat(e.target.value) || 500)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Impossible travel threshold (e.g. 700 km/h airline speed limit).
             </p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Distance Threshold (km)
             </label>
             <input
@@ -270,9 +270,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               step="100"
               value={configValues.distance_threshold_km || 500}
               onChange={(e) => handleParamChange('distance_threshold_km', parseFloat(e.target.value) || 0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-soc-muted mt-1">
               Minimum displacement from previous transaction coordinates.
             </p>
           </div>
@@ -284,7 +284,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Night Window Start Hour (0–23 UTC)
             </label>
             <input
@@ -293,13 +293,13 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="23"
               value={configValues.night_start !== undefined ? configValues.night_start : 1}
               onChange={(e) => handleParamChange('night_start', parseInt(e.target.value, 10) || 0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">Start of anomalous nocturnal window.</p>
+            <p className="text-[11px] text-soc-muted mt-1">Start of anomalous nocturnal window.</p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-soc-foreground block mb-1">
               Night Window End Hour (0–23 UTC)
             </label>
             <input
@@ -308,9 +308,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="23"
               value={configValues.night_end !== undefined ? configValues.night_end : 5}
               onChange={(e) => handleParamChange('night_end', parseInt(e.target.value, 10) || 0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <p className="text-[11px] text-slate-500 mt-1">End of anomalous nocturnal window.</p>
+            <p className="text-[11px] text-soc-muted mt-1">End of anomalous nocturnal window.</p>
           </div>
         </div>
       );
@@ -319,7 +319,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
     if (code === 'FAILED_ATTEMPTS' || code === 'FAILED_ATTEMPT_SPIKE') {
       return (
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             Max Consecutive Failed Attempts
           </label>
           <input
@@ -328,9 +328,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             max="20"
             value={configValues.max_failed_attempts || 2}
             onChange={(e) => handleParamChange('max_failed_attempts', parseInt(e.target.value, 10) || 1)}
-            className="w-full sm:w-1/2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+            className="w-full sm:w-1/2 bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
           />
-          <p className="text-[11px] text-slate-500 mt-1">
+          <p className="text-[11px] text-soc-muted mt-1">
             Triggers when prior failed authentication attempts meet or exceed this count.
           </p>
         </div>
@@ -340,7 +340,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
     if (code === 'SUDDEN_SPENDING_INCREASE' || code === 'SPENDING_VELOCITY_ANOMALY') {
       return (
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             1-Hour Spending Multiplier
           </label>
           <div className="flex items-center gap-2 max-w-xs">
@@ -351,11 +351,11 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="50"
               value={configValues.spending_multiplier || 3.0}
               onChange={(e) => handleParamChange('spending_multiplier', parseFloat(e.target.value) || 1.0)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
             />
-            <span className="text-xs text-slate-400 font-mono">x</span>
+            <span className="text-xs text-soc-muted font-mono">x</span>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1">
+          <p className="text-[11px] text-soc-muted mt-1">
             Ratio of cumulative 1-hour transaction volume over 30-day baseline average.
           </p>
         </div>
@@ -368,7 +368,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
         : '';
       return (
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             High-Risk Merchant Categories (Comma-separated)
           </label>
           <input
@@ -384,9 +384,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               )
             }
             placeholder="crypto_exchange, gambling, wire_transfer, luxury_goods"
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+            className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono"
           />
-          <p className="text-[11px] text-slate-500 mt-1">
+          <p className="text-[11px] text-soc-muted mt-1">
             MCC tags and category labels flagged as elevated fraud risk.
           </p>
         </div>
@@ -396,7 +396,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
     // Default JSON parameter fallback
     return (
       <div>
-        <label className="text-xs font-semibold text-slate-300 block mb-1">
+        <label className="text-xs font-semibold text-soc-foreground block mb-1">
           Rule Condition Parameters
         </label>
         <textarea
@@ -409,7 +409,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               // Ignore while typing JSON
             }
           }}
-          className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white font-mono focus:outline-none focus:border-blue-500"
+          className="w-full bg-soc-surface border border-soc-border rounded-lg p-2.5 text-xs text-soc-foreground font-mono focus:outline-none focus:border-blue-500"
         />
       </div>
     );
@@ -418,21 +418,21 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Top Header Information */}
-      <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+      <div className="bg-soc-surface border border-soc-border p-4 rounded-xl flex items-center justify-between">
         <div>
-          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
             Target Rule Definition
           </div>
-          <div className="text-base font-bold text-white flex items-center gap-2 mt-0.5">
+          <div className="text-base font-bold text-soc-foreground flex items-center gap-2 mt-0.5">
             <span>{rule.name}</span>
-            <span className="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+            <span className="text-xs font-mono text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20 font-semibold">
               {rule.rule_code}
             </span>
           </div>
         </div>
         <div className="text-right">
-          <span className="text-xs text-slate-400">Current Active:</span>
-          <div className="text-xs font-mono font-bold text-emerald-400">
+          <span className="text-xs text-soc-muted">Current Active:</span>
+          <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
             v{rule.version || '1.0'}
           </div>
         </div>
@@ -441,7 +441,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       {/* Global Rule Parameters (Score, Severity, Target Version) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             New Version Code
           </label>
           <input
@@ -450,12 +450,12 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             value={versionInput}
             onChange={(e) => setVersionInput(e.target.value)}
             placeholder="e.g. 2.0"
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono font-bold"
+            className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono font-bold"
           />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             Risk Score Weight (0–100)
           </label>
           <div className="flex items-center gap-2">
@@ -465,7 +465,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
               max="100"
               value={weightInput}
               onChange={(e) => setWeightInput(parseFloat(e.target.value) || 0)}
-              className="w-20 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono font-bold"
+              className="w-20 bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono font-bold"
             />
             <input
               type="range"
@@ -479,13 +479,13 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             Rule Severity Tier
           </label>
           <select
             value={severityInput}
             onChange={(e) => setSeverityInput(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+            className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="CRITICAL">Critical Severity</option>
             <option value="HIGH">High Severity</option>
@@ -496,9 +496,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       </div>
 
       {/* Type-Specific Parameter Configuration */}
-      <div className="bg-slate-950/60 border border-slate-800/80 p-4 rounded-xl space-y-4">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 border-b border-slate-800 pb-2">
-          <Sliders className="w-4 h-4 text-blue-400" />
+      <div className="bg-soc-surface border border-soc-border p-4 rounded-xl space-y-4">
+        <div className="flex items-center gap-2 text-xs font-semibold text-soc-foreground border-b border-soc-border pb-2">
+          <Sliders className="w-4 h-4 text-blue-500" />
           <span>Configurable Detection Thresholds</span>
         </div>
         {renderParameterFields()}
@@ -507,7 +507,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
       {/* Change Reason & Activation Options */}
       <div className="space-y-3">
         <div>
-          <label className="text-xs font-semibold text-slate-300 block mb-1">
+          <label className="text-xs font-semibold text-soc-foreground block mb-1">
             Change Reason / Audit Justification
           </label>
           <input
@@ -515,7 +515,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             value={reasonInput}
             onChange={(e) => setReasonInput(e.target.value)}
             placeholder="e.g., Calibrated thresholds following false positive review in Q3 fraud triage."
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+            className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground placeholder-soc-muted focus:outline-none focus:border-blue-500"
           />
         </div>
 
@@ -525,9 +525,9 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             id="activateImmediatelyCheck"
             checked={isActiveInput}
             onChange={(e) => setIsActiveInput(e.target.checked)}
-            className="rounded border-slate-700 bg-slate-800 text-blue-600 focus:ring-0"
+            className="rounded border-soc-border bg-soc-surface text-blue-600 focus:ring-0"
           />
-          <label htmlFor="activateImmediatelyCheck" className="text-xs text-slate-300 font-semibold cursor-pointer">
+          <label htmlFor="activateImmediatelyCheck" className="text-xs text-soc-foreground font-semibold cursor-pointer">
             Atomically activate this version immediately (retires previous active version)
           </label>
         </div>
@@ -538,15 +538,15 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
         <div
           className={`p-3.5 rounded-xl border text-xs ${
             validationResult.valid
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+              : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
           }`}
         >
           <div className="flex items-center gap-2 font-semibold">
             {validationResult.valid ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
             ) : (
-              <XCircle className="w-4 h-4 text-rose-400" />
+              <XCircle className="w-4 h-4 text-rose-500" />
             )}
             <span>
               {validationResult.valid
@@ -562,7 +562,7 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             </ul>
           )}
           {validationResult.warnings.length > 0 && (
-            <ul className="list-disc list-inside mt-1 text-[11px] text-amber-400 space-y-0.5">
+            <ul className="list-disc list-inside mt-1 text-[11px] text-amber-600 dark:text-amber-400 space-y-0.5">
               {validationResult.warnings.map((warn, i) => (
                 <li key={i}>{warn}</li>
               ))}
@@ -573,21 +573,21 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs flex items-center gap-2">
+        <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 flex-shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {/* Actions */}
-      <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+      <div className="flex items-center justify-between pt-3 border-t border-soc-border">
         <button
           type="button"
           onClick={handleValidate}
           disabled={isValidating}
-          className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          className="px-3.5 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
         >
-          <Check className="w-3.5 h-3.5 text-blue-400" />
+          <Check className="w-3.5 h-3.5 text-blue-500" />
           <span>{isValidating ? 'Validating...' : 'Validate Schema'}</span>
         </button>
 
@@ -596,14 +596,14 @@ export const RuleConfigForm: React.FC<RuleConfigFormProps> = ({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+            className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-xs font-semibold transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-blue-500/20 disabled:opacity-50 transition-all"
+            className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-blue-500/20 disabled:opacity-50 transition-all cursor-pointer"
           >
             <Save className="w-3.5 h-3.5" />
             <span>{isSubmitting ? 'Persisting Version...' : 'Save & Deploy Version'}</span>
