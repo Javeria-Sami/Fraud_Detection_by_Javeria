@@ -59,12 +59,12 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
               onChange={(e) => onStatusChange(e.target.value)}
               className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold"
             >
-              <option value="">All Statuses</option>
-              <option value="OPEN">OPEN</option>
-              <option value="INVESTIGATING">INVESTIGATING</option>
-              <option value="PENDING">PENDING</option>
-              <option value="RESOLVED">RESOLVED</option>
-              <option value="CLOSED">CLOSED</option>
+              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Statuses</option>
+              <option value="OPEN" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">OPEN</option>
+              <option value="INVESTIGATING" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">INVESTIGATING</option>
+              <option value="PENDING" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">PENDING</option>
+              <option value="RESOLVED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">RESOLVED</option>
+              <option value="CLOSED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">CLOSED</option>
             </select>
           </div>
 
@@ -76,11 +76,11 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
               onChange={(e) => onSeverityChange(e.target.value)}
               className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold"
             >
-              <option value="">All Severities</option>
-              <option value="CRITICAL">CRITICAL</option>
-              <option value="HIGH">HIGH</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="LOW">LOW</option>
+              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Severities</option>
+              <option value="CRITICAL" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">CRITICAL</option>
+              <option value="HIGH" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">HIGH</option>
+              <option value="MEDIUM" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">MEDIUM</option>
+              <option value="LOW" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">LOW</option>
             </select>
           </div>
 
@@ -92,10 +92,10 @@ export const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
               onChange={(e) => onAnalystChange(e.target.value)}
               className="bg-transparent text-soc-foreground focus:outline-none text-xs cursor-pointer font-semibold max-w-[130px] truncate"
             >
-              <option value="">All Analysts</option>
-              <option value="UNASSIGNED">Unassigned</option>
-              <option value="analyst@fraudshield.io">analyst@fraudshield.io</option>
-              <option value="admin@fraudshield.io">admin@fraudshield.io</option>
+              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Analysts</option>
+              <option value="UNASSIGNED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Unassigned</option>
+              <option value="analyst@fraudshield.io" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">analyst@fraudshield.io</option>
+              <option value="admin@fraudshield.io" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">admin@fraudshield.io</option>
             </select>
           </div>
 

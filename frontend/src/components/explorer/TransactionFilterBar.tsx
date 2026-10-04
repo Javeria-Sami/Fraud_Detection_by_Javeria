@@ -88,11 +88,11 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             onChange={(e) => onFilterChange({ risk_level: e.target.value })}
             className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans cursor-pointer"
           >
-            <option value="">All Risk Tiers</option>
-            <option value="CRITICAL">Critical Risk (90–100)</option>
-            <option value="HIGH">High Risk (70–89)</option>
-            <option value="MEDIUM">Medium Risk (40–69)</option>
-            <option value="LOW">Low Risk (0–39)</option>
+            <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Risk Tiers</option>
+            <option value="CRITICAL" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Critical Risk (90–100)</option>
+            <option value="HIGH" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">High Risk (70–89)</option>
+            <option value="MEDIUM" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Medium Risk (40–69)</option>
+            <option value="LOW" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Low Risk (0–39)</option>
           </select>
           <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
@@ -104,15 +104,15 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             onChange={(e) => onFilterChange({ status: e.target.value })}
             className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-sans cursor-pointer"
           >
-            <option value="">All Statuses</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REVIEW_REQUIRED">Review Required</option>
-            <option value="FLAGGED">Flagged</option>
-            <option value="BLOCKED">Blocked</option>
-            <option value="PENDING">Pending</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="FAILED">Failed</option>
-            <option value="DECLINED">Declined</option>
+            <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Statuses</option>
+            <option value="APPROVED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Approved</option>
+            <option value="REVIEW_REQUIRED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Review Required</option>
+            <option value="FLAGGED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Flagged</option>
+            <option value="BLOCKED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Blocked</option>
+            <option value="PENDING" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Pending</option>
+            <option value="COMPLETED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Completed</option>
+            <option value="FAILED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Failed</option>
+            <option value="DECLINED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Declined</option>
           </select>
           <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
@@ -196,12 +196,12 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
                 onChange={(e) => onFilterChange({ currency: e.target.value })}
                 className="w-full appearance-none bg-soc-bg border border-soc-border rounded-lg pl-3 pr-8 py-1.5 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono cursor-pointer"
               >
-                <option value="">All Currencies</option>
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="CAD">CAD ($)</option>
-                <option value="AUD">AUD ($)</option>
+                <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Currencies</option>
+                <option value="USD" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">USD ($)</option>
+                <option value="EUR" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">EUR (€)</option>
+                <option value="GBP" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">GBP (£)</option>
+                <option value="CAD" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">CAD ($)</option>
+                <option value="AUD" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">AUD ($)</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>

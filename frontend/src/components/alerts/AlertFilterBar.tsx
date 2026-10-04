@@ -85,11 +85,11 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             onChange={(e) => onFilterChange({ severity: e.target.value })}
             className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 transition-colors cursor-pointer font-semibold"
           >
-            <option value="">All Severities</option>
-            <option value="CRITICAL">Critical Severity</option>
-            <option value="HIGH">High Severity</option>
-            <option value="MEDIUM">Medium Severity</option>
-            <option value="LOW">Low Severity</option>
+            <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Severities</option>
+            <option value="CRITICAL" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Critical Severity</option>
+            <option value="HIGH" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">High Severity</option>
+            <option value="MEDIUM" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Medium Severity</option>
+            <option value="LOW" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Low Severity</option>
           </select>
           <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
@@ -101,14 +101,14 @@ export const AlertFilterBar: React.FC<AlertFilterBarProps> = ({
             onChange={(e) => onFilterChange({ status: e.target.value })}
             className="w-full appearance-none bg-soc-bg border border-soc-border rounded-xl pl-3 pr-9 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 transition-colors cursor-pointer font-semibold"
           >
-            <option value="">All Statuses</option>
-            <option value="OPEN">Open (New & Active)</option>
-            <option value="NEW">New (Unassigned)</option>
-            <option value="ACKNOWLEDGED">Acknowledged</option>
-            <option value="INVESTIGATING">Investigating</option>
-            <option value="ESCALATED">Escalated</option>
-            <option value="RESOLVED">Resolved</option>
-            <option value="DISMISSED">Dismissed (False Positive)</option>
+            <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">All Statuses</option>
+            <option value="OPEN" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Open (New & Active)</option>
+            <option value="NEW" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">New (Unassigned)</option>
+            <option value="ACKNOWLEDGED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Acknowledged</option>
+            <option value="INVESTIGATING" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Investigating</option>
+            <option value="ESCALATED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Escalated</option>
+            <option value="RESOLVED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Resolved</option>
+            <option value="DISMISSED" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Dismissed (False Positive)</option>
           </select>
           <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>

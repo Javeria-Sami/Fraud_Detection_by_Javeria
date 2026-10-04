@@ -40,7 +40,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({
         {...props}
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} disabled={opt.disabled} className="bg-soc-card text-soc-foreground">
+          <option key={opt.value} value={opt.value} disabled={opt.disabled} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
             {opt.label}
           </option>
         ))}

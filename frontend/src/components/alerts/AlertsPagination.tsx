@@ -60,12 +60,12 @@ export const AlertsPagination: React.FC<AlertsPaginationProps> = ({
               value={pageSize}
               onChange={(e) => onPageSizeChange(Number(e.target.value))}
               disabled={isLoading}
-              className="appearance-none bg-soc-bg border border-soc-border rounded-lg pl-2.5 pr-7 py-1 text-xs text-white focus:outline-none focus:border-blue-500 font-mono cursor-pointer disabled:opacity-50"
+              className="appearance-none bg-soc-bg border border-soc-border rounded-lg pl-2.5 pr-7 py-1 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 font-mono cursor-pointer disabled:opacity-50"
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
+              <option value={10} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">10</option>
+              <option value={25} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">25</option>
+              <option value={50} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">50</option>
+              <option value={100} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">100</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
           </div>

@@ -34,6 +34,33 @@
     color: rgb(var(--soc-foreground));
     @apply antialiased font-sans transition-colors duration-200;
   }
+
+  select {
+    color-scheme: light dark;
+  }
+}
+
+/* Global native select & option contrast styling across all operating systems & browsers */
+select option,
+select optgroup {
+  background-color: #111827 !important;
+  color: #F8FAFC !important;
+}
+
+html.light select option,
+html.light select optgroup,
+html:not(.dark) select option,
+html:not(.dark) select optgroup,
+.light select option,
+.light select optgroup {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+.dark select option,
+.dark select optgroup {
+  background-color: #111827 !important;
+  color: #F8FAFC !important;
 }
 
 /* Custom sleek scrollbar */
