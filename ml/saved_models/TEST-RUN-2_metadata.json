@@ -37,11 +37,11 @@
   ],
   "metrics": {
     "val_anomaly_percentage": 100.0,
-    "score_p50": 0.7125,
-    "score_p90": 0.7473,
-    "score_p99": 0.8078
+    "score_p50": 0.7186,
+    "score_p90": 0.7575,
+    "score_p99": 0.8098
   },
   "threshold": 0.65,
-  "created_at": "2026-10-04T17:46:35.377409+00:00",
+  "created_at": "2026-10-04T19:00:16.570853+00:00",
   "training_samples": 210
 }
