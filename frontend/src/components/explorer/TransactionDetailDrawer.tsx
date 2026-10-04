@@ -39,9 +39,34 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
 
   const { subscribeEvent } = useRealtime();
 
-  const getMockInvestigation = useCallback((id: string): TransactionInvestigationDetail | null => {
-    const mockTx = MOCK_TRANSACTIONS.find((t) => t.id === id);
-    if (!mockTx) return null;
+  const getMockInvestigation = useCallback((id: string): TransactionInvestigationDetail => {
+    let mockTx = MOCK_TRANSACTIONS.find((t) => t.id === id);
+    if (!mockTx) {
+      mockTx = {
+        id,
+        user_id: 'USR-CUST-1001',
+        user_name: 'Customer Account',
+        merchant_name: 'Amazon Web Retail',
+        merchant_category: 'Electronics & Retail',
+        payment_method: 'CREDIT_CARD',
+        transaction_type: 'PURCHASE',
+        amount: 150.0,
+        currency: 'USD',
+        device_id: 'DEV-SEC-01',
+        city: 'London',
+        country: 'GB',
+        failed_attempts: 0,
+        source: 'API',
+        risk_score: 28.5,
+        risk_level: 'LOW',
+        ml_anomaly_score: 0.185,
+        rules_triggered: [],
+        risk_factors: [],
+        status: 'APPROVED',
+        timestamp: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      };
+    }
 
     const triggeredRuleNames = (mockTx.rules_triggered || []).map((r: any) =>
       typeof r === 'string' ? r : r.rule_id || r.rule_name || ''
@@ -51,7 +76,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         rule_id: 'RUL-VEL-001',
         rule_name: 'High Frequency Velocity Surge',
         category: 'VELOCITY',
-        triggered: triggeredRuleNames.includes('VELOCITY_SPIKE') || mockTx.risk_score > 65,
+        triggered: triggeredRuleNames.includes('VELOCITY_SPIKE') || (mockTx.risk_score || 0) > 65,
         score: 35,
         severity: 'HIGH',
         reason: 'Multiple rapid authorizations detected across 10-minute sliding window.',
@@ -60,7 +85,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         rule_id: 'RUL-GEO-002',
         rule_name: 'Geographical Impossible Travel',
         category: 'LOCATION',
-        triggered: triggeredRuleNames.includes('LOCATION_MISMATCH') || mockTx.risk_score > 80,
+        triggered: triggeredRuleNames.includes('LOCATION_MISMATCH') || (mockTx.risk_score || 0) > 80,
         score: 45,
         severity: 'CRITICAL',
         reason: 'Current physical terminal coordinate deviates >1200km from previous session within 15 minutes.',
@@ -69,7 +94,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         rule_id: 'RUL-DEV-003',
         rule_name: 'Unrecognized Device Fingerprint',
         category: 'DEVICE',
-        triggered: triggeredRuleNames.includes('NEW_DEVICE') || mockTx.risk_score > 40,
+        triggered: triggeredRuleNames.includes('NEW_DEVICE') || (mockTx.risk_score || 0) > 40,
         score: 20,
         severity: 'MEDIUM',
         reason: 'Hardware canvas and WebGL fingerprint hash has no prior baseline association with customer.',
@@ -78,21 +103,24 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         rule_id: 'RUL-THR-004',
         rule_name: 'High Single-Ticket Transaction Threshold',
         category: 'FINANCIAL',
-        triggered: mockTx.amount >= 500,
+        triggered: (mockTx.amount || 0) >= 500,
         score: 25,
         severity: 'MEDIUM',
-        reason: `Transaction amount $${mockTx.amount.toFixed(2)} exceeds standard tier velocity threshold.`,
+        reason: `Transaction amount $${(mockTx.amount || 0).toFixed(2)} exceeds standard tier velocity threshold.`,
       },
     ];
+
+    const safeScore = typeof mockTx.risk_score === 'number' ? mockTx.risk_score : 25;
+    const safeAmount = typeof mockTx.amount === 'number' ? mockTx.amount : 100;
 
     return {
       transaction: mockTx,
       risk: {
-        score: mockTx.risk_score,
-        risk_level: mockTx.risk_level,
-        rule_score: Math.round(mockTx.risk_score * 0.6),
-        ml_score: Math.round(mockTx.risk_score * 0.4),
-        behavior_score: Math.round(mockTx.risk_score * 0.5),
+        score: safeScore,
+        risk_level: mockTx.risk_level || 'LOW',
+        rule_score: Math.round(safeScore * 0.6),
+        ml_score: Math.round(safeScore * 0.4),
+        behavior_score: Math.round(safeScore * 0.5),
         explanation: mockTx.risk_factors || [],
         scoring_version: 'v1.4.2',
         created_at: mockTx.timestamp || new Date().toISOString(),
@@ -101,37 +129,37 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
       ml_prediction: {
         model_name: 'isolation_forest_v2',
         model_version: '2.1.0',
-        anomaly_score: mockTx.ml_anomaly_score || Number((mockTx.risk_score / 100).toFixed(3)),
-        prediction: mockTx.risk_score >= 70 ? 'ANOMALOUS' : 'NORMAL',
+        anomaly_score: mockTx.ml_anomaly_score || Number((safeScore / 100).toFixed(3)),
+        prediction: safeScore >= 70 ? 'ANOMALOUS' : 'NORMAL',
         confidence: 0.94,
         inference_time_ms: 18.5,
         algorithm: 'Isolation Forest + LightGBM Ensemble',
         contextual_indicators: [
-          `Session velocity metric: ${mockTx.amount > 500 ? 'Elevated spike' : 'Nominal baseline'}`,
-          `Device fingerprint telemetry: ${mockTx.device_id}`,
+          `Session velocity metric: ${safeAmount > 500 ? 'Elevated spike' : 'Nominal baseline'}`,
+          `Device fingerprint telemetry: ${mockTx.device_id || 'Standard'}`,
           `Origin location: ${mockTx.city || 'Standard'}, ${mockTx.country || 'Global'}`,
         ],
       },
       features: {
-        amount: mockTx.amount,
-        currency: mockTx.currency,
+        amount: safeAmount,
+        currency: mockTx.currency || 'USD',
         user_id: mockTx.user_id,
         device_id: mockTx.device_id,
         merchant_category: mockTx.merchant_category,
         failed_attempts: mockTx.failed_attempts || 0,
-        historical_avg_amount: Number((mockTx.amount * 0.72).toFixed(2)),
-        velocity_window_10m: mockTx.risk_score > 60 ? 4 : 1,
-        geo_distance_km: mockTx.risk_score > 75 ? 1420.5 : 12.3,
+        historical_avg_amount: Number((safeAmount * 0.72).toFixed(2)),
+        velocity_window_10m: safeScore > 60 ? 4 : 1,
+        geo_distance_km: safeScore > 75 ? 1420.5 : 12.3,
       },
       alerts:
         mockTx.risk_level === 'CRITICAL' || mockTx.risk_level === 'HIGH'
           ? [
               {
-                id: `ALT-${mockTx.id.replace('TXN-', '')}`,
+                id: `ALT-${(mockTx.id || 'TXN').replace('TXN-', '')}`,
                 title: `Elevated ${mockTx.risk_level} Risk on ${mockTx.merchant_name}`,
                 severity: mockTx.risk_level,
                 status: 'OPEN',
-                alert_reason: `Composite risk threshold exceeded (${mockTx.risk_score}/100)`,
+                alert_reason: `Composite risk threshold exceeded (${safeScore}/100)`,
                 created_at: mockTx.timestamp || new Date().toISOString(),
               },
             ]
@@ -140,10 +168,10 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
       user_context: {
         user_id: mockTx.user_id,
         user_name: mockTx.user_name,
-        baseline_spending: Number((mockTx.amount * 0.85).toFixed(2)),
+        baseline_spending: Number((safeAmount * 0.85).toFixed(2)),
         total_transactions: 142,
         fraud_incident_count: mockTx.risk_level === 'CRITICAL' ? 1 : 0,
-        active_risk_level: mockTx.risk_level,
+        active_risk_level: mockTx.risk_level || 'LOW',
       },
     };
   }, []);
@@ -447,22 +475,27 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
 
                     {t.risk_factors && t.risk_factors.length > 0 ? (
                       <div className="space-y-2">
-                        {t.risk_factors.map((factor, idx) => (
-                          <div
-                            key={idx}
-                            className="p-2.5 bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border/70 rounded-lg flex items-start justify-between gap-3 text-xs"
-                          >
-                            <div className="space-y-0.5">
-                              <span className="font-semibold text-slate-800 dark:text-slate-200">
-                                {factor.factor_name.replace(/_/g, ' ')}
+                        {t.risk_factors.map((factor: any, idx: number) => {
+                          const name = factor.factor_name || factor.name || factor.rule_name || 'Risk Factor';
+                          const desc = factor.description || factor.reason || '';
+                          const contrib = typeof factor.contribution === 'number' ? factor.contribution : (factor.weight || 0);
+                          return (
+                            <div
+                              key={idx}
+                              className="p-2.5 bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border/70 rounded-lg flex items-start justify-between gap-3 text-xs"
+                            >
+                              <div className="space-y-0.5">
+                                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                                  {String(name).replace(/_/g, ' ')}
+                                </span>
+                                {desc && <p className="text-[11px] text-slate-500 dark:text-soc-muted">{desc}</p>}
+                              </div>
+                              <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">
+                                +{contrib.toFixed(1)} pts
                               </span>
-                              <p className="text-[11px] text-slate-500 dark:text-soc-muted">{factor.description}</p>
                             </div>
-                            <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">
-                              +{factor.contribution.toFixed(1)} pts
-                            </span>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     ) : (
                       <p className="text-xs text-slate-500 dark:text-soc-muted">

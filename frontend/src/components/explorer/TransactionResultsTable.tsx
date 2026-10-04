@@ -211,7 +211,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                         e.stopPropagation();
                         onSelectTransaction(t.id);
                       }}
-                      className="p-1.5 rounded-lg bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 text-slate-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-500/40 transition-all duration-150 shadow-xs"
+                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-soc-bg dark:hover:bg-slate-800 border border-slate-200 dark:border-soc-border text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-150 shadow-xs"
                       title="Inspect Transaction"
                     >
                       <ChevronRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
