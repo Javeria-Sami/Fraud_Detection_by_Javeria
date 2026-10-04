@@ -40,6 +40,14 @@ async def test_trigger_retraining_api_creates_candidate_evaluated():
     POST /api/v1/ml-retraining/run
     Tests that authorized retraining triggers the pipeline and creates an EVALUATED candidate model.
     """
+    async with AsyncSessionLocal() as session:
+        stmt = select(ModelRetrainingRun).where(
+            ModelRetrainingRun.status.in_(["VALIDATING_DATA", "TRAINING", "RUNNING", "FEATURE_ENGINEERING", "EVALUATING", "QUEUED"])
+        )
+        for r in (await session.execute(stmt)).scalars().all():
+            r.status = "CANCELLED"
+        await session.commit()
+
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         headers = get_auth_headers("admin")

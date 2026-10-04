@@ -4,6 +4,7 @@ Tests Admin Overview, Platform Health Diagnostics, User Management,
 Last Admin & Self-Lockout Protections, Roles & Permission Matrix,
 Typed System Settings, and RBAC security boundaries.
 """
+import uuid
 import pytest
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -149,10 +150,11 @@ async def test_admin_user_detail_and_create(admin_token: str):
         assert len(detail["effective_permissions"]) > 0
 
         # Create new user
-        new_email = "test.admin.user@example.com"
+        uid_rand = uuid.uuid4().hex[:6]
+        new_email = f"test.admin.user.{uid_rand}@example.com"
         create_payload = {
             "email": new_email,
-            "username": "testadminuser",
+            "username": f"testadmin_{uid_rand}",
             "full_name": "Test Admin Created User",
             "password": "SecurePassword123!",
             "role": "ANALYST",

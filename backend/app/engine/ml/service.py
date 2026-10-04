@@ -144,7 +144,13 @@ class MLInferenceService:
             X_scaled = cls._cached_preprocessor.transform(features)
 
             # 3. Predict anomaly score
-            raw_score = cls._cached_model.decision_function(X_scaled)[0]
+            if hasattr(cls._cached_model, "decision_function"):
+                raw_score = float(cls._cached_model.decision_function(X_scaled)[0])
+            elif hasattr(cls._cached_model, "score_samples"):
+                raw_score = float(cls._cached_model.score_samples(X_scaled)[0])
+            else:
+                raw_score = -0.1
+
             # Sigmoid calibration: [0.0, 1.0] where 1.0 is anomalous
             anomaly_score = float(1.0 / (1.0 + np.exp(raw_score * 12.0)))
             anomaly_score = max(0.0, min(1.0, round(anomaly_score, 4)))

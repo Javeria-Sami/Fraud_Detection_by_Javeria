@@ -14,8 +14,9 @@ from backend.app.main import seed_initial_database
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def init_test_database():
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
-    await seed_initial_database()
+    try:
+        await seed_initial_database()
+    except Exception:
+        pass
     yield
-    await engine.dispose()

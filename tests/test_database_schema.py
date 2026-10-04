@@ -6,9 +6,9 @@ import pytest
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import select, exc
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.app.core.database import Base
+from backend.app.core.database import Base, engine, AsyncSessionLocal
 from backend.app.models import (
     Role,
     Permission,
@@ -41,39 +41,24 @@ from backend.app.models import (
     AuditLog,
     SystemSetting
 )
-
-from sqlalchemy.pool import StaticPool
 import pytest_asyncio
+
 
 @pytest_asyncio.fixture
 async def db_session():
-    test_engine = create_async_engine(
-        "sqlite+aiosqlite:///:memory:",
-        echo=False,
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool
-    )
-    async with test_engine.begin() as conn:
+    async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        
-    TestSessionLocal = async_sessionmaker(
-        bind=test_engine,
-        class_=AsyncSession,
-        expire_on_commit=False
-    )
-    
-    async with TestSessionLocal() as session:
+    async with AsyncSessionLocal() as session:
         yield session
-        
-    async with test_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-    await test_engine.dispose()
+        await session.rollback()
+
 
 @pytest.mark.asyncio
 async def test_database_connection_and_table_creation(db_session: AsyncSession):
     """Test 1: Verify database connection and that all domain tables exist."""
     res = await db_session.execute(select(Role))
     assert res is not None
+
 
 @pytest.mark.asyncio
 async def test_roles_and_permissions_many_to_many(db_session: AsyncSession):
@@ -96,12 +81,12 @@ async def test_roles_and_permissions_many_to_many(db_session: AsyncSession):
     ]))
     await db_session.commit()
     
-    # Query back
     from sqlalchemy.orm import selectinload
     stmt = select(Role).options(selectinload(Role.permissions)).where(Role.name == rname)
     retrieved_role = (await db_session.execute(stmt)).scalar_one()
     assert len(retrieved_role.permissions) == 2
     assert any(p.name == pname1 for p in retrieved_role.permissions)
+
 
 @pytest.mark.asyncio
 async def test_user_creation_and_uniqueness_constraints(db_session: AsyncSession):
@@ -126,7 +111,7 @@ async def test_user_creation_and_uniqueness_constraints(db_session: AsyncSession
     # Test email uniqueness violation
     duplicate_email_user = User(
         id=str(uuid.uuid4()),
-        email=f"test.analyst.{uid}@fraudshield.io", # Duplicate
+        email=f"test.analyst.{uid}@fraudshield.io",
         username=f"unique_username_2_{uid}",
         full_name="Another User",
         hashed_password="hashed_password"
@@ -136,12 +121,14 @@ async def test_user_creation_and_uniqueness_constraints(db_session: AsyncSession
         await db_session.commit()
     await db_session.rollback()
 
+
 @pytest.mark.asyncio
 async def test_merchant_and_device_entities(db_session: AsyncSession):
     """Test 4: Verify Merchant and Device creation and unique codes/identifiers."""
+    uid = uuid.uuid4().hex[:8]
     merchant = Merchant(
-        id="MERCH-TEST-01",
-        merchant_code="MC-TEST-99",
+        id=f"MERCH-TEST-{uid}",
+        merchant_code=f"MC-TEST-{uid}",
         name="Test Merchant Ltd",
         category="Electronics",
         country="US",
@@ -149,8 +136,8 @@ async def test_merchant_and_device_entities(db_session: AsyncSession):
         risk_level="LOW"
     )
     device = Device(
-        id="DEV-TEST-01",
-        device_identifier="FP-TEST-12345",
+        id=f"DEV-TEST-{uid}",
+        device_identifier=f"FP-TEST-{uid}",
         device_type="MOBILE",
         operating_system="iOS 17.5",
         browser="Safari",
@@ -160,23 +147,26 @@ async def test_merchant_and_device_entities(db_session: AsyncSession):
     db_session.add_all([merchant, device])
     await db_session.commit()
     
-    m_res = (await db_session.execute(select(Merchant).where(Merchant.merchant_code == "MC-TEST-99"))).scalar_one()
-    d_res = (await db_session.execute(select(Device).where(Device.device_identifier == "FP-TEST-12345"))).scalar_one()
+    m_res = (await db_session.execute(select(Merchant).where(Merchant.merchant_code == f"MC-TEST-{uid}"))).scalar_one()
+    d_res = (await db_session.execute(select(Device).where(Device.device_identifier == f"FP-TEST-{uid}"))).scalar_one()
     assert m_res.name == "Test Merchant Ltd"
     assert d_res.operating_system == "iOS 17.5"
+
 
 @pytest.mark.asyncio
 async def test_transaction_references_user_merchant_device(db_session: AsyncSession):
     """Test 5: Verify Transaction links to User, Merchant, and Device."""
-    user = User(id="USR-T1", email="u1@test.com", username="u1", full_name="User One", hashed_password="pwd")
-    merchant = Merchant(id="MERCH-T1", merchant_code="MC-T1", name="Merchant T1", category="Retail")
-    device = Device(id="DEV-T1", device_identifier="FP-T1", device_type="DESKTOP")
+    uid = uuid.uuid4().hex[:8]
+    user = User(id=f"USR-T1-{uid}", email=f"u1_{uid}@test.com", username=f"u1_{uid}", full_name="User One", hashed_password="pwd")
+    merchant = Merchant(id=f"MERCH-T1-{uid}", merchant_code=f"MC-T1-{uid}", name="Merchant T1", category="Retail")
+    device = Device(id=f"DEV-T1-{uid}", device_identifier=f"FP-T1-{uid}", device_type="DESKTOP")
     db_session.add_all([user, merchant, device])
     await db_session.flush()
     
+    txn_id = f"TXN-TEST-100-{uid}"
     txn = Transaction(
-        id="TXN-TEST-100",
-        transaction_id="TXN-TEST-100",
+        id=txn_id,
+        transaction_id=txn_id,
         user_id=user.id,
         merchant_id=merchant.id,
         device_id=device.id,
@@ -188,19 +178,21 @@ async def test_transaction_references_user_merchant_device(db_session: AsyncSess
     db_session.add(txn)
     await db_session.commit()
     
-    # Retrieve and test relationships
-    stmt = select(Transaction).where(Transaction.id == "TXN-TEST-100")
+    stmt = select(Transaction).where(Transaction.id == txn_id)
     t_obj = (await db_session.execute(stmt)).scalar_one()
-    assert t_obj.user.email == "u1@test.com"
+    assert t_obj.user.email == f"u1_{uid}@test.com"
     assert t_obj.merchant.name == "Merchant T1"
-    assert t_obj.device.device_identifier == "FP-T1"
+    assert t_obj.device.device_identifier == f"FP-T1-{uid}"
+
 
 @pytest.mark.asyncio
 async def test_fraud_rule_versions_and_executions(db_session: AsyncSession):
     """Test 6: Verify FraudRule, FraudRuleVersion, and RuleExecution relationships."""
+    uid = uuid.uuid4().hex[:8]
+    rule_id = f"HIGH_AMOUNT_{uid}"
     rule = FraudRule(
-        id="HIGH_AMOUNT_RULE",
-        rule_code="HIGH_AMOUNT_RULE",
+        id=rule_id,
+        rule_code=rule_id,
         name="High Amount Check",
         category="AMOUNT",
         default_severity="HIGH"
@@ -211,16 +203,17 @@ async def test_fraud_rule_versions_and_executions(db_session: AsyncSession):
     version = FraudRuleVersion(
         id=str(uuid.uuid4()),
         rule_id=rule.id,
-        version="1.0",
+        version=f"1.0-{uid}",
         threshold=5000.0,
         weight=25.0,
         configuration={"multiplier": 5.0}
     )
     db_session.add(version)
     
+    txn_id = f"TXN-RULE-TEST-{uid}"
     txn = Transaction(
-        id="TXN-RULE-TEST",
-        transaction_id="TXN-RULE-TEST",
+        id=txn_id,
+        transaction_id=txn_id,
         amount=6000.0,
         payment_method="WIRE"
     )
@@ -242,19 +235,22 @@ async def test_fraud_rule_versions_and_executions(db_session: AsyncSession):
     exec_res = (await db_session.execute(select(RuleExecution).where(RuleExecution.transaction_id == txn.id))).scalar_one()
     assert exec_res.triggered is True
     assert exec_res.rule.name == "High Amount Check"
-    assert exec_res.rule_version.version == "1.0"
+    assert exec_res.rule_version.version == f"1.0-{uid}"
+
 
 @pytest.mark.asyncio
 async def test_ml_prediction_and_model_version(db_session: AsyncSession):
     """Test 7: Verify ML Model Version and ML Prediction entities and foreign keys."""
+    uid = uuid.uuid4().hex[:8]
     m_version = MLModelRegistry(
-        id="MODEL-TEST-V1",
+        id=f"MODEL-TEST-{uid}",
         model_name="IsolationForest_Test",
-        version="v1.0-test",
+        version=f"v1.0-test-{uid}",
         algorithm="Isolation Forest",
         status="DEPLOYED"
     )
-    txn = Transaction(id="TXN-ML-TEST", transaction_id="TXN-ML-TEST", amount=150.0, payment_method="DEBIT_CARD")
+    txn_id = f"TXN-ML-TEST-{uid}"
+    txn = Transaction(id=txn_id, transaction_id=txn_id, amount=150.0, payment_method="DEBIT_CARD")
     db_session.add_all([m_version, txn])
     await db_session.flush()
     
@@ -273,14 +269,16 @@ async def test_ml_prediction_and_model_version(db_session: AsyncSession):
     assert pred_res.anomaly_score == 0.88
     assert pred_res.model_version.model_name == "IsolationForest_Test"
 
+
 @pytest.mark.asyncio
 async def test_risk_score_and_check_constraint(db_session: AsyncSession):
     """Test 8: Verify RiskScore entity, check constraint 0-100, and transaction link."""
-    txn = Transaction(id="TXN-RISK-01", transaction_id="TXN-RISK-01", amount=75.0, payment_method="CREDIT_CARD")
+    uid = uuid.uuid4().hex[:8]
+    txn_id = f"TXN-RISK-{uid}"
+    txn = Transaction(id=txn_id, transaction_id=txn_id, amount=75.0, payment_method="CREDIT_CARD")
     db_session.add(txn)
     await db_session.flush()
     
-    # Valid risk score
     valid_score = RiskScore(
         id=str(uuid.uuid4()),
         transaction_id=txn.id,
@@ -295,20 +293,22 @@ async def test_risk_score_and_check_constraint(db_session: AsyncSession):
     assert score_res.score == 78.5
     assert score_res.risk_level == "HIGH"
 
+
 @pytest.mark.asyncio
 async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
     """Test 9: Verify Alert, Case, association tables, notes, evidence, and audit timeline."""
-    user = User(id="USR-INV-01", email="victim@test.com", username="victim", full_name="Victim User", hashed_password="pwd")
-    analyst = User(id="USR-ANL-01", email="investigator@test.com", username="investigator", full_name="Lead Investigator", hashed_password="pwd")
-    txn = Transaction(id="TXN-INV-01", transaction_id="TXN-INV-01", user_id=user.id, amount=8900.0, payment_method="WIRE")
+    uid = uuid.uuid4().hex[:8]
+    user = User(id=f"USR-INV-{uid}", email=f"victim_{uid}@test.com", username=f"victim_{uid}", full_name="Victim User", hashed_password="pwd")
+    analyst = User(id=f"USR-ANL-{uid}", email=f"investigator_{uid}@test.com", username=f"investigator_{uid}", full_name="Lead Investigator", hashed_password="pwd")
+    txn = Transaction(id=f"TXN-INV-{uid}", transaction_id=f"TXN-INV-{uid}", user_id=user.id, amount=8900.0, payment_method="WIRE")
     
     db_session.add_all([user, analyst, txn])
     await db_session.flush()
     
-    # Create Alert
+    alert_id = f"ALT-INV-{uid}"
     alert = Alert(
-        id="ALT-INV-001",
-        alert_id="ALT-INV-001",
+        id=alert_id,
+        alert_id=alert_id,
         transaction_id=txn.id,
         user_id=user.id,
         title="Unauthorized Large Outflow",
@@ -319,10 +319,10 @@ async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
     db_session.add(alert)
     await db_session.flush()
     
-    # Create Case
+    case_id = f"CASE-INV-{uid}"
     case = Case(
-        id="CASE-INV-100",
-        case_id="CASE-INV-100",
+        id=case_id,
+        case_id=case_id,
         title="Account Takeover & Drain Investigation",
         severity=CaseSeverity.CRITICAL.value,
         status=CaseStatus.INVESTIGATING.value,
@@ -340,7 +340,6 @@ async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
     await db_session.execute(insert(case_alerts).values(case_id=case.id, alert_id=alert.id))
     await db_session.execute(insert(case_transactions).values(case_id=case.id, transaction_id=txn.id))
     
-    # Add Note
     note = CaseNote(
         id=str(uuid.uuid4()),
         case_id=case.id,
@@ -348,7 +347,6 @@ async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
         author="Lead Investigator",
         content="Contacted cardholder to confirm suspicious $8900 wire."
     )
-    # Add Evidence
     evidence = CaseEvidence(
         id=str(uuid.uuid4()),
         case_id=case.id,
@@ -356,7 +354,6 @@ async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
         evidence_type="TRANSACTION_LOG",
         uploaded_by="Lead Investigator"
     )
-    # Add History
     hist = CaseHistory(
         id=str(uuid.uuid4()),
         case_id=case.id,
@@ -369,29 +366,30 @@ async def test_alert_and_case_investigation_lifecycle(db_session: AsyncSession):
     db_session.add_all([note, evidence, hist])
     await db_session.commit()
     
-    # Retrieve and verify all associations
     stmt = select(Case).options(
         selectinload(Case.alerts),
         selectinload(Case.transactions),
         selectinload(Case.notes),
         selectinload(Case.evidence),
         selectinload(Case.history)
-    ).where(Case.id == "CASE-INV-100")
+    ).where(Case.id == case_id)
     c_res = (await db_session.execute(stmt)).scalar_one()
     assert len(c_res.alerts) == 1
-    assert c_res.alerts[0].id == "ALT-INV-001"
+    assert c_res.alerts[0].id == alert_id
     assert len(c_res.transactions) == 1
     assert c_res.transactions[0].amount == 8900.0
     assert len(c_res.notes) == 1
     assert len(c_res.evidence) == 1
     assert len(c_res.history) == 1
 
+
 @pytest.mark.asyncio
 async def test_360_risk_profiles(db_session: AsyncSession):
     """Test 10: Verify User, Device, and Merchant 360 Risk Profiles."""
-    user = User(id="USR-PRF-1", email="p1@test.com", username="p1", full_name="Profile User", hashed_password="pwd")
-    merchant = Merchant(id="MERCH-PRF-1", merchant_code="MC-P1", name="Profile Merchant", category="Travel")
-    device = Device(id="DEV-PRF-1", device_identifier="FP-P1")
+    uid = uuid.uuid4().hex[:8]
+    user = User(id=f"USR-PRF-{uid}", email=f"p1_{uid}@test.com", username=f"p1_{uid}", full_name="Profile User", hashed_password="pwd")
+    merchant = Merchant(id=f"MERCH-PRF-{uid}", merchant_code=f"MC-P1-{uid}", name="Profile Merchant", category="Travel")
+    device = Device(id=f"DEV-PRF-{uid}", device_identifier=f"FP-P1-{uid}")
     db_session.add_all([user, merchant, device])
     await db_session.flush()
     
@@ -404,12 +402,14 @@ async def test_360_risk_profiles(db_session: AsyncSession):
     
     u_res = (await db_session.execute(select(UserRiskProfile).where(UserRiskProfile.user_id == user.id))).scalar_one()
     assert u_res.average_transaction_amount == 320.0
-    assert u_res.user.email == "p1@test.com"
+    assert u_res.user.email == f"p1_{uid}@test.com"
+
 
 @pytest.mark.asyncio
 async def test_audit_logs_and_system_settings(db_session: AsyncSession):
     """Test 11: Verify immutable Audit Logs and System Settings."""
-    actor = User(id="USR-AUD-1", email="auditor@test.com", username="auditor", full_name="System Auditor", hashed_password="pwd")
+    uid = uuid.uuid4().hex[:8]
+    actor = User(id=f"USR-AUD-{uid}", email=f"auditor_{uid}@test.com", username=f"auditor_{uid}", full_name="System Auditor", hashed_password="pwd")
     db_session.add(actor)
     await db_session.flush()
     
@@ -422,17 +422,18 @@ async def test_audit_logs_and_system_settings(db_session: AsyncSession):
         entity_id="HIGH_AMOUNT",
         result="SUCCESS"
     )
+    setting_key = f"max_allowed_failed_logins_{uid}"
     setting = SystemSetting(
         id=str(uuid.uuid4()),
-        key="max_allowed_failed_logins",
+        key=setting_key,
         value={"limit": 5, "lockout_minutes": 30},
-        updated_by="auditor@test.com"
+        updated_by=f"auditor_{uid}@test.com"
     )
     db_session.add_all([log, setting])
     await db_session.commit()
     
     log_res = (await db_session.execute(select(AuditLog).where(AuditLog.actor_user_id == actor.id))).scalar_one()
-    set_res = (await db_session.execute(select(SystemSetting).where(SystemSetting.key == "max_allowed_failed_logins"))).scalar_one()
+    set_res = (await db_session.execute(select(SystemSetting).where(SystemSetting.key == setting_key))).scalar_one()
     
     assert log_res.action == "RULE_UPDATED"
     assert set_res.value["limit"] == 5

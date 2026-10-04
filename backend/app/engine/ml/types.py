@@ -37,6 +37,7 @@ class MLTrainingConfig(BaseModel):
     val_split: float = 0.15
     test_split: float = 0.15
     min_samples_required: int = 50
+    default_threshold: float = 0.65
 
 
 class EvaluationReport(BaseModel):

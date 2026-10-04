@@ -386,7 +386,7 @@ async def test_alert_api_endpoints():
             headers=analyst_headers,
             json={
                 "transaction_id": f"TX-API-EVAL-{uuid.uuid4().hex[:6]}",
-                "user_id": "USR-API-EVAL",
+                "user_id": f"USR-API-EVAL-{uuid.uuid4().hex[:6]}",
                 "risk_score": 88.0,
                 "risk_level": "HIGH",
                 "persist": True

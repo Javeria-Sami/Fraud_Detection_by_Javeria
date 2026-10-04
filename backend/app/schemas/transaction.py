@@ -114,16 +114,16 @@ class RiskFactor(BaseModel):
 class TransactionResponse(BaseModel):
     id: str
     transaction_id: Optional[str] = None
-    user_id: str
+    user_id: Optional[str] = None
     user_name: Optional[str] = None
     merchant_id: Optional[str] = None
-    merchant_name: str
-    merchant_category: str
-    payment_method: str
+    merchant_name: Optional[str] = "Unknown Merchant"
+    merchant_category: Optional[str] = "general"
+    payment_method: Optional[str] = "CREDIT_CARD"
     transaction_type: str = "PURCHASE"
     amount: float
-    currency: str
-    device_id: str
+    currency: str = "USD"
+    device_id: Optional[str] = "DEV-UNKNOWN"
     ip_address: Optional[str] = None
     city: Optional[str] = None
     country: Optional[str] = None

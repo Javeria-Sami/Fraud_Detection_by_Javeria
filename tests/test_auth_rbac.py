@@ -120,15 +120,21 @@ async def test_account_enumeration_protection_and_invalid_credentials():
 @pytest.mark.asyncio
 async def test_deactivated_account_rejection():
     """Verifies that inactive users cannot log in or access protected resources."""
+    import uuid
+    suffix = uuid.uuid4().hex[:6]
+    test_email = f"inactive.{suffix}@fraudshield.io"
+    test_username = f"inactive_user_{suffix}"
+    test_id = f"USR-INACTIVE-{suffix}"
+
     async with AsyncSessionLocal() as session:
         # Create a deactivated user
         role_stmt = select(Role).where(Role.name == "viewer")
         viewer_role = (await session.execute(role_stmt)).scalar_one_or_none()
         
         inactive_user = User(
-            id="USR-INACTIVE-TEST-001",
-            email="inactive.user@fraudshield.io",
-            username="inactive_test_user",
+            id=test_id,
+            email=test_email,
+            username=test_username,
             full_name="Inactive Suspended User",
             hashed_password=get_password_hash("Inactive@123456"),
             role=viewer_role,
@@ -139,7 +145,7 @@ async def test_deactivated_account_rejection():
 
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         login_res = await ac.post("/api/v1/auth/login", json={
-            "email": "inactive.user@fraudshield.io",
+            "email": test_email,
             "password": "Inactive@123456"
         })
         assert login_res.status_code == 403

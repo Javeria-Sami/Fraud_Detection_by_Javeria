@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 
+from sqlalchemy import select
 from backend.app.core.database import AsyncSessionLocal
 from backend.app.engine.ml.dataset import DatasetPreparationService, DataQualityError
 from backend.app.engine.ml.preprocessor import MLPreprocessor, ML_FEATURE_NAMES
@@ -99,6 +100,15 @@ async def test_candidate_retraining_execution_and_reproducibility():
     Validates candidate registration with status EVALUATED and verifies reproducibility.
     """
     async with AsyncSessionLocal() as session:
+        # Clear any stale active runs
+        from backend.app.models.ml_model import ModelRetrainingRun
+        stmt = select(ModelRetrainingRun).where(
+            ModelRetrainingRun.status.in_(["VALIDATING_DATA", "TRAINING", "RUNNING", "FEATURE_ENGINEERING", "EVALUATING", "QUEUED"])
+        )
+        for r in (await session.execute(stmt)).scalars().all():
+            r.status = "CANCELLED"
+        await session.commit()
+
         cfg = RetrainingConfig(
             model_type="Isolation Forest",
             n_estimators=60,
@@ -141,11 +151,13 @@ async def test_retraining_run_cancellation():
     """
     Verifies that a running or queued retraining job can be cancelled cleanly.
     """
+    import uuid
+    cancel_run_id = f"RETRAIN-TEST-CANCEL-{uuid.uuid4().hex[:6]}"
     async with AsyncSessionLocal() as session:
         # Create a mock pending run
         from backend.app.models.ml_model import ModelRetrainingRun
         mock_run = ModelRetrainingRun(
-            id="RETRAIN-TEST-CANCEL",
+            id=cancel_run_id,
             model_type="Isolation Forest",
             status=RetrainingStatus.TRAINING.value,
             created_by="analyst@fraudshield.internal"
@@ -155,7 +167,7 @@ async def test_retraining_run_cancellation():
 
         cancelled = await ModelRetrainingService.cancel_retraining(
             session=session,
-            run_id="RETRAIN-TEST-CANCEL",
+            run_id=cancel_run_id,
             actor_email="admin@fraudshield.internal",
             actor_role="admin"
         )

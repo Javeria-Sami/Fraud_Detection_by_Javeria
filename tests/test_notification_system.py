@@ -106,6 +106,7 @@ async def test_policy_alert_notification_creation():
 @pytest.mark.asyncio
 async def test_notification_deduplication_and_cooldown():
     """Verifies deterministic deduplication prevents notification storm on repeated events."""
+    dedup_source_id = f"ML-TEST-DEDUP-{uuid.uuid4().hex[:6]}"
     async with AsyncSessionLocal() as session:
         recipients = await NotificationPolicyService.resolve_recipients(session, roles=["ADMIN"])
         assert len(recipients) > 0
@@ -122,7 +123,7 @@ async def test_notification_deduplication_and_cooldown():
             severity=NotificationSeverity.WARNING.value,
             priority=NotificationPriority.NORMAL.value,
             source_type="MODEL",
-            source_id="ML-TEST-DEDUP"
+            source_id=dedup_source_id
         )
         await session.commit()
         assert n1 is not None
@@ -138,7 +139,7 @@ async def test_notification_deduplication_and_cooldown():
             severity=NotificationSeverity.WARNING.value,
             priority=NotificationPriority.NORMAL.value,
             source_type="MODEL",
-            source_id="ML-TEST-DEDUP"
+            source_id=dedup_source_id
         )
         assert n2 is None  # Suppressed by cooldown
 

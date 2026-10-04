@@ -58,8 +58,22 @@ class MLModelRegistryService:
         status: str = "APPROVED",
         description: Optional[str] = None
     ) -> MLModelRegistry:
-        """Registers a new model version into the database."""
+        """Registers a new model version into the database or updates if existing."""
         model_id = f"MODEL-{version}"
+        existing = await cls.get_model_by_id_or_version(session, version)
+        if existing:
+            existing.algorithm = algorithm
+            existing.feature_version = feature_version
+            existing.status = status
+            existing.parameters = parameters
+            existing.metrics = metrics
+            existing.artifact_path = artifact_path
+            if description:
+                existing.description = description
+            existing.updated_at = datetime.now(timezone.utc)
+            await session.flush()
+            return existing
+
         model_obj = MLModelRegistry(
             id=model_id,
             model_name=f"IsolationForest_{version}",
