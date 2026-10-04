@@ -537,17 +537,17 @@ export const AdminUsers: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-sm">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight">
+              <h1 className="text-xl font-bold text-soc-foreground tracking-tight">
                 User Management & Access Control (RBAC)
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Provision accounts, assign roles, enforce last-admin safety protections, and audit permission matrices.
               </p>
             </div>
@@ -557,7 +557,7 @@ export const AdminUsers: React.FC = () => {
         <div className="flex items-center gap-3 self-start sm:self-auto">
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all"
           >
             <UserPlus className="w-4 h-4" />
             <span>Provision User</span>
@@ -571,8 +571,8 @@ export const AdminUsers: React.FC = () => {
           onClick={() => setActiveTab('users')}
           className={`px-4 py-2.5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all ${
             activeTab === 'users'
-              ? 'border-blue-500 text-blue-400 bg-blue-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-500/10'
+              : 'border-transparent text-soc-muted hover:text-soc-foreground'
           }`}
         >
           <Users className="w-4 h-4" />
@@ -582,8 +582,8 @@ export const AdminUsers: React.FC = () => {
           onClick={() => setActiveTab('roles')}
           className={`px-4 py-2.5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all ${
             activeTab === 'roles'
-              ? 'border-blue-500 text-blue-400 bg-blue-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-500/10'
+              : 'border-transparent text-soc-muted hover:text-soc-foreground'
           }`}
         >
           <Shield className="w-4 h-4" />
@@ -593,24 +593,24 @@ export const AdminUsers: React.FC = () => {
 
       {/* Feedback Banners */}
       {alertError && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center justify-between gap-3 animate-in fade-in">
           <div className="flex items-center gap-2.5">
             <AlertTriangle className="w-4 h-4 shrink-0" />
             <span>{alertError}</span>
           </div>
-          <button onClick={() => setAlertError(null)} className="text-rose-400 hover:text-rose-200">
+          <button onClick={() => setAlertError(null)} className="text-rose-600 dark:text-rose-400 hover:opacity-75">
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
       {alertSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs flex items-center justify-between gap-3 animate-in fade-in">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{alertSuccess}</span>
           </div>
-          <button onClick={() => setAlertSuccess(null)} className="text-emerald-400 hover:text-emerald-200">
+          <button onClick={() => setAlertSuccess(null)} className="text-emerald-600 dark:text-emerald-400 hover:opacity-75">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -620,21 +620,21 @@ export const AdminUsers: React.FC = () => {
       {activeTab === 'users' && (
         <div className="space-y-4">
           {/* Filter Bar */}
-          <div className="bg-soc-card border border-soc-border p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3.5 shadow-lg">
+          <div className="bg-soc-card border border-soc-border p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3.5 shadow-sm">
             <form onSubmit={handleSearchSubmit} className="flex-1 w-full flex items-center gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-soc-muted absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by email, username, full name, or user ID..."
-                  className="w-full bg-soc-bg border border-soc-border rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-xl pl-9 pr-3 py-2 text-xs text-soc-foreground placeholder-soc-muted focus:outline-none focus:border-blue-500"
                 />
               </div>
               <button
                 type="submit"
-                className="px-3.5 py-2 rounded-xl bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 text-xs font-semibold"
+                className="px-3.5 py-2 rounded-xl bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-semibold transition-colors"
               >
                 Search
               </button>
@@ -647,7 +647,7 @@ export const AdminUsers: React.FC = () => {
                   setRoleFilter(e.target.value);
                   setPage(1);
                 }}
-                className="bg-soc-bg border border-soc-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="bg-soc-surface border border-soc-border rounded-xl px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               >
                 <option value="">All Roles</option>
                 <option value="ADMIN">ADMIN</option>
@@ -661,7 +661,7 @@ export const AdminUsers: React.FC = () => {
                   setStatusFilter(e.target.value);
                   setPage(1);
                 }}
-                className="bg-soc-bg border border-soc-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="bg-soc-surface border border-soc-border rounded-xl px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               >
                 <option value="">All Statuses</option>
                 <option value="active">Active Only</option>
@@ -670,19 +670,19 @@ export const AdminUsers: React.FC = () => {
 
               <button
                 onClick={() => fetchUsers()}
-                className="p-2 rounded-xl bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white"
+                className="p-2 rounded-xl bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground transition-colors"
                 title="Refresh Table"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoadingUsers ? 'animate-spin text-blue-400' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${isLoadingUsers ? 'animate-spin text-blue-500' : ''}`} />
               </button>
             </div>
           </div>
 
           {/* User Table */}
-          <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-soc-bg/85 text-slate-400 uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
+                <thead className="bg-soc-surface text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
                   <tr>
                     <th className="py-3.5 px-4">Operator</th>
                     <th className="py-3.5 px-4">Email Address</th>
@@ -695,35 +695,35 @@ export const AdminUsers: React.FC = () => {
                 <tbody className="divide-y divide-soc-border/60 font-sans">
                   {isLoadingUsers ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-slate-400">
+                      <td colSpan={6} className="py-12 text-center text-soc-muted">
                         <div className="flex flex-col items-center gap-2">
-                          <RefreshCw className="w-5 h-5 animate-spin text-blue-400" />
+                          <RefreshCw className="w-5 h-5 animate-spin text-blue-500" />
                           <span>Loading operator accounts...</span>
                         </div>
                       </td>
                     </tr>
                   ) : users.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-slate-400">
+                      <td colSpan={6} className="py-12 text-center text-soc-muted">
                         No operator accounts match the query criteria.
                       </td>
                     </tr>
                   ) : (
                     users.map((u) => (
-                      <tr key={u.id} className="hover:bg-slate-800/60 transition-colors">
+                      <tr key={u.id} className="hover:bg-soc-cardHover transition-colors">
                         <td className="py-3.5 px-4">
-                          <div className="font-bold text-white">{u.full_name}</div>
-                          <div className="text-[11px] text-slate-400 font-mono">@{u.username}</div>
+                          <div className="font-bold text-soc-foreground">{u.full_name}</div>
+                          <div className="text-[11px] text-soc-muted font-mono">@{u.username}</div>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-300">{u.email}</td>
+                        <td className="py-3.5 px-4 font-mono text-soc-muted">{u.email}</td>
                         <td className="py-3.5 px-4">
                           <span
                             className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
                               u.role.toUpperCase() === 'ADMIN'
-                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
                                 : u.role.toUpperCase() === 'ANALYST'
-                                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                                : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30'
+                                : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                             }`}
                           >
                             {u.role}
@@ -731,25 +731,25 @@ export const AdminUsers: React.FC = () => {
                         </td>
                         <td className="py-3.5 px-4">
                           {u.is_active ? (
-                            <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold text-xs">
+                            <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Active</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 text-rose-400 font-semibold text-xs">
+                            <span className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold text-xs">
                               <XCircle className="w-3.5 h-3.5" />
                               <span>Inactive</span>
                             </span>
                           )}
                         </td>
-                        <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                        <td className="py-3.5 px-4 text-soc-muted font-mono text-[11px]">
                           {u.created_at ? new Date(u.created_at).toLocaleDateString() : 'System Default'}
                         </td>
                         <td className="py-3.5 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => handleViewDetail(u.id)}
-                              className="p-1.5 rounded-lg bg-soc-bg hover:bg-slate-700 text-slate-300 hover:text-white"
+                              className="p-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground transition-colors"
                               title="Inspect User Profile & Permissions"
                             >
                               <Eye className="w-3.5 h-3.5" />
@@ -759,17 +759,17 @@ export const AdminUsers: React.FC = () => {
                                 setRoleActionUser(u);
                                 setTargetRole(u.role.toUpperCase());
                               }}
-                              className="px-2 py-1 rounded-lg bg-soc-bg hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] font-semibold"
+                              className="px-2 py-1 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground text-[11px] font-semibold transition-colors"
                               title="Change Role"
                             >
                               Role
                             </button>
                             <button
                               onClick={() => setStatusActionUser(u)}
-                              className={`px-2 py-1 rounded-lg text-[11px] font-semibold ${
+                              className={`px-2 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
                                 u.is_active
-                                  ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400'
-                                  : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400'
+                                  ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                                  : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                               }`}
                             >
                               {u.is_active ? 'Deactivate' : 'Activate'}
@@ -784,10 +784,10 @@ export const AdminUsers: React.FC = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="p-4 border-t border-soc-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+            <div className="p-4 border-t border-soc-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-soc-muted">
               <div>
-                Showing Page <strong className="text-white font-mono">{page}</strong> of{' '}
-                <strong className="text-white font-mono">{totalPages}</strong> ({totalUsers} total users)
+                Showing Page <strong className="text-soc-foreground font-mono">{page}</strong> of{' '}
+                <strong className="text-soc-foreground font-mono">{totalPages}</strong> ({totalUsers} total users)
               </div>
               <div className="flex items-center gap-1.5">
                 <select
@@ -796,7 +796,7 @@ export const AdminUsers: React.FC = () => {
                     setPageSize(parseInt(e.target.value, 10));
                     setPage(1);
                   }}
-                  className="bg-soc-bg border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 mr-2 font-mono cursor-pointer"
+                  className="bg-soc-surface border border-soc-border rounded-lg px-2.5 py-1.5 text-xs text-soc-foreground focus:outline-none focus:border-blue-500 mr-2 font-mono cursor-pointer"
                 >
                   <option value="5">5 per page</option>
                   <option value="10">10 per page</option>
@@ -808,7 +808,7 @@ export const AdminUsers: React.FC = () => {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1 || isLoadingUsers}
-                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+                  className="px-3 py-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
                   title="Previous Page"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -824,7 +824,7 @@ export const AdminUsers: React.FC = () => {
                     className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition-all ${
                       page === pNum
                         ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                        : 'bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white'
+                        : 'bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground'
                     }`}
                   >
                     {pNum}
@@ -835,7 +835,7 @@ export const AdminUsers: React.FC = () => {
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages || isLoadingUsers}
-                  className="px-3 py-1.5 rounded-lg bg-soc-bg hover:bg-slate-800 border border-soc-border text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
+                  className="px-3 py-1.5 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-muted hover:text-soc-foreground disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all font-medium shadow-sm active:scale-95"
                   title="Next Page"
                 >
                   <span>Next</span>
@@ -853,46 +853,46 @@ export const AdminUsers: React.FC = () => {
           {/* Role Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {safeRoles.map((r) => (
-              <div key={r.id || r.name} className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-lg space-y-3">
+              <div key={r.id || r.name} className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
                   <span
                     className={`text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
                       r.name?.toUpperCase() === 'ADMIN'
-                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                        ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
                         : r.name?.toUpperCase() === 'ANALYST'
-                        ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30'
+                        : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                     }`}
                   >
                     {r.name}
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">{r.user_count ?? 0} Operators</span>
+                  <span className="text-xs text-soc-muted font-mono">{r.user_count ?? 0} Operators</span>
                 </div>
-                <p className="text-xs text-slate-300 min-h-[36px]">{r.description || 'System standard operational role.'}</p>
-                <div className="pt-2 border-t border-soc-border/60 flex items-center justify-between text-xs text-slate-400 font-mono">
+                <p className="text-xs text-soc-muted min-h-[36px] leading-relaxed">{r.description || 'System standard operational role.'}</p>
+                <div className="pt-2 border-t border-soc-border/60 flex items-center justify-between text-xs text-soc-muted font-mono">
                   <span>Granted Permissions:</span>
-                  <strong className="text-white">{r.permission_count ?? (r.permissions || []).length}</strong>
+                  <strong className="text-soc-foreground">{r.permission_count ?? (r.permissions || []).length}</strong>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Matrix Filter & Table */}
-          <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-sm">
             <div className="p-4 border-b border-soc-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <KeyRound className="w-4 h-4 text-blue-400" />
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                <KeyRound className="w-4 h-4 text-blue-500" />
+                <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider">
                   Role-To-Permission Matrix Catalog
                 </h3>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">Category:</span>
+                <span className="text-xs text-soc-muted">Category:</span>
                 <select
                   value={matrixCategoryFilter}
                   onChange={(e) => setMatrixCategoryFilter(e.target.value)}
-                  className="bg-soc-bg border border-soc-border rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="bg-soc-surface border border-soc-border rounded-lg px-2.5 py-1 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 >
                   {categories.map((c) => (
                     <option key={c} value={c}>
@@ -905,7 +905,7 @@ export const AdminUsers: React.FC = () => {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-soc-bg/85 text-slate-400 uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
+                <thead className="bg-soc-surface text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
                   <tr>
                     <th className="py-3.5 px-4">Permission Name</th>
                     <th className="py-3.5 px-4">Category</th>
@@ -917,38 +917,38 @@ export const AdminUsers: React.FC = () => {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-soc-border/60">
+                <tbody className="divide-y divide-soc-border/60 font-sans">
                   {isLoadingMatrix ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-slate-400">
-                        <RefreshCw className="w-5 h-5 animate-spin text-blue-400 mx-auto mb-2" />
+                      <td colSpan={6} className="py-12 text-center text-soc-muted">
+                        <RefreshCw className="w-5 h-5 animate-spin text-blue-500 mx-auto mb-2" />
                         <span>Loading permission matrix...</span>
                       </td>
                     </tr>
                   ) : filteredMatrix.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-400">
+                      <td colSpan={6} className="py-8 text-center text-soc-muted">
                         No permissions found for this category.
                       </td>
                     </tr>
                   ) : (
                     filteredMatrix.map((entry, idx) => (
-                      <tr key={entry.permission_name || idx} className="hover:bg-slate-800/50 transition-colors">
-                        <td className="py-3 px-4 font-mono font-bold text-white">{entry.permission_name}</td>
+                      <tr key={entry.permission_name || idx} className="hover:bg-soc-cardHover transition-colors">
+                        <td className="py-3 px-4 font-mono font-bold text-soc-foreground">{entry.permission_name}</td>
                         <td className="py-3 px-4">
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-soc-surface text-soc-muted border border-soc-border font-mono">
                             {entry.category || 'General'}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-slate-300 max-w-sm truncate">{entry.permission_description || '—'}</td>
+                        <td className="py-3 px-4 text-soc-muted max-w-sm truncate">{entry.permission_description || '—'}</td>
                         {(safeMatrix?.roles || []).map((rName) => {
                           const isGranted = Boolean(entry.granted_roles && entry.granted_roles[rName]);
                           return (
                             <td key={rName} className="py-3 px-4 text-center">
                               {isGranted ? (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-400 mx-auto" />
+                                <CheckCircle2 className="w-4 h-4 text-emerald-500 mx-auto" />
                               ) : (
-                                <XCircle className="w-4 h-4 text-slate-600 mx-auto" />
+                                <XCircle className="w-4 h-4 text-soc-muted/40 mx-auto" />
                               )}
                             </td>
                           );
@@ -965,72 +965,72 @@ export const AdminUsers: React.FC = () => {
 
       {/* MODAL: PROVISION USER */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
           <div className="bg-soc-card border border-soc-border rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center border-b border-soc-border pb-3">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <UserPlus className="w-4 h-4 text-blue-400" />
+              <h3 className="text-sm font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+                <UserPlus className="w-4 h-4 text-blue-500" />
                 <span>Provision Operator Account</span>
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowCreateModal(false)} className="text-soc-muted hover:text-soc-foreground">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateUser} className="space-y-3.5">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Full Name</label>
+                <label className="text-xs font-semibold text-soc-foreground block mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="e.g. Alex Mercer"
-                  className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Email Address</label>
+                <label className="text-xs font-semibold text-soc-foreground block mb-1">Email Address</label>
                 <input
                   type="email"
                   required
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="alex.mercer@fraudshield.io"
-                  className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Username (Optional)</label>
+                <label className="text-xs font-semibold text-soc-foreground block mb-1">Username (Optional)</label>
                 <input
                   type="text"
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
                   placeholder="alexmercer"
-                  className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Initial Temporary Password</label>
+                <label className="text-xs font-semibold text-soc-foreground block mb-1">Initial Temporary Password</label>
                 <input
                   type="password"
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Role & Permissions Tier</label>
+                <label className="text-xs font-semibold text-soc-foreground block mb-1">Role & Permissions Tier</label>
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
                 >
                   <option value="ANALYST">ANALYST — Fraud & Security Analyst</option>
                   <option value="ADMIN">ADMIN — Platform Administrator</option>
@@ -1042,14 +1042,14 @@ export const AdminUsers: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 rounded-lg bg-soc-bg hover:bg-slate-800 text-slate-300 text-xs font-semibold"
+                  className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-semibold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingCreate}
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 disabled:opacity-50 transition-all"
                 >
                   {isSubmittingCreate ? 'Provisioning...' : 'Provision User'}
                 </button>
@@ -1061,40 +1061,40 @@ export const AdminUsers: React.FC = () => {
 
       {/* DIALOG: STATUS TOGGLE (WITH REASON & LAST ADMIN NOTICE) */}
       {statusActionUser && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
           <div className="bg-soc-card border border-soc-border rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center border-b border-soc-border pb-3">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
                 <span>Confirm Status Change</span>
               </h3>
-              <button onClick={() => setStatusActionUser(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setStatusActionUser(null)} className="text-soc-muted hover:text-soc-foreground">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-soc-muted leading-relaxed">
               Are you sure you want to{' '}
-              <strong className={statusActionUser.is_active ? 'text-rose-400' : 'text-emerald-400'}>
+              <strong className={statusActionUser.is_active ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}>
                 {statusActionUser.is_active ? 'DEACTIVATE' : 'ACTIVATE'}
               </strong>{' '}
-              account <strong>{statusActionUser.email}</strong>?
+              account <strong className="text-soc-foreground">{statusActionUser.email}</strong>?
             </p>
 
             {statusActionUser.role.toUpperCase() === 'ADMIN' && statusActionUser.is_active && (
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs">
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs">
                 ⚠️ Last Admin Protection is active. Deactivating the sole active administrator account is prohibited.
               </div>
             )}
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">Audit Reason (Optional)</label>
+              <label className="text-xs font-semibold text-soc-foreground block mb-1">Audit Reason (Optional)</label>
               <input
                 type="text"
                 value={statusReason}
                 onChange={(e) => setStatusReason(e.target.value)}
                 placeholder="e.g. Account suspended due to role departure"
-                className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -1102,7 +1102,7 @@ export const AdminUsers: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStatusActionUser(null)}
-                className="px-4 py-2 rounded-lg bg-soc-bg hover:bg-slate-800 text-slate-300 text-xs font-semibold"
+                className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-semibold transition-colors"
               >
                 Cancel
               </button>
@@ -1113,7 +1113,7 @@ export const AdminUsers: React.FC = () => {
                   statusActionUser.is_active
                     ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-500/20'
                     : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/20'
-                } disabled:opacity-50`}
+                } disabled:opacity-50 transition-all`}
               >
                 {isSubmittingStatus ? 'Updating...' : 'Confirm Change'}
               </button>
@@ -1124,28 +1124,28 @@ export const AdminUsers: React.FC = () => {
 
       {/* DIALOG: ROLE CHANGE */}
       {roleActionUser && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
           <div className="bg-soc-card border border-soc-border rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center border-b border-soc-border pb-3">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Shield className="w-4 h-4 text-blue-400" />
+              <h3 className="text-sm font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-2">
+                <Shield className="w-4 h-4 text-blue-500" />
                 <span>Modify Operator Role</span>
               </h3>
-              <button onClick={() => setRoleActionUser(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setRoleActionUser(null)} className="text-soc-muted hover:text-soc-foreground">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-300">
-              Select new role tier for <strong>{roleActionUser.email}</strong>:
+            <p className="text-xs text-soc-muted">
+              Select new role tier for <strong className="text-soc-foreground">{roleActionUser.email}</strong>:
             </p>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">New Role</label>
+              <label className="text-xs font-semibold text-soc-foreground block mb-1">New Role</label>
               <select
                 value={targetRole}
                 onChange={(e) => setTargetRole(e.target.value)}
-                className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               >
                 <option value="ADMIN">ADMIN (Full Governance)</option>
                 <option value="ANALYST">ANALYST (Triage & Rules)</option>
@@ -1154,13 +1154,13 @@ export const AdminUsers: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">Audit Reason</label>
+              <label className="text-xs font-semibold text-soc-foreground block mb-1">Audit Reason</label>
               <input
                 type="text"
                 value={roleReason}
                 onChange={(e) => setRoleReason(e.target.value)}
                 placeholder="e.g. Promotion to security admin lead"
-                className="w-full bg-soc-bg border border-soc-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-soc-surface border border-soc-border rounded-lg px-3 py-2 text-xs text-soc-foreground focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -1168,14 +1168,14 @@ export const AdminUsers: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setRoleActionUser(null)}
-                className="px-4 py-2 rounded-lg bg-soc-bg hover:bg-slate-800 text-slate-300 text-xs font-semibold"
+                className="px-4 py-2 rounded-lg bg-soc-surface hover:bg-soc-cardHover border border-soc-border text-soc-foreground text-xs font-semibold transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleExecuteRoleChange}
                 disabled={isSubmittingRole}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 disabled:opacity-50 transition-all"
               >
                 {isSubmittingRole ? 'Updating...' : 'Update Role'}
               </button>
@@ -1190,65 +1190,65 @@ export const AdminUsers: React.FC = () => {
           <div className="bg-soc-card border-l border-soc-border w-full max-w-xl p-6 overflow-y-auto space-y-5 shadow-2xl">
             <div className="flex justify-between items-center border-b border-soc-border pb-4">
               <div>
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <UserIcon className="w-5 h-5 text-blue-400" />
+                <h2 className="text-base font-bold text-soc-foreground flex items-center gap-2">
+                  <UserIcon className="w-5 h-5 text-blue-500" />
                   <span>Operator Profile & Governance</span>
                 </h2>
-                <span className="text-xs text-slate-400 font-mono">{selectedUserId}</span>
+                <span className="text-xs text-soc-muted font-mono">{selectedUserId}</span>
               </div>
-              <button onClick={() => setSelectedUserId(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setSelectedUserId(null)} className="text-soc-muted hover:text-soc-foreground">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {isLoadingDetail ? (
-              <div className="py-24 text-center text-slate-400">
-                <RefreshCw className="w-6 h-6 animate-spin text-blue-400 mx-auto mb-2" />
+              <div className="py-24 text-center text-soc-muted">
+                <RefreshCw className="w-6 h-6 animate-spin text-blue-500 mx-auto mb-2" />
                 <span>Loading profile details...</span>
               </div>
             ) : userDetail ? (
               <div className="space-y-6">
                 {/* Basic Details */}
-                <div className="bg-soc-bg border border-soc-border rounded-xl p-4 space-y-2.5 text-xs">
+                <div className="bg-soc-surface border border-soc-border rounded-xl p-4 space-y-2.5 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Full Name</span>
-                    <strong className="text-white">{userDetail.full_name}</strong>
+                    <span className="text-soc-muted">Full Name</span>
+                    <strong className="text-soc-foreground">{userDetail.full_name}</strong>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Email</span>
-                    <span className="font-mono text-slate-200">{userDetail.email}</span>
+                    <span className="text-soc-muted">Email</span>
+                    <span className="font-mono text-soc-foreground">{userDetail.email}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Username</span>
-                    <span className="font-mono text-slate-200">@{userDetail.username}</span>
+                    <span className="text-soc-muted">Username</span>
+                    <span className="font-mono text-soc-foreground">@{userDetail.username}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Assigned Role</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                    <span className="text-soc-muted">Assigned Role</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30">
                       {userDetail.role}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Status</span>
+                    <span className="text-soc-muted">Status</span>
                     {userDetail.is_active ? (
-                      <span className="text-emerald-400 font-bold">Active</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">Active</span>
                     ) : (
-                      <span className="text-rose-400 font-bold">Inactive</span>
+                      <span className="text-rose-600 dark:text-rose-400 font-bold">Inactive</span>
                     )}
                   </div>
                 </div>
 
                 {/* Effective Permissions */}
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <KeyRound className="w-4 h-4 text-purple-400" />
+                  <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <KeyRound className="w-4 h-4 text-purple-500" />
                     <span>Effective Permissions ({(userDetail.effective_permissions || []).length})</span>
                   </h3>
-                  <div className="flex flex-wrap gap-1.5 p-3 rounded-xl bg-soc-bg border border-soc-border max-h-48 overflow-y-auto">
+                  <div className="flex flex-wrap gap-1.5 p-3 rounded-xl bg-soc-surface border border-soc-border max-h-48 overflow-y-auto">
                     {(userDetail.effective_permissions || []).map((p) => (
                       <span
                         key={p}
-                        className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-purple-300 font-mono border border-slate-700"
+                        className="text-[10px] px-2 py-0.5 rounded bg-soc-card text-purple-600 dark:text-purple-300 font-mono border border-soc-border"
                       >
                         {p}
                       </span>
@@ -1258,41 +1258,41 @@ export const AdminUsers: React.FC = () => {
 
                 {/* Customer Risk Profiling (If Applicable) */}
                 {userDetail.is_customer && (
-                  <div className="p-4 rounded-xl bg-soc-bg border border-soc-border space-y-2">
-                    <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                      <Activity className="w-4 h-4 text-amber-400" />
+                  <div className="p-4 rounded-xl bg-soc-surface border border-soc-border space-y-2">
+                    <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5">
+                      <Activity className="w-4 h-4 text-amber-500" />
                       <span>Cardholder Risk Profile</span>
                     </h3>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-400">Calibrated Risk Score</span>
-                      <strong className="text-white font-mono">{userDetail.customer_risk_score ?? '—'}</strong>
+                      <span className="text-soc-muted">Calibrated Risk Score</span>
+                      <strong className="text-soc-foreground font-mono">{userDetail.customer_risk_score ?? '—'}</strong>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-400">Assigned Risk Tier</span>
-                      <strong className="text-amber-400 font-mono">{userDetail.customer_risk_tier ?? 'LOW'}</strong>
+                      <span className="text-soc-muted">Assigned Risk Tier</span>
+                      <strong className="text-amber-600 dark:text-amber-400 font-mono">{userDetail.customer_risk_tier ?? 'LOW'}</strong>
                     </div>
                   </div>
                 )}
 
                 {/* Recent Audit Activity */}
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-blue-400" />
+                  <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-blue-500" />
                     <span>Recent Audit Activity</span>
                   </h3>
-                  <div className="divide-y divide-soc-border/40 bg-soc-bg border border-soc-border rounded-xl max-h-48 overflow-y-auto">
+                  <div className="divide-y divide-soc-border/40 bg-soc-surface border border-soc-border rounded-xl max-h-48 overflow-y-auto">
                     {(!userDetail.recent_activity || userDetail.recent_activity.length === 0) ? (
-                      <div className="p-4 text-center text-xs text-slate-500">No recent audit log activities.</div>
+                      <div className="p-4 text-center text-xs text-soc-muted">No recent audit log activities.</div>
                     ) : (
                       (userDetail.recent_activity || []).map((act) => (
                         <div key={act.id} className="p-3 text-xs space-y-1">
                           <div className="flex justify-between items-center">
-                            <span className="font-mono font-bold text-blue-400 text-[11px]">{act.action}</span>
-                            <span className="text-slate-500 font-mono text-[10px]">
+                            <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-[11px]">{act.action}</span>
+                            <span className="text-soc-muted font-mono text-[10px]">
                               {act.timestamp ? new Date(act.timestamp).toLocaleTimeString() : '—'}
                             </span>
                           </div>
-                          <p className="text-slate-300 text-[11px]">{act.details || 'Administrative action recorded'}</p>
+                          <p className="text-soc-muted text-[11px]">{act.details || 'Administrative action recorded'}</p>
                         </div>
                       ))
                     )}

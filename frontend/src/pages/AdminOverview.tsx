@@ -111,18 +111,18 @@ export const AdminOverview: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-soc-card border border-soc-border p-5 rounded-2xl shadow-sm">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-xl font-bold text-soc-foreground tracking-tight flex items-center gap-2">
                 <span>Platform Governance & Health Overview</span>
                 {overview?.platform?.overall_status && getStatusBadge(overview.platform.overall_status)}
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-soc-muted mt-0.5">
                 Real-time operational diagnostics, RBAC user summary, fraud detection engine metrics, and MLOps health.
               </p>
             </div>
@@ -138,7 +138,7 @@ export const AdminOverview: React.FC = () => {
           <button
             onClick={() => fetchData(true)}
             disabled={isRefreshing}
-            className="px-3.5 py-2 rounded-xl bg-soc-surface hover:bg-soc-card border border-soc-border hover:border-blue-400 text-soc-foreground text-xs font-semibold flex items-center gap-2 transition-all shadow-sm disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-soc-surface hover:bg-soc-cardHover border border-soc-border hover:border-blue-400 text-soc-foreground text-xs font-semibold flex items-center gap-2 transition-all shadow-sm disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-500' : 'text-blue-500'}`} />
             <span>Refresh</span>
@@ -248,30 +248,30 @@ export const AdminOverview: React.FC = () => {
               <Cpu className="w-5 h-5" />
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-slate-400">
+          <div className="mt-4 pt-3 border-t border-soc-border/60 flex items-center justify-between text-xs text-soc-muted">
             <span>{overview?.ml?.total_model_versions ?? 0} Versions in Registry</span>
-            <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
+            <ArrowUpRight className="w-4 h-4 text-soc-muted group-hover:text-amber-500 transition-colors" />
           </div>
         </Link>
       </div>
 
       {/* Platform Subsystems Diagnostics Table */}
-      <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-soc-card border border-soc-border rounded-2xl overflow-hidden shadow-sm">
         <div className="p-5 border-b border-soc-border flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Server className="w-5 h-5 text-blue-400" />
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+            <Server className="w-5 h-5 text-blue-500" />
+            <h2 className="text-sm font-bold text-soc-foreground uppercase tracking-wider">
               Live Platform Health & Component Telemetry
             </h2>
           </div>
-          <span className="text-xs text-slate-400 font-mono">
+          <span className="text-xs text-soc-muted font-mono">
             {diagnostics?.components?.length ?? 0} Services Monitored
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-soc-bg/80 text-slate-400 uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
+            <thead className="bg-soc-surface text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border">
               <tr>
                 <th className="py-3 px-4">Subsystem Component</th>
                 <th className="py-3 px-4">Health Status</th>
@@ -282,27 +282,27 @@ export const AdminOverview: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-soc-border/60 font-sans">
               {(diagnostics?.components || []).map((comp, idx) => (
-                <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-400" />
+                <tr key={idx} className="hover:bg-soc-cardHover transition-colors">
+                  <td className="py-3.5 px-4 font-bold text-soc-foreground flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-500" />
                     <span>{comp.name}</span>
                   </td>
                   <td className="py-3.5 px-4">
                     {getStatusBadge(comp.status)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-300">
+                  <td className="py-3.5 px-4 font-mono text-soc-foreground">
                     {comp.latency_ms !== null && comp.latency_ms !== undefined ? (
-                      <span className={`${comp.latency_ms > 100 ? 'text-amber-400 font-bold' : 'text-slate-300'}`}>
+                      <span className={`${comp.latency_ms > 100 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-soc-foreground'}`}>
                         {comp.latency_ms.toFixed(1)} ms
                       </span>
                     ) : (
-                      <span className="text-slate-500">—</span>
+                      <span className="text-soc-muted">—</span>
                     )}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-300 max-w-md truncate" title={comp.details || ''}>
+                  <td className="py-3.5 px-4 text-soc-muted max-w-md truncate" title={comp.details || ''}>
                     {comp.details || 'Subsystem operational'}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">
+                  <td className="py-3.5 px-4 text-soc-muted font-mono text-[11px]">
                     {comp.last_checked ? new Date(comp.last_checked).toLocaleTimeString() : 'Just now'}
                   </td>
                 </tr>
@@ -315,38 +315,38 @@ export const AdminOverview: React.FC = () => {
       {/* System Information & Administrative Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* System Environment Specs */}
-        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-lg space-y-4">
+        <div className="bg-soc-card border border-soc-border rounded-2xl p-5 shadow-sm space-y-4">
           <div className="flex items-center gap-2 border-b border-soc-border pb-3">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <h3 className="text-xs font-bold text-soc-foreground uppercase tracking-wider">
               System Environment & Runtime
             </h3>
           </div>
 
           <div className="space-y-2.5 text-xs">
             <div className="flex justify-between py-1.5 border-b border-soc-border/40">
-              <span className="text-slate-400">Environment</span>
-              <span className="font-mono font-bold text-emerald-400">{overview?.system?.environment || 'DEVELOPMENT'}</span>
+              <span className="text-soc-muted">Environment</span>
+              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{overview?.system?.environment || 'DEVELOPMENT'}</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-soc-border/40">
-              <span className="text-slate-400">Application Name</span>
-              <span className="font-medium text-white">{overview?.system?.application_name || 'FraudShield AI Platform'}</span>
+              <span className="text-soc-muted">Application Name</span>
+              <span className="font-medium text-soc-foreground">{overview?.system?.application_name || 'FraudShield AI Platform'}</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-soc-border/40">
-              <span className="text-slate-400">Backend Gateway</span>
-              <span className="font-mono text-slate-300">FastAPI v{overview?.system?.backend_version || '1.0.0'}</span>
+              <span className="text-soc-muted">Backend Gateway</span>
+              <span className="font-mono text-soc-foreground">FastAPI v{overview?.system?.backend_version || '1.0.0'}</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-soc-border/40">
-              <span className="text-slate-400">Frontend Client</span>
-              <span className="font-mono text-slate-300">React v{overview?.system?.frontend_version || '1.0.0'} (Vite)</span>
+              <span className="text-soc-muted">Frontend Client</span>
+              <span className="font-mono text-soc-foreground">React v{overview?.system?.frontend_version || '1.0.0'} (Vite)</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-soc-border/40">
-              <span className="text-slate-400">Database Layer</span>
-              <span className="font-mono text-slate-300">{overview?.system?.database_version || 'PostgreSQL 15 (Async)'}</span>
+              <span className="text-soc-muted">Database Layer</span>
+              <span className="font-mono text-soc-foreground">{overview?.system?.database_version || 'PostgreSQL 15 (Async)'}</span>
             </div>
             <div className="flex justify-between py-1.5">
-              <span className="text-slate-400">Security / RBAC</span>
-              <span className="font-bold text-blue-400">Enforced & Active</span>
+              <span className="text-soc-muted">Security / RBAC</span>
+              <span className="font-bold text-blue-500 dark:text-blue-400">Enforced & Active</span>
             </div>
           </div>
         </div>

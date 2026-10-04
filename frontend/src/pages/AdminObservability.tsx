@@ -392,11 +392,11 @@ export const AdminObservability: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-soc-border pb-5">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500">
               <Activity className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
+              <h1 className="text-2xl font-bold tracking-tight text-soc-foreground flex items-center gap-3">
                 Operational Observability & Diagnostics
                 {statusData && getStatusBadge(statusData.overall_status)}
               </h1>
@@ -409,13 +409,13 @@ export const AdminObservability: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-soc-surface border border-soc-border text-xs text-soc-muted font-mono">
-            <Clock className="w-3.5 h-3.5 text-blue-400" />
+            <Clock className="w-3.5 h-3.5 text-blue-500" />
             Live Sync: {lastRefreshed.toLocaleTimeString()}
           </div>
           <button
             onClick={() => fetchTelemetry(true)}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-all shadow-sm shadow-blue-500/20 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-all shadow-md shadow-blue-500/20 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
@@ -424,8 +424,8 @@ export const AdminObservability: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm flex items-center gap-3">
-          <XCircle className="w-5 h-5 flex-shrink-0 text-rose-400" />
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-sm flex items-center gap-3">
+          <XCircle className="w-5 h-5 flex-shrink-0 text-rose-500" />
           <span>{error}</span>
         </div>
       )}
@@ -436,21 +436,21 @@ export const AdminObservability: React.FC = () => {
         <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-soc-muted mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Ingested Txns</span>
-            <Zap className="w-4 h-4 text-cyan-400" />
+            <Zap className="w-4 h-4 text-cyan-500" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-soc-foreground">
             {telemetry?.transaction_pipeline.processed_total.toLocaleString() ?? '0'}
           </div>
-          <span className="text-xs text-emerald-400 mt-1 font-medium">100% Ingestion Nominal</span>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-medium">100% Ingestion Nominal</span>
         </div>
 
         {/* HTTP Error Rate */}
         <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-soc-muted mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">HTTP Error Rate</span>
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <AlertTriangle className="w-4 h-4 text-amber-500" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-soc-foreground">
             {telemetry?.http.error_rate_pct ?? 0.0}%
           </div>
           <span className="text-xs text-soc-muted mt-1">
@@ -462,21 +462,21 @@ export const AdminObservability: React.FC = () => {
         <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-soc-muted mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">P95 Latency</span>
-            <Clock className="w-4 h-4 text-purple-400" />
+            <Clock className="w-4 h-4 text-purple-500" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-soc-foreground">
             {telemetry?.http.duration_ms.p95 ?? 0} <span className="text-sm font-normal text-soc-muted">ms</span>
           </div>
-          <span className="text-xs text-emerald-400 mt-1">p50: {telemetry?.http.duration_ms.p50 ?? 0}ms</span>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">p50: {telemetry?.http.duration_ms.p50 ?? 0}ms</span>
         </div>
 
         {/* Active WebSockets */}
         <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-soc-muted mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Active WebSockets</span>
-            <Radio className="w-4 h-4 text-emerald-400" />
+            <Radio className="w-4 h-4 text-emerald-500" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-soc-foreground">
             {telemetry?.realtime_websocket.active_connections ?? 0}
           </div>
           <span className="text-xs text-soc-muted mt-1">
@@ -488,12 +488,12 @@ export const AdminObservability: React.FC = () => {
         <div className="p-4 rounded-xl bg-soc-surface border border-soc-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-soc-muted mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Active Alarms</span>
-            <BellRing className="w-4 h-4 text-rose-400" />
+            <BellRing className="w-4 h-4 text-rose-500" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-soc-foreground">
             {alertsData?.active_alarms_count ?? 0}
           </div>
-          <span className={`text-xs mt-1 font-medium ${(alertsData?.active_alarms_count ?? 0) > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+          <span className={`text-xs mt-1 font-medium ${(alertsData?.active_alarms_count ?? 0) > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
             {(alertsData?.active_alarms_count ?? 0) > 0 ? 'Action Required' : 'All Systems Nominal'}
           </span>
         </div>
@@ -504,7 +504,7 @@ export const AdminObservability: React.FC = () => {
         <button
           onClick={() => setActiveTab('overview')}
           className={`pb-3 text-sm font-medium transition-colors relative ${
-            activeTab === 'overview' ? 'text-blue-400 font-semibold' : 'text-soc-muted hover:text-white'
+            activeTab === 'overview' ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-soc-muted hover:text-soc-foreground'
           }`}
         >
           Subsystems & SLI/SLO
@@ -516,11 +516,11 @@ export const AdminObservability: React.FC = () => {
         <button
           onClick={() => setActiveTab('traces')}
           className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'traces' ? 'text-blue-400 font-semibold' : 'text-soc-muted hover:text-white'
+            activeTab === 'traces' ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-soc-muted hover:text-soc-foreground'
           }`}
         >
           Sampled Traces
-          <span className="px-2 py-0.5 text-xs rounded-full bg-soc-border text-soc-muted">
+          <span className="px-2 py-0.5 text-xs rounded-full bg-soc-surface border border-soc-border text-soc-muted font-mono">
             {tracesData?.total_traces ?? 0}
           </span>
           {activeTab === 'traces' && (
@@ -531,12 +531,12 @@ export const AdminObservability: React.FC = () => {
         <button
           onClick={() => setActiveTab('alarms')}
           className={`pb-3 text-sm font-medium transition-colors relative flex items-center gap-2 ${
-            activeTab === 'alarms' ? 'text-blue-400 font-semibold' : 'text-soc-muted hover:text-white'
+            activeTab === 'alarms' ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-soc-muted hover:text-soc-foreground'
           }`}
         >
           Operational Alarms
           {(alertsData?.active_alarms_count ?? 0) > 0 && (
-            <span className="px-2 py-0.5 text-xs rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+            <span className="px-2 py-0.5 text-xs rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
               {alertsData?.active_alarms_count}
             </span>
           )}
@@ -551,30 +551,30 @@ export const AdminObservability: React.FC = () => {
         <div className="space-y-6">
           {/* SLI / SLO Compliance Targets */}
           <div className="rounded-xl bg-soc-surface border border-soc-border p-5">
-            <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-blue-400" />
+            <h2 className="text-base font-bold text-soc-foreground mb-4 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-blue-500" />
               Service Level Objectives (SLI / SLO) Status
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {slo &&
                 Object.entries(slo).map(([key, item]) => (
-                  <div key={key} className="p-4 rounded-xl bg-soc-bg border border-soc-border flex flex-col justify-between">
+                  <div key={key} className="p-4 rounded-xl bg-soc-card border border-soc-border flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold text-white uppercase tracking-wider">
+                        <span className="text-xs font-bold text-soc-foreground uppercase tracking-wider">
                           {key.replace(/_/g, ' ')}
                         </span>
                         {item.compliant ? (
-                          <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Met
                           </span>
                         ) : (
-                          <span className="text-xs text-rose-400 font-semibold flex items-center gap-1">
+                          <span className="text-xs text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1">
                             <XCircle className="w-3.5 h-3.5" /> Breached
                           </span>
                         )}
                       </div>
-                      <div className="text-xl font-bold font-mono text-white mt-2">
+                      <div className="text-xl font-bold font-mono text-soc-foreground mt-2">
                         {item.sli_actual} {item.unit}
                       </div>
                     </div>
@@ -588,20 +588,20 @@ export const AdminObservability: React.FC = () => {
 
           {/* Subsystem Health Grid */}
           <div className="rounded-xl bg-soc-surface border border-soc-border p-5">
-            <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-blue-400" />
+            <h2 className="text-base font-bold text-soc-foreground mb-4 flex items-center gap-2">
+              <Layers className="w-5 h-5 text-blue-500" />
               Platform Subsystems Health Matrix
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {statusData?.subsystems &&
                 Object.entries(statusData.subsystems).map(([k, sub]) => (
-                  <div key={k} className="p-4 rounded-xl bg-soc-bg border border-soc-border flex flex-col justify-between">
+                  <div key={k} className="p-4 rounded-xl bg-soc-card border border-soc-border flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-semibold text-white">{sub.name}</h3>
+                        <h3 className="text-sm font-semibold text-soc-foreground">{sub.name}</h3>
                         {getStatusBadge(sub.status)}
                       </div>
-                      <p className="text-xs text-soc-muted mb-3">{sub.details}</p>
+                      <p className="text-xs text-soc-muted mb-3 leading-relaxed">{sub.details}</p>
                     </div>
 
                     <div className="pt-2 border-t border-soc-border/50 text-xs font-mono text-soc-muted flex items-center justify-between">
@@ -623,8 +623,8 @@ export const AdminObservability: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 rounded-xl bg-soc-surface border border-soc-border overflow-hidden">
             <div className="p-4 border-b border-soc-border flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-purple-400" />
+              <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-purple-500" />
                 Recent Sampled Spans ({tracesData?.traces?.length ?? 0})
               </h3>
               <span className="text-xs text-soc-muted font-mono">Auto-sampled requests</span>
@@ -635,19 +635,19 @@ export const AdminObservability: React.FC = () => {
                 <div
                   key={trace.span_id}
                   onClick={() => setSelectedTrace(trace)}
-                  className={`p-3.5 hover:bg-soc-bg/80 cursor-pointer transition-colors flex items-center justify-between ${
-                    selectedTrace?.span_id === trace.span_id ? 'bg-soc-bg border-l-2 border-blue-500' : ''
+                  className={`p-3.5 hover:bg-soc-cardHover cursor-pointer transition-colors flex items-center justify-between ${
+                    selectedTrace?.span_id === trace.span_id ? 'bg-soc-card border-l-2 border-blue-500' : ''
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-white font-mono">{trace.name}</span>
+                      <span className="text-xs font-semibold text-soc-foreground font-mono">{trace.name}</span>
                       {trace.status === 'ERROR' ? (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-mono">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-mono">
                           ERROR
                         </span>
                       ) : (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-mono">
                           OK
                         </span>
                       )}
@@ -659,7 +659,7 @@ export const AdminObservability: React.FC = () => {
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs font-mono font-semibold text-purple-400">
+                    <span className="text-xs font-mono font-semibold text-purple-600 dark:text-purple-400">
                       {trace.duration_ms} ms
                     </span>
                   </div>
@@ -670,8 +670,8 @@ export const AdminObservability: React.FC = () => {
 
           {/* Trace Detail Inspector */}
           <div className="rounded-xl bg-soc-surface border border-soc-border p-4">
-            <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-blue-400" />
+            <h3 className="text-sm font-bold text-soc-foreground mb-3 flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-blue-500" />
               Span Inspector
             </h3>
 
@@ -679,23 +679,23 @@ export const AdminObservability: React.FC = () => {
               <div className="space-y-3 text-xs font-mono">
                 <div>
                   <span className="text-soc-muted block">Operation Name:</span>
-                  <span className="text-white font-semibold">{selectedTrace.name}</span>
+                  <span className="text-soc-foreground font-semibold">{selectedTrace.name}</span>
                 </div>
                 <div>
                   <span className="text-soc-muted block">Trace ID:</span>
-                  <span className="text-blue-400">{selectedTrace.trace_id}</span>
+                  <span className="text-blue-500 dark:text-blue-400">{selectedTrace.trace_id}</span>
                 </div>
                 <div>
                   <span className="text-soc-muted block">Span ID:</span>
-                  <span className="text-purple-400">{selectedTrace.span_id}</span>
+                  <span className="text-purple-600 dark:text-purple-400">{selectedTrace.span_id}</span>
                 </div>
                 <div>
                   <span className="text-soc-muted block">Duration:</span>
-                  <span className="text-white">{selectedTrace.duration_ms} ms</span>
+                  <span className="text-soc-foreground">{selectedTrace.duration_ms} ms</span>
                 </div>
                 <div>
                   <span className="text-soc-muted block mb-1">Tags & Metadata:</span>
-                  <pre className="p-2.5 rounded-lg bg-soc-bg border border-soc-border text-[11px] text-emerald-400 overflow-x-auto">
+                  <pre className="p-2.5 rounded-lg bg-soc-card border border-soc-border text-[11px] text-emerald-600 dark:text-emerald-400 overflow-x-auto">
                     {JSON.stringify(selectedTrace.tags, null, 2)}
                   </pre>
                 </div>
@@ -712,8 +712,8 @@ export const AdminObservability: React.FC = () => {
       {/* Tab 3: Operational Alarms */}
       {activeTab === 'alarms' && (
         <div className="rounded-xl bg-soc-surface border border-soc-border overflow-hidden p-5">
-          <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-            <BellRing className="w-5 h-5 text-rose-400" />
+          <h2 className="text-base font-bold text-soc-foreground mb-4 flex items-center gap-2">
+            <BellRing className="w-5 h-5 text-rose-500" />
             Active Operational Health Alarms
           </h2>
 
@@ -722,13 +722,13 @@ export const AdminObservability: React.FC = () => {
               {(alertsData?.alarms ?? []).map((alarm) => (
                 <div
                   key={alarm.id}
-                  className="p-4 rounded-xl bg-soc-bg border border-soc-border flex items-start gap-3"
+                  className="p-4 rounded-xl bg-soc-card border border-soc-border flex items-start gap-3"
                 >
-                  <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0 mt-0.5" />
+                  <AlertTriangle className="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-semibold text-white">{alarm.title}</h4>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-mono">
+                      <h4 className="text-sm font-semibold text-soc-foreground">{alarm.title}</h4>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-mono">
                         {alarm.component}
                       </span>
                     </div>
@@ -738,9 +738,9 @@ export const AdminObservability: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center rounded-xl bg-soc-bg border border-soc-border">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-white">Zero Operational Alarms</p>
+            <div className="p-8 text-center rounded-xl bg-soc-card border border-soc-border">
+              <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
+              <p className="text-sm font-semibold text-soc-foreground">Zero Operational Alarms</p>
               <p className="text-xs text-soc-muted mt-1">All telemetry thresholds, error rates, and latencies are nominal.</p>
             </div>
           )}
