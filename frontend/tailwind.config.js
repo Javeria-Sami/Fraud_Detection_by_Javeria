@@ -9,13 +9,13 @@ export default {
     extend: {
       colors: {
         soc: {
-          bg: "var(--soc-bg)",
-          surface: "var(--soc-surface)",
-          card: "var(--soc-card)",
-          cardHover: "var(--soc-card-hover)",
-          border: "var(--soc-border)",
-          accent: "var(--soc-accent)",
-          accentHover: "var(--soc-accent-hover)",
+          bg: "rgb(var(--soc-bg) / <alpha-value>)",
+          surface: "rgb(var(--soc-surface) / <alpha-value>)",
+          card: "rgb(var(--soc-card) / <alpha-value>)",
+          cardHover: "rgb(var(--soc-card-hover) / <alpha-value>)",
+          border: "rgb(var(--soc-border) / <alpha-value>)",
+          accent: "rgb(var(--soc-accent) / <alpha-value>)",
+          accentHover: "rgb(var(--soc-accent-hover) / <alpha-value>)",
           critical: "#EF4444",
           criticalBg: "rgba(239, 68, 68, 0.12)",
           criticalBorder: "rgba(239, 68, 68, 0.3)",
@@ -28,8 +28,8 @@ export default {
           low: "#10B981",
           lowBg: "rgba(16, 185, 129, 0.12)",
           lowBorder: "rgba(16, 185, 129, 0.3)",
-          muted: "var(--soc-muted)",
-          foreground: "var(--soc-foreground)",
+          muted: "rgb(var(--soc-muted) / <alpha-value>)",
+          foreground: "rgb(var(--soc-foreground) / <alpha-value>)",
         }
       },
       fontFamily: {

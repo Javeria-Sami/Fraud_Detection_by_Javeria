@@ -288,10 +288,10 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
   const triggeredRulesCount = safeRules.filter((r) => r && r.triggered).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm transition-opacity">
-      <div className="w-full max-w-2xl bg-white dark:bg-soc-card border-l border-slate-200 dark:border-soc-border h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm transition-opacity">
+      <div className="w-full max-w-2xl bg-white dark:bg-[#0B0F19] border-l border-slate-200 dark:border-slate-800 h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-200">
         {/* Drawer Header */}
-        <div className="p-5 border-b border-slate-200 dark:border-soc-border bg-slate-50 dark:bg-soc-bg/80 flex items-center justify-between gap-4">
+        <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-[#111827] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className={`p-2.5 rounded-xl border shrink-0 ${
@@ -307,16 +307,16 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-slate-900 dark:text-white truncate">
+                <span className="text-sm font-mono font-extrabold text-slate-950 dark:text-white tracking-tight truncate">
                   {transactionId}
                 </span>
                 {t?.status && (
-                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
+                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700">
                     {t.status}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-soc-muted truncate">
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate mt-0.5">
                 Transaction Investigation & Decision Intelligence Trace
               </p>
             </div>
@@ -327,16 +327,16 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               type="button"
               onClick={() => fetchInvestigationDetail(true)}
               disabled={isLoading || isRefreshing}
-              className="p-2 rounded-lg bg-white dark:bg-soc-bg border border-slate-200 dark:border-soc-border hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
+              className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors shadow-xs"
               title="Refresh Transaction Intelligence"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-500 dark:text-blue-400' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-600 dark:text-blue-400' : ''}`} />
             </button>
 
             <button
               type="button"
               onClick={handleEscalateToCase}
-              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm transition-colors"
+              className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-colors"
             >
               <FolderPlus className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Escalate</span>
@@ -345,7 +345,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
               title="Close Panel (Esc)"
             >
               <X className="w-4 h-4" />
@@ -354,14 +354,14 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 px-5 pt-3 border-b border-slate-200 dark:border-soc-border bg-slate-50/50 dark:bg-soc-bg/40 text-xs font-medium overflow-x-auto">
+        <div className="flex items-center gap-1 px-5 pt-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0E1422] text-xs font-medium overflow-x-auto">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'overview'
-                ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold'
-                : 'border-transparent text-slate-600 dark:text-soc-muted hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
+                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Overview & Risk
@@ -371,8 +371,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('rules')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'rules'
-                ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold'
-                : 'border-transparent text-slate-600 dark:text-soc-muted hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
+                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Rules ({triggeredRulesCount})
@@ -382,8 +382,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('ml')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'ml'
-                ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold'
-                : 'border-transparent text-slate-600 dark:text-soc-muted hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
+                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             ML Anomaly
@@ -393,8 +393,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('features')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'features'
-                ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold'
-                : 'border-transparent text-slate-600 dark:text-soc-muted hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
+                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Feature Store
@@ -404,8 +404,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('alerts')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'alerts'
-                ? 'border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold'
-                : 'border-transparent text-slate-600 dark:text-soc-muted hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
+                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Alerts ({safeAlerts.length})
@@ -413,7 +413,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         </div>
 
         {/* Drawer Body Content */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+        <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-white dark:bg-[#0B0F19]">
           {isLoading && !detail ? (
             <div className="space-y-4">
               <Skeleton className="h-28 w-full rounded-xl" />
@@ -424,7 +424,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             <div className="p-6 bg-rose-500/10 border border-rose-500/30 rounded-xl text-center space-y-3">
               <AlertTriangle className="w-8 h-8 text-rose-500 dark:text-rose-400 mx-auto" />
               <h4 className="text-sm font-semibold text-rose-700 dark:text-rose-300">Investigation Retrieval Error</h4>
-              <p className="text-xs text-slate-600 dark:text-soc-muted">{error}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300">{error}</p>
               <button
                 type="button"
                 onClick={() => fetchInvestigationDetail(true)}
@@ -439,36 +439,36 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               {activeTab === 'overview' && (
                 <div className="space-y-5">
                   {/* Financial Settlement & Risk Score Hero */}
-                  <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl">
+                  <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs">
                     <div>
-                      <div className="text-[10px] font-semibold text-slate-500 dark:text-soc-muted uppercase tracking-wider">
+                      <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Settlement Amount
                       </div>
-                      <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-0.5">
+                      <div className="text-2xl font-extrabold font-mono text-slate-950 dark:text-white mt-0.5">
                         ${t.amount.toFixed(2)}{' '}
-                        <span className="text-xs text-slate-500 dark:text-soc-muted font-sans font-normal">{t.currency}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 font-sans font-normal">{t.currency}</span>
                       </div>
-                      <div className="text-[11px] text-slate-500 dark:text-soc-muted mt-1 font-sans">
+                      <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 font-sans">
                         {t.payment_method} • {t.transaction_type || 'PURCHASE'}
                       </div>
                     </div>
 
                     <div className="flex flex-col items-end justify-between">
-                      <div className="text-[10px] font-semibold text-slate-500 dark:text-soc-muted uppercase tracking-wider">
+                      <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Calibrated Risk
                       </div>
                       <RiskScoreBadge score={t.risk_score} level={t.risk_level} size="lg" />
-                      <div className="text-[10px] text-slate-500 dark:text-soc-muted font-mono">
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                         Engine {risk?.scoring_version || 'v1.0'}
                       </div>
                     </div>
                   </div>
 
                   {/* Why this was flagged (Risk Explainability Factors) */}
-                  <div className="p-4 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl space-y-3">
+                  <div className="p-4 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl space-y-3 shadow-xs">
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-soc-foreground uppercase tracking-wider">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                         Risk Attribution & Signal Factors
                       </h4>
                     </div>
@@ -482,15 +482,15 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                           return (
                             <div
                               key={idx}
-                              className="p-2.5 bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border/70 rounded-lg flex items-start justify-between gap-3 text-xs"
+                              className="p-3 bg-white dark:bg-[#161F30] border border-slate-200 dark:border-slate-700/80 rounded-lg flex items-start justify-between gap-3 text-xs shadow-xs"
                             >
                               <div className="space-y-0.5">
-                                <span className="font-semibold text-slate-800 dark:text-slate-200">
+                                <span className="font-bold text-slate-900 dark:text-slate-100">
                                   {String(name).replace(/_/g, ' ')}
                                 </span>
-                                {desc && <p className="text-[11px] text-slate-500 dark:text-soc-muted">{desc}</p>}
+                                {desc && <p className="text-[11px] text-slate-600 dark:text-slate-400">{desc}</p>}
                               </div>
-                              <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">
+                              <span className="font-mono text-xs font-extrabold text-amber-600 dark:text-amber-400 shrink-0">
                                 +{contrib.toFixed(1)} pts
                               </span>
                             </div>
@@ -498,42 +498,42 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                         })}
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500 dark:text-soc-muted">
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         No critical risk factors elevated for this transaction.
                       </p>
                     )}
                   </div>
 
                   {/* Identity, Device & Telemetry Context */}
-                  <div className="p-4 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl space-y-3">
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-soc-foreground uppercase tracking-wider border-b border-slate-200 dark:border-soc-border/60 pb-2">
+                  <div className="p-4 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl space-y-3 shadow-xs">
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-2">
                       Identity & Environment Telemetry
                     </h4>
 
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <div>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted block">User / Customer</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{t.user_name || t.user_id}</span>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted block font-mono">{t.user_id}</span>
+                        <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">User / Customer</span>
+                        <span className="font-bold text-slate-900 dark:text-slate-100">{t.user_name || t.user_id}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-mono">{t.user_id}</span>
                       </div>
 
                       <div>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted block">Merchant & Category</span>
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">{t.merchant_name}</span>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted uppercase block font-mono">{t.merchant_category}</span>
+                        <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">Merchant & Category</span>
+                        <span className="font-bold text-slate-900 dark:text-slate-100">{t.merchant_name}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase block font-mono">{t.merchant_category}</span>
                       </div>
 
                       <div>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted block">Device Identifier</span>
-                        <span className="font-mono text-slate-800 dark:text-slate-200 text-[11px] truncate block">{t.device_id}</span>
+                        <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">Device Identifier</span>
+                        <span className="font-mono font-medium text-slate-900 dark:text-slate-200 text-[11px] truncate block">{t.device_id}</span>
                       </div>
 
                       <div>
-                        <span className="text-[10px] text-slate-500 dark:text-soc-muted block">IP & Location</span>
-                        <span className="text-slate-800 dark:text-slate-200 text-[11px] block">
+                        <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">IP & Location</span>
+                        <span className="text-slate-900 dark:text-slate-200 text-[11px] font-medium block">
                           {t.city ? `${t.city}, ${t.country}` : 'Unknown'}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-500 dark:text-soc-muted block">{t.ip_address || '198.51.100.1'}</span>
+                        <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 block">{t.ip_address || '198.51.100.1'}</span>
                       </div>
                     </div>
                   </div>
@@ -543,13 +543,13 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               {/* TAB 2: RULES */}
               {activeTab === 'rules' && (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-soc-muted mb-1">
+                  <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-1 font-medium">
                     <span>Deterministic AST Rule Evaluator Signals</span>
                     <span>{safeRules.length} Evaluated</span>
                   </div>
 
                   {safeRules.length === 0 ? (
-                    <div className="p-6 text-center text-xs text-slate-500 dark:text-soc-muted bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl">
+                    <div className="p-6 text-center text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl">
                       No rule executions recorded for this transaction.
                     </div>
                   ) : (
@@ -558,8 +558,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                         key={idx}
                         className={`p-3.5 rounded-xl border transition-all text-xs space-y-2 ${
                           rule.triggered
-                            ? 'bg-amber-500/5 dark:bg-soc-bg border-amber-500/40 shadow-sm'
-                            : 'bg-slate-50/60 dark:bg-soc-bg/50 border-slate-200 dark:border-soc-border/60 opacity-75'
+                            ? 'bg-amber-500/5 dark:bg-[#181D2A] border-amber-500/40 shadow-xs'
+                            : 'bg-slate-50/60 dark:bg-[#111827]/60 border-slate-200 dark:border-slate-800/80 opacity-80'
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2">
@@ -568,12 +568,12 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                               className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
                                 rule.triggered
                                   ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
-                                  : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                  : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                               }`}
                             >
                               {rule.triggered ? 'TRIGGERED' : 'PASSED'}
                             </span>
-                            <span className="font-semibold text-slate-800 dark:text-slate-200">{rule.rule_name}</span>
+                            <span className="font-bold text-slate-900 dark:text-slate-100">{rule.rule_name}</span>
                           </div>
 
                           <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
@@ -585,7 +585,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                           <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">{rule.reason}</p>
                         )}
 
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-soc-border/40 text-[10px] font-mono text-slate-500 dark:text-soc-muted">
+                        <div className="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-400">
                           <span>Category: {rule.category}</span>
                           <span>Severity: {rule.severity}</span>
                           <span>Rule Code: {rule.rule_id}</span>
@@ -601,11 +601,11 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                 <div className="space-y-4">
                   {ml ? (
                     <>
-                      <div className="p-4 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl space-y-3">
+                      <div className="p-4 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl space-y-3 shadow-xs">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Cpu className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                            <h4 className="text-xs font-bold text-slate-900 dark:text-soc-foreground uppercase tracking-wider">
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                               {ml.model_name} Inference
                             </h4>
                           </div>
@@ -615,16 +615,16 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 pt-2 text-xs font-mono">
-                          <div className="p-3 bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border/60 rounded-lg">
-                            <span className="text-[10px] text-slate-500 dark:text-soc-muted block">Anomaly Score</span>
-                            <span className="text-xl font-bold text-slate-900 dark:text-white">
+                          <div className="p-3 bg-white dark:bg-[#161F30] border border-slate-200 dark:border-slate-700/80 rounded-lg">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-sans font-medium">Anomaly Score</span>
+                            <span className="text-xl font-extrabold text-slate-950 dark:text-white">
                               {ml.anomaly_score.toFixed(3)}
                             </span>
                           </div>
 
-                          <div className="p-3 bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border/60 rounded-lg">
-                            <span className="text-[10px] text-slate-500 dark:text-soc-muted block">Prediction Classification</span>
-                            <span className={`text-base font-bold uppercase ${
+                          <div className="p-3 bg-white dark:bg-[#161F30] border border-slate-200 dark:border-slate-700/80 rounded-lg">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-sans font-medium">Prediction Classification</span>
+                            <span className={`text-base font-extrabold uppercase ${
                               ml.prediction === 'ANOMALOUS' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
                             }`}>
                               {ml.prediction}
@@ -632,17 +632,17 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                           </div>
                         </div>
 
-                        <div className="text-[11px] text-slate-500 dark:text-soc-muted pt-1">
-                          Algorithm: <span className="text-slate-800 dark:text-slate-300">{ml.algorithm}</span> • Feature Version:{' '}
-                          <span className="text-slate-800 dark:text-slate-300">{detail.feature_version}</span>
+                        <div className="text-[11px] text-slate-600 dark:text-slate-400 pt-1">
+                          Algorithm: <span className="text-slate-900 dark:text-slate-200 font-medium">{ml.algorithm}</span> • Feature Version:{' '}
+                          <span className="text-slate-900 dark:text-slate-200 font-medium">{detail.feature_version}</span>
                         </div>
                       </div>
 
                       {/* Contextual Indicators */}
-                      <div className="p-4 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl space-y-2 text-xs">
-                        <h5 className="font-bold text-slate-800 dark:text-slate-200">Contextual Behavioral Indicators</h5>
+                      <div className="p-4 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-xs">
+                        <h5 className="font-bold text-slate-900 dark:text-slate-100">Contextual Behavioral Indicators</h5>
                         {ml.contextual_indicators && ml.contextual_indicators.length > 0 ? (
-                          <ul className="space-y-1.5 list-disc list-inside text-slate-600 dark:text-soc-muted text-[11px]">
+                          <ul className="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-300 text-[11px]">
                             {ml.contextual_indicators.map((ind, i) => (
                               <li key={i} className="text-slate-700 dark:text-slate-300">
                                 {ind}
@@ -650,14 +650,14 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                             ))}
                           </ul>
                         ) : (
-                          <p className="text-slate-500 dark:text-soc-muted text-[11px]">
+                          <p className="text-slate-500 dark:text-slate-400 text-[11px]">
                             Features aligned within normal multivariate distributions.
                           </p>
                         )}
                       </div>
                     </>
                   ) : (
-                    <div className="p-6 text-center text-xs text-slate-500 dark:text-soc-muted bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl">
+                    <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl">
                       No ML prediction model inference recorded.
                     </div>
                   )}
@@ -667,13 +667,13 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               {/* TAB 4: FEATURE STORE */}
               {activeTab === 'features' && (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-soc-muted">
+                  <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <span>Feature Snapshot at Evaluation Timestamp</span>
-                    <span className="font-mono text-blue-600 dark:text-blue-400">{detail.feature_version || 'v2.4'}</span>
+                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{detail.feature_version || 'v2.4'}</span>
                   </div>
 
-                  <div className="bg-slate-900 dark:bg-soc-bg border border-slate-800 dark:border-soc-border rounded-xl p-4 overflow-x-auto">
-                    <pre className="font-mono text-[11px] text-emerald-400 dark:text-emerald-300 leading-relaxed">
+                  <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 overflow-x-auto shadow-sm">
+                    <pre className="font-mono text-[11px] text-emerald-400 leading-relaxed">
                       {JSON.stringify(detail.features || {}, null, 2)}
                     </pre>
                   </div>
@@ -683,20 +683,20 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               {/* TAB 5: ALERTS */}
               {activeTab === 'alerts' && (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-slate-500 dark:text-soc-muted">
+                  <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <span>Referenced Security Alerts</span>
                     <span>{safeAlerts.length} Incident(s)</span>
                   </div>
 
                   {safeAlerts.length === 0 ? (
-                    <div className="p-6 text-center text-xs text-slate-500 dark:text-soc-muted bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl">
+                    <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl">
                       No security alerts were triggered by this transaction.
                     </div>
                   ) : (
                     safeAlerts.map((al) => (
                       <div
                         key={al.id}
-                        className="p-3.5 bg-slate-50 dark:bg-soc-bg border border-slate-200 dark:border-soc-border rounded-xl space-y-2 text-xs"
+                        className="p-3.5 bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-xs"
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -708,11 +708,11 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
                           </span>
                         </div>
 
-                        <p className="text-slate-800 dark:text-slate-200 font-semibold">{al.title}</p>
+                        <p className="text-slate-900 dark:text-slate-100 font-bold">{al.title}</p>
                         {al.alert_reason && (
-                          <p className="text-[11px] text-slate-500 dark:text-soc-muted">{al.alert_reason}</p>
+                          <p className="text-[11px] text-slate-600 dark:text-slate-300">{al.alert_reason}</p>
                         )}
-                        <div className="text-[10px] text-slate-500 dark:text-soc-muted font-mono pt-1">
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200 dark:border-slate-800">
                           Triggered: {al.created_at ? new Date(al.created_at).toLocaleString() : '-'}
                         </div>
                       </div>
