@@ -23,18 +23,41 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const wsRef = useRef<WebSocket | null>(null);
   const listenersRef = useRef<Map<string, Set<(payload: any) => void>>>(new Map());
   const reconnectTimeoutRef = useRef<any>(null);
+  const reconnectAttemptsRef = useRef<number>(0);
+  const maxReconnectAttempts = 5;
 
-  const connect = () => {
+  const computeWsUrl = () => {
+    const envWsUrl = (import.meta as any).env?.VITE_WS_URL;
+    if (envWsUrl) {
+      return envWsUrl;
+    }
+    const envApiUrl = (import.meta as any).env?.VITE_API_URL;
+    if (envApiUrl && (envApiUrl.startsWith('http://') || envApiUrl.startsWith('https://'))) {
+      const wsProto = envApiUrl.startsWith('https:') ? 'wss:' : 'ws:';
+      const parsed = new URL(envApiUrl);
+      return `${wsProto}//${parsed.host}/ws/live`;
+    }
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host = window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host;
-    const wsUrl = `${protocol}//${host}/ws/live`;
+    return `${protocol}//${host}/ws/live`;
+  };
+
+  const connect = () => {
+    const baseUrl = computeWsUrl();
+    const token = localStorage.getItem('fraudshield_token');
+    const wsUrl = token ? `${baseUrl}?token=${encodeURIComponent(token)}` : baseUrl;
 
     try {
+      if (reconnectAttemptsRef.current > 0) {
+        setStatus('RECONNECTING');
+      }
+
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
 
       ws.onopen = () => {
         setStatus('CONNECTED');
+        reconnectAttemptsRef.current = 0;
       };
 
       ws.onmessage = (event) => {
@@ -59,16 +82,36 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       };
 
       ws.onerror = () => {
-        setStatus('RECONNECTING');
+        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+          setStatus('RECONNECTING');
+        } else {
+          setStatus('DISCONNECTED');
+        }
       };
 
-      ws.onclose = () => {
-        setStatus('RECONNECTING');
-        reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      ws.onclose = (event) => {
+        if (event.code === 1000 || event.code === 1008) {
+          setStatus('DISCONNECTED');
+          return;
+        }
+
+        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+          setStatus('RECONNECTING');
+          reconnectAttemptsRef.current += 1;
+          const delay = Math.min(10000, 1500 * Math.pow(1.5, reconnectAttemptsRef.current));
+          reconnectTimeoutRef.current = setTimeout(connect, delay);
+        } else {
+          setStatus('DISCONNECTED');
+        }
       };
     } catch (err) {
-      setStatus('RECONNECTING');
-      reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+        setStatus('RECONNECTING');
+        reconnectAttemptsRef.current += 1;
+        reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      } else {
+        setStatus('DISCONNECTED');
+      }
     }
   };
 

@@ -32,22 +32,22 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       case 'CONNECTED':
         return (
           <span
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-medium"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400 text-xs font-mono font-medium"
             title="Real-time WebSocket event channel established"
           >
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>● Live</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+            <span>CONNECTED</span>
           </span>
         );
       case 'CONNECTING':
       case 'RECONNECTING':
         return (
           <span
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-medium"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-400 text-xs font-mono font-medium"
             title="Attempting WebSocket handshake"
           >
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            <span>● Reconnecting</span>
+            <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
+            <span>RECONNECTING</span>
           </span>
         );
       case 'DISCONNECTED':
@@ -55,11 +55,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       default:
         return (
           <span
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono font-medium"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-500/10 border border-slate-500/20 text-soc-muted text-xs font-mono font-medium"
             title="WebSocket disconnected. Showing REST aggregate data."
           >
-            <span className="h-2 w-2 rounded-full bg-rose-400" />
-            <span>● Offline</span>
+            <span className="h-2 w-2 rounded-full bg-slate-400" />
+            <span>DISCONNECTED</span>
           </span>
         );
     }

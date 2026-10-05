@@ -121,13 +121,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-soc-surface border border-soc-border text-xs font-mono">
             {status === 'CONNECTED' ? (
               <>
-                <span className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse-live" />
-                <span className="text-soc-deepGreen dark:text-emerald-300 font-semibold tracking-wide text-[11px]">LIVE STREAM</span>
+                <span className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+                <span className="text-soc-deepGreen dark:text-emerald-300 font-semibold tracking-wide text-[11px]">CONNECTED</span>
+              </>
+            ) : status === 'RECONNECTING' ? (
+              <>
+                <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
+                <span className="text-amber-700 dark:text-amber-400 font-semibold tracking-wide text-[11px]">RECONNECTING</span>
               </>
             ) : (
               <>
-                <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
-                <span className="text-amber-600 dark:text-amber-400 font-semibold tracking-wide text-[11px]">RECONNECTING</span>
+                <span className="h-2 w-2 rounded-full bg-slate-400" />
+                <span className="text-soc-muted font-semibold tracking-wide text-[11px]">DISCONNECTED</span>
               </>
             )}
           </div>
