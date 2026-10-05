@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Platform Brand */}
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-500 dark:text-blue-400 shadow-sm shrink-0">
+            <div className="h-9 w-9 rounded-xl bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 flex items-center justify-center text-soc-deepGreen dark:text-emerald-400 shadow-sm shrink-0">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -109,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="font-bold text-sm sm:text-base text-soc-foreground tracking-tight">
                   FraudShield
                 </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-500 dark:text-blue-400 font-mono font-bold hidden sm:inline-block">
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 text-soc-deepGreen dark:text-emerald-300 font-mono font-bold hidden sm:inline-block">
                   SOC v1.0
                 </span>
               </div>
@@ -121,13 +121,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-soc-surface border border-soc-border text-xs font-mono">
             {status === 'CONNECTED' ? (
               <>
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-live" />
-                <span className="text-emerald-500 font-semibold tracking-wide text-[11px]">LIVE STREAM</span>
+                <span className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse-live" />
+                <span className="text-soc-deepGreen dark:text-emerald-300 font-semibold tracking-wide text-[11px]">LIVE STREAM</span>
               </>
             ) : (
               <>
                 <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
-                <span className="text-amber-500 font-semibold tracking-wide text-[11px]">RECONNECTING</span>
+                <span className="text-amber-600 dark:text-amber-400 font-semibold tracking-wide text-[11px]">RECONNECTING</span>
               </>
             )}
           </div>
@@ -140,11 +140,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             onClick={() => setShowSearchModal(true)}
             aria-label="Open global search"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:border-slate-600 text-soc-muted hover:text-soc-foreground text-xs transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:border-emerald-600/40 text-soc-muted hover:text-soc-foreground text-xs transition-colors"
           >
             <Search className="w-3.5 h-3.5 text-soc-muted" />
             <span className="hidden sm:inline">Search...</span>
-            <kbd className="hidden sm:inline-block px-1.5 py-0.2 bg-soc-card border border-soc-border rounded text-[10px] font-mono">
+            <kbd className="hidden sm:inline-block px-1.5 py-0.2 bg-soc-card border border-soc-border rounded text-[10px] font-mono text-soc-muted">
               Ctrl+K
             </kbd>
           </button>
@@ -155,11 +155,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Toggle Transaction Simulator"
             className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
               isSimulatorOpen
-                ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/20'
-                : 'bg-soc-surface hover:bg-soc-cardHover text-soc-foreground border-soc-border'
+                ? 'bg-soc-deepGreen text-white border-emerald-800 shadow-md shadow-emerald-900/20'
+                : 'bg-soc-surface hover:bg-soc-lightGreen text-soc-foreground border-soc-border'
             }`}
           >
-            <Play className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
+            <Play className={`w-3.5 h-3.5 ${isSimulatorOpen ? 'text-white' : 'text-soc-deepGreen dark:text-emerald-400'}`} />
             <span>Simulator</span>
           </button>
 
@@ -168,11 +168,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setShowNotifications(prev => !prev)}
               aria-label="Security Notifications"
-              className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground relative transition-colors"
+              className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-lightGreen text-soc-muted hover:text-soc-foreground relative transition-colors"
             >
               <Bell className="w-4 h-4" />
               {(unreadCount > 0 || liveAlerts.length > 0) && (
-                <span className="absolute -top-1 -right-1 h-4 min-w-[16px] px-1 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 h-4 min-w-[16px] px-1 bg-soc-critical text-white rounded-full text-[10px] font-bold flex items-center justify-center animate-pulse">
                   {unreadCount > 0 ? unreadCount : liveAlerts.length}
                 </span>
               )}
@@ -189,12 +189,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-soc-muted hover:text-soc-foreground transition-colors"
+            className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-lightGreen text-soc-muted hover:text-soc-foreground transition-colors"
           >
             {theme === 'dark' ? (
-              <Sun className="w-4 h-4 text-amber-400" />
+              <Sun className="w-4 h-4 text-soc-gold" />
             ) : (
-              <Moon className="w-4 h-4 text-blue-600" />
+              <Moon className="w-4 h-4 text-soc-deepGreen" />
             )}
           </button>
 
@@ -204,9 +204,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setShowRoleDropdown(!showRoleDropdown)}
               aria-haspopup="true"
               aria-expanded={showRoleDropdown}
-              className="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-cardHover text-xs transition-colors"
+              className="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-lightGreen text-xs transition-colors"
             >
-              <div className="w-6 h-6 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-500 dark:text-blue-400 font-bold flex items-center justify-center text-xs uppercase">
+              <div className="w-6 h-6 rounded-full bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 text-soc-deepGreen dark:text-emerald-300 font-bold flex items-center justify-center text-xs uppercase">
                 {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
               </div>
               <div className="hidden sm:block text-left">
@@ -234,7 +234,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="text-[11px] text-soc-muted truncate font-mono">
                     {user?.email}
                   </div>
-                  <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-[10px] font-mono font-bold text-blue-500 dark:text-blue-400 uppercase">
+                  <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 text-[10px] font-mono font-bold text-soc-deepGreen dark:text-emerald-300 uppercase">
                     <Lock className="w-3 h-3" />
                     Role: {user?.role || 'viewer'}
                   </div>
@@ -258,15 +258,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }}
                         className={`w-full flex items-center justify-between p-2 rounded-lg text-left text-xs transition-colors ${
                           isCurrent
-                            ? 'bg-blue-600/15 text-blue-500 dark:text-blue-400 font-semibold'
-                            : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-cardHover'
+                            ? 'bg-soc-lightGreen dark:bg-emerald-950/50 text-soc-deepGreen dark:text-emerald-300 font-semibold'
+                            : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-surface'
                         }`}
                       >
                         <div>
                           <div className="text-xs font-semibold">{r.label}</div>
                           <div className="text-[10px] text-soc-muted">{r.desc}</div>
                         </div>
-                        {isCurrent && <Check className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />}
+                        {isCurrent && <Check className="w-3.5 h-3.5 text-soc-deepGreen dark:text-emerald-300" />}
                       </button>
                     );
                   })}

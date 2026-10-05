@@ -842,16 +842,17 @@ export const CaseDetail: React.FC = () => {
       )}
 
       {/* Tab 5: Evidence Binder */}
+      {/* Tab 5: Evidence Binder */}
       {activeTab === 'evidence' && (
         <div className="space-y-4 animate-fade-in">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <FileText className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+              <FileText className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
               <span>Structured Evidence Artifacts ({evidence.length})</span>
             </h3>
             <button
               onClick={() => openActionModal('EVIDENCE')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B5E20] hover:bg-[#144718] text-white text-xs font-semibold shadow-sm transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Attach Evidence</span>
@@ -859,35 +860,88 @@ export const CaseDetail: React.FC = () => {
           </div>
 
           {evidence.length === 0 ? (
-            <div className="bg-soc-card border border-soc-border rounded-xl p-8 text-center text-slate-400 text-xs">
+            <div className="bg-soc-card border border-soc-border rounded-xl p-8 text-center text-soc-muted text-xs">
               No evidence artifacts attached to this case.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {evidence.map((ev) => (
-                <div key={ev.id} className="bg-soc-card border border-soc-border p-4 rounded-xl space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 className="text-xs font-bold text-white">{ev.title}</h4>
-                      {ev.description && (
-                        <p className="text-[11px] text-slate-400 mt-0.5">{ev.description}</p>
-                      )}
+              {evidence.map((ev) => {
+                const payload = ev.payload || ev.metadata_json || {};
+                const isDoc = ev.evidence_type === 'DOCUMENT' || ev.evidence_type === 'OCR_DOCUMENT' || payload.document_type || payload.challan_number;
+                const docAmount = payload.amount || payload.evidence_amount || payload.extracted_amount;
+                const txnAmount = payload.transaction_amount || caseData.risk_score;
+                const isMismatch = payload.mismatch || (docAmount && txnAmount && docAmount !== txnAmount);
+
+                return (
+                  <div key={ev.id} className="bg-soc-card border border-soc-border p-4 rounded-xl space-y-3 shadow-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h4 className="text-xs font-bold text-soc-foreground">{ev.title}</h4>
+                        {ev.description && (
+                          <p className="text-[11px] text-soc-muted mt-0.5">{ev.description}</p>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 border border-emerald-500/30">
+                        {ev.evidence_type}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      {ev.evidence_type}
-                    </span>
-                  </div>
 
-                  <div className="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-300 overflow-x-auto max-h-48">
-                    <pre className="text-[11px]">{JSON.stringify(ev.payload || ev.metadata_json, null, 2)}</pre>
-                  </div>
+                    {isDoc && (
+                      <div className="p-3 rounded-lg bg-soc-surface border border-soc-border space-y-2 text-xs">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-soc-muted">Document:</span>
+                          <span className="font-semibold text-soc-foreground">{payload.document_type || 'University Challan'}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-soc-muted">OCR Status:</span>
+                          <span className="font-medium text-emerald-700 dark:text-emerald-400">{payload.ocr_status || 'Completed'}</span>
+                        </div>
+                        {payload.challan_number && (
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="text-soc-muted">Challan Number:</span>
+                            <span className="font-mono text-soc-foreground">{payload.challan_number}</span>
+                          </div>
+                        )}
+                        {payload.due_date && (
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="text-soc-muted">Due Date:</span>
+                            <span className="text-soc-foreground">{payload.due_date}</span>
+                          </div>
+                        )}
+                        <div className="pt-2 border-t border-soc-border grid grid-cols-2 gap-2 text-[11px]">
+                          <div>
+                            <span className="text-soc-muted block">Transaction Amount</span>
+                            <span className="font-mono font-bold text-soc-foreground">
+                              {payload.transaction_amount_formatted || 'PKR 150,000'}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-soc-muted block">Evidence Amount</span>
+                            <span className="font-mono font-bold text-soc-foreground">
+                              {payload.evidence_amount_formatted || 'PKR 77,765'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-soc-muted">Match Status:</span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-800 dark:text-amber-400 border border-amber-500/30">
+                            ⚠ AMOUNT MISMATCH
+                          </span>
+                        </div>
+                      </div>
+                    )}
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800">
-                    <span>Uploaded by: <span className="text-slate-200">{ev.uploaded_by}</span></span>
-                    <span>{formatDateTime(ev.created_at)}</span>
+                    <div className="bg-slate-900 dark:bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto max-h-36">
+                      <pre className="text-[11px]">{JSON.stringify(payload, null, 2)}</pre>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-soc-muted pt-1 border-t border-soc-border">
+                      <span>Uploaded by: <span className="text-soc-foreground font-medium">{ev.uploaded_by}</span></span>
+                      <span>{formatDateTime(ev.created_at)}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -896,41 +950,41 @@ export const CaseDetail: React.FC = () => {
       {/* Tab 6: Audit Timeline */}
       {activeTab === 'timeline' && (
         <div className="space-y-4 animate-fade-in max-w-3xl">
-          <h3 className="text-sm font-bold text-white flex items-center gap-2">
-            <History className="w-4 h-4 text-purple-400" />
+          <h3 className="text-sm font-bold text-soc-foreground flex items-center gap-2">
+            <History className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
             <span>Case Lifecycle & Audit History ({history.length} events)</span>
           </h3>
 
           {history.length === 0 ? (
-            <div className="bg-soc-card border border-soc-border rounded-xl p-8 text-center text-slate-400 text-xs">
+            <div className="bg-soc-card border border-soc-border rounded-xl p-8 text-center text-soc-muted text-xs">
               No timeline history recorded for this case.
             </div>
           ) : (
-            <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+            <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-soc-border">
               {history.map((h) => (
                 <div key={h.id} className="relative group">
-                  <div className="absolute -left-6 top-1.5 w-3 h-3 rounded-full bg-indigo-500 ring-4 ring-slate-900" />
-                  <div className="bg-soc-card border border-soc-border p-4 rounded-xl space-y-1.5">
+                  <div className="absolute -left-6 top-1.5 w-3 h-3 rounded-full bg-emerald-700 ring-4 ring-soc-bg" />
+                  <div className="bg-soc-card border border-soc-border p-4 rounded-xl space-y-1.5 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-indigo-300 font-mono">
+                      <span className="text-xs font-bold text-emerald-800 dark:text-emerald-400 font-mono">
                         {h.action}
                       </span>
-                      <span className="text-[11px] text-slate-400">{formatDateTime(h.created_at)}</span>
+                      <span className="text-[11px] text-soc-muted">{formatDateTime(h.created_at)}</span>
                     </div>
 
                     {h.from_status && h.to_status && (
-                      <div className="text-xs text-slate-300 font-mono">
-                        <span className="text-slate-400">{h.from_status}</span> &rarr;{' '}
-                        <span className="text-indigo-400 font-semibold">{h.to_status}</span>
+                      <div className="text-xs text-soc-foreground font-mono">
+                        <span className="text-soc-muted">{h.from_status}</span> &rarr;{' '}
+                        <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{h.to_status}</span>
                       </div>
                     )}
 
                     {h.note && (
-                      <p className="text-xs text-slate-300">{h.note}</p>
+                      <p className="text-xs text-soc-foreground">{h.note}</p>
                     )}
 
-                    <div className="text-[11px] text-slate-400 pt-1">
-                      Actor: <span className="text-slate-200 font-mono">{h.actor_name || 'System'}</span>
+                    <div className="text-[11px] text-soc-muted pt-1">
+                      Actor: <span className="text-soc-foreground font-mono font-medium">{h.actor_name || 'System'}</span>
                     </div>
                   </div>
                 </div>

@@ -289,17 +289,17 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm transition-opacity">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#0B0F19] border-l border-slate-200 dark:border-slate-800 h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-200">
+      <div className="w-full max-w-2xl bg-white dark:bg-soc-bg border-l border-soc-border h-full flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-right duration-200">
         {/* Drawer Header */}
-        <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-[#111827] flex items-center justify-between gap-4">
+        <div className="p-5 border-b border-soc-border bg-soc-surface dark:bg-soc-card flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className={`p-2.5 rounded-xl border shrink-0 ${
                 t?.risk_level === 'CRITICAL'
-                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                  ? 'bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-400'
                   : t?.risk_level === 'HIGH'
-                  ? 'bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400'
-                  : 'bg-blue-500/15 border-blue-500/30 text-blue-600 dark:text-blue-400'
+                  ? 'bg-amber-500/15 border-amber-500/30 text-amber-700 dark:text-amber-400'
+                  : 'bg-soc-lightGreen border-emerald-600/30 text-soc-deepGreen dark:text-emerald-300'
               }`}
             >
               <ShieldAlert className="w-5 h-5" />
@@ -307,16 +307,16 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-mono font-extrabold text-slate-950 dark:text-white tracking-tight truncate">
+                <span className="text-sm font-mono font-extrabold text-soc-foreground tracking-tight truncate">
                   {transactionId}
                 </span>
                 {t?.status && (
-                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700">
+                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-soc-lightGreen dark:bg-emerald-950/50 text-soc-deepGreen dark:text-emerald-300 border border-emerald-600/30">
                     {t.status}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate mt-0.5">
+              <p className="text-xs text-soc-muted font-medium truncate mt-0.5">
                 Transaction Investigation & Decision Intelligence Trace
               </p>
             </div>
@@ -327,16 +327,16 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
               type="button"
               onClick={() => fetchInvestigationDetail(true)}
               disabled={isLoading || isRefreshing}
-              className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors shadow-xs"
+              className="p-2 rounded-lg bg-soc-surface border border-soc-border hover:bg-soc-lightGreen text-soc-foreground transition-colors shadow-xs"
               title="Refresh Transaction Intelligence"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-600 dark:text-blue-400' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-soc-deepGreen dark:text-emerald-400' : ''}`} />
             </button>
 
             <button
               type="button"
               onClick={handleEscalateToCase}
-              className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-colors"
+              className="px-3.5 py-1.5 rounded-lg bg-soc-deepGreen hover:bg-[#154A19] text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-colors"
             >
               <FolderPlus className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Escalate</span>
@@ -345,7 +345,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-soc-muted hover:text-soc-foreground hover:bg-soc-lightGreen dark:hover:bg-soc-cardHover transition-colors"
               title="Close Panel (Esc)"
             >
               <X className="w-4 h-4" />
@@ -354,14 +354,14 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 px-5 pt-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0E1422] text-xs font-medium overflow-x-auto">
+        <div className="flex items-center gap-1 px-5 pt-3 border-b border-soc-border bg-soc-bg text-xs font-medium overflow-x-auto">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'overview'
-                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-soc-deepGreen dark:border-emerald-400 text-soc-deepGreen dark:text-emerald-300 font-bold'
+                : 'border-transparent text-soc-muted hover:text-soc-foreground'
             }`}
           >
             Overview & Risk
@@ -371,8 +371,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('rules')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'rules'
-                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-soc-deepGreen dark:border-emerald-400 text-soc-deepGreen dark:text-emerald-300 font-bold'
+                : 'border-transparent text-soc-muted hover:text-soc-foreground'
             }`}
           >
             Rules ({triggeredRulesCount})
@@ -382,8 +382,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('ml')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'ml'
-                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-soc-deepGreen dark:border-emerald-400 text-soc-deepGreen dark:text-emerald-300 font-bold'
+                : 'border-transparent text-soc-muted hover:text-soc-foreground'
             }`}
           >
             ML Anomaly
@@ -393,8 +393,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('features')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'features'
-                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-soc-deepGreen dark:border-emerald-400 text-soc-deepGreen dark:text-emerald-300 font-bold'
+                : 'border-transparent text-soc-muted hover:text-soc-foreground'
             }`}
           >
             Feature Store
@@ -404,8 +404,8 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
             onClick={() => setActiveTab('alerts')}
             className={`pb-2.5 px-3 border-b-2 transition-colors ${
               activeTab === 'alerts'
-                ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-bold'
-                : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'border-soc-deepGreen dark:border-emerald-400 text-soc-deepGreen dark:text-emerald-300 font-bold'
+                : 'border-transparent text-soc-muted hover:text-soc-foreground'
             }`}
           >
             Alerts ({safeAlerts.length})
@@ -413,7 +413,7 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
         </div>
 
         {/* Drawer Body Content */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-white dark:bg-[#0B0F19]">
+        <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-white dark:bg-soc-bg">
           {isLoading && !detail ? (
             <div className="space-y-4">
               <Skeleton className="h-28 w-full rounded-xl" />

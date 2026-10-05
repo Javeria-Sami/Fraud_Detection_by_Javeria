@@ -103,8 +103,8 @@ export const Pagination: React.FC<PaginationProps> = ({
                 onClick={() => onPageChange(pageNum)}
                 className={`min-w-[28px] h-8 px-2 flex items-center justify-center rounded-lg border font-mono text-xs transition-all ${
                   isActive
-                    ? 'bg-blue-600 border-blue-500 text-white font-bold shadow-sm shadow-blue-500/20'
-                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-cardHover hover:border-slate-400 dark:hover:border-slate-600'
+                    ? 'bg-soc-deepGreen border-emerald-800 text-white font-bold shadow-sm shadow-emerald-950/20'
+                    : 'bg-soc-surface border-soc-border text-soc-foreground hover:bg-soc-lightGreen hover:border-emerald-600/40'
                 }`}
               >
                 {pageNum}

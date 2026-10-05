@@ -26,10 +26,10 @@ export const AlertBadge: React.FC<AlertBadgeProps> = ({
   if (severity) {
     const sev = severity.toUpperCase() as AlertSeverity;
     const severityConfigs: Record<AlertSeverity, { bg: string; border: string; text: string; icon: React.ElementType }> = {
-      LOW: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', icon: Info },
-      MEDIUM: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', icon: AlertTriangle },
-      HIGH: { bg: 'bg-orange-500/10', border: 'border-orange-500/30', text: 'text-orange-400', icon: AlertTriangle },
-      CRITICAL: { bg: 'bg-rose-500/15', border: 'border-rose-500/40', text: 'text-rose-400', icon: ShieldAlert },
+      LOW: { bg: 'bg-emerald-500/10 dark:bg-emerald-500/15', border: 'border-emerald-600/30', text: 'text-emerald-800 dark:text-emerald-300', icon: Info },
+      MEDIUM: { bg: 'bg-amber-500/10 dark:bg-amber-500/15', border: 'border-amber-600/30', text: 'text-amber-800 dark:text-amber-300', icon: AlertTriangle },
+      HIGH: { bg: 'bg-orange-500/10 dark:bg-orange-500/15', border: 'border-orange-600/30', text: 'text-orange-800 dark:text-orange-300', icon: AlertTriangle },
+      CRITICAL: { bg: 'bg-rose-500/10 dark:bg-rose-500/20', border: 'border-rose-600/35', text: 'text-rose-800 dark:text-rose-300', icon: ShieldAlert },
     };
     const current = severityConfigs[sev] || severityConfigs.LOW;
     const Icon = current.icon;
@@ -51,10 +51,10 @@ export const AlertBadge: React.FC<AlertBadgeProps> = ({
   if (status) {
     const st = status.toUpperCase() as AlertStatus;
     const statusConfigs: Record<AlertStatus, { bg: string; border: string; text: string; icon: React.ElementType }> = {
-      NEW: { bg: 'bg-rose-500/10', border: 'border-rose-500/30', text: 'text-rose-400', icon: ShieldAlert },
-      ACKNOWLEDGED: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400', icon: Eye },
-      INVESTIGATING: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', icon: Clock },
-      RESOLVED: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-600 dark:text-emerald-400', icon: CheckCircle2 },
+      NEW: { bg: 'bg-rose-500/10 dark:bg-rose-500/20', border: 'border-rose-600/30', text: 'text-rose-800 dark:text-rose-300', icon: ShieldAlert },
+      ACKNOWLEDGED: { bg: 'bg-soc-lightGreen dark:bg-emerald-950/40', border: 'border-emerald-600/30', text: 'text-soc-deepGreen dark:text-emerald-300', icon: Eye },
+      INVESTIGATING: { bg: 'bg-amber-500/10 dark:bg-amber-500/15', border: 'border-amber-600/30', text: 'text-amber-800 dark:text-amber-300', icon: Clock },
+      RESOLVED: { bg: 'bg-emerald-500/10 dark:bg-emerald-500/15', border: 'border-emerald-600/30', text: 'text-emerald-800 dark:text-emerald-300', icon: CheckCircle2 },
       CLOSED: { bg: 'bg-slate-100 dark:bg-slate-800/80', border: 'border-slate-300 dark:border-slate-700/80', text: 'text-slate-700 dark:text-slate-300', icon: Check },
     };
     const current = statusConfigs[st] || statusConfigs.NEW;

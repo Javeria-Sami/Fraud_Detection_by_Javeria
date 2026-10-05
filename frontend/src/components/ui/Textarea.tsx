@@ -28,7 +28,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({
         id={textareaId}
         ref={ref}
         rows={rows}
-        className={`w-full rounded-lg border bg-soc-surface text-xs text-soc-foreground placeholder:text-soc-muted p-3 transition-all focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed ${
+        className={`w-full rounded-lg border bg-soc-surface text-xs text-soc-foreground placeholder:text-soc-muted p-3 transition-all focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed ${
           error ? 'border-rose-500 focus:border-rose-500' : 'border-soc-border'
         } ${className}`}
         {...props}
@@ -64,7 +64,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({
         type="checkbox"
         id={checkboxId}
         ref={ref}
-        className={`mt-0.5 h-4 w-4 rounded border-soc-border bg-soc-surface text-blue-600 focus:ring-blue-500 focus:ring-offset-soc-bg transition-colors ${className}`}
+        className={`mt-0.5 h-4 w-4 rounded border-soc-border bg-soc-surface text-soc-deepGreen focus:ring-emerald-600 focus:ring-offset-soc-bg transition-colors ${className}`}
         {...props}
       />
       <div className="text-xs">
@@ -108,8 +108,8 @@ export const Switch: React.FC<SwitchProps> = ({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed ${
-          checked ? 'bg-blue-600' : 'bg-slate-700'
+        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed ${
+          checked ? 'bg-soc-deepGreen' : 'bg-slate-300 dark:bg-slate-700'
         }`}
       >
         <span

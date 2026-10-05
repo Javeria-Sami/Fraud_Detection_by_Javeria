@@ -188,31 +188,31 @@ export const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-soc-bg flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Ambient Glows */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-lg bg-soc-card border border-soc-border rounded-2xl shadow-2xl p-6 sm:p-8 relative z-10">
+      <div className="w-full max-w-lg bg-soc-card border border-soc-border rounded-2xl shadow-xl p-6 sm:p-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex p-3 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 mb-3 shadow-lg shadow-blue-500/10">
+          <div className="inline-flex p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400 mb-3 shadow-sm">
             <Shield className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">FraudShield SOC</h1>
-          <p className="text-xs text-slate-400 mt-1">Real-Time Financial Anomaly Operations Platform</p>
+          <h1 className="text-2xl font-bold text-soc-foreground tracking-tight">FraudShield SOC</h1>
+          <p className="text-xs text-soc-muted mt-1">Financial Cyber Defense & Real-Time Anomaly Platform</p>
         </div>
 
         {/* Autofill Notification Banner */}
         {autofillSuccessMsg && (
-          <div className="mb-4 p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2 animate-in fade-in duration-200">
-            <Check className="w-4 h-4 shrink-0" />
+          <div className="mb-4 p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400 text-xs flex items-center gap-2 animate-in fade-in duration-200">
+            <Check className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
             <span className="font-medium">{autofillSuccessMsg}</span>
           </div>
         )}
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 shrink-0" />
+          <div className="mb-4 p-3 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-700 dark:text-rose-400 text-xs flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
@@ -220,31 +220,31 @@ export const Login: React.FC = () => {
         {/* Credentials Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1.5">Email Address</label>
+            <label className="text-xs font-semibold text-soc-foreground block mb-1.5">Email Address</label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <Mail className="w-4 h-4 text-soc-muted absolute left-3 top-3" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@fraudshield.io"
-                className="w-full bg-soc-bg border border-soc-border rounded-lg pl-9 pr-3 py-2.5 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white dark:bg-slate-900 border border-soc-border rounded-lg pl-9 pr-3 py-2.5 text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors shadow-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1.5">Password</label>
+            <label className="text-xs font-semibold text-soc-foreground block mb-1.5">Password</label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <Lock className="w-4 h-4 text-soc-muted absolute left-3 top-3" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-soc-bg border border-soc-border rounded-lg pl-9 pr-3 py-2.5 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white dark:bg-slate-900 border border-soc-border rounded-lg pl-9 pr-3 py-2.5 text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors shadow-sm"
               />
             </div>
           </div>
@@ -252,7 +252,7 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+            className="w-full py-2.5 rounded-lg bg-[#1B5E20] hover:bg-[#144718] text-white text-xs font-bold transition-all shadow-md shadow-emerald-900/15 flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
           >
             <span>{isLoading ? 'Authenticating...' : 'Sign In to Operations Console'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -262,14 +262,14 @@ export const Login: React.FC = () => {
         {/* 1-Click Role Presets */}
         <div className="mt-6 pt-5 border-t border-soc-border">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-soc-muted">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Quick 1-Click Role Presets</span>
             </div>
             <button
               type="button"
               onClick={() => setShowAllUsers(!showAllUsers)}
-              className="text-[11px] text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 transition-colors"
+              className="text-[11px] text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 font-medium flex items-center gap-1 transition-colors"
             >
               <span>{showAllUsers ? 'Hide All Users' : 'Autofill All Users'}</span>
               {showAllUsers ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -282,16 +282,16 @@ export const Login: React.FC = () => {
               onClick={() => handleSelectUser(DEMO_USERS[0], true)}
               className={`p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'admin-01'
-                  ? 'bg-blue-600/15 border-blue-500/50 shadow-md shadow-blue-500/10'
-                  : 'bg-soc-bg border-soc-border hover:border-blue-500/40'
+                  ? 'bg-emerald-500/15 border-emerald-600 text-emerald-900 dark:text-emerald-300 shadow-sm'
+                  : 'bg-soc-surface border-soc-border hover:border-emerald-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-blue-400">Admin</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Admin</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               </div>
-              <div className="text-[9px] text-slate-400 leading-tight">Alex Mercer</div>
-              <div className="text-[8px] text-slate-400 font-mono mt-0.5 truncate">admin@...</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium">Alex Mercer</div>
+              <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">admin@...</div>
             </button>
 
             <button
@@ -299,16 +299,16 @@ export const Login: React.FC = () => {
               onClick={() => handleSelectUser(DEMO_USERS[1], true)}
               className={`p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'analyst-01'
-                  ? 'bg-purple-600/15 border-purple-500/50 shadow-md shadow-purple-500/10'
-                  : 'bg-soc-bg border-soc-border hover:border-purple-500/40'
+                  ? 'bg-amber-500/15 border-amber-600 text-amber-900 dark:text-amber-300 shadow-sm'
+                  : 'bg-soc-surface border-soc-border hover:border-amber-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-purple-400">Analyst</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                <span className="text-[11px] font-bold text-amber-800 dark:text-amber-400">Analyst</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
               </div>
-              <div className="text-[9px] text-slate-400 leading-tight">Elena Rostova</div>
-              <div className="text-[8px] text-slate-400 font-mono mt-0.5 truncate">analyst@...</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium">Elena Rostova</div>
+              <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">analyst@...</div>
             </button>
 
             <button
@@ -316,16 +316,16 @@ export const Login: React.FC = () => {
               onClick={() => handleSelectUser(DEMO_USERS[2], true)}
               className={`p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'viewer-01'
-                  ? 'bg-emerald-600/15 border-emerald-500/50 shadow-md shadow-emerald-500/10'
-                  : 'bg-soc-bg border-soc-border hover:border-emerald-500/40'
+                  ? 'bg-emerald-500/15 border-emerald-600 text-emerald-900 dark:text-emerald-300 shadow-sm'
+                  : 'bg-soc-surface border-soc-border hover:border-emerald-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-emerald-400">Viewer</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Viewer</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               </div>
-              <div className="text-[9px] text-slate-400 leading-tight">David Vance</div>
-              <div className="text-[8px] text-slate-400 font-mono mt-0.5 truncate">viewer@...</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium">David Vance</div>
+              <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">viewer@...</div>
             </button>
           </div>
         </div>
@@ -334,8 +334,8 @@ export const Login: React.FC = () => {
         {showAllUsers && (
           <div className="mt-4 pt-4 border-t border-soc-border space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-soc-muted flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-soc-muted" />
                 Select any user to autofill or instant-login:
               </span>
             </div>
@@ -346,26 +346,26 @@ export const Login: React.FC = () => {
                   key={u.id}
                   className={`p-2.5 rounded-lg border text-left flex items-center justify-between gap-3 transition-all ${
                     selectedUser.id === u.id
-                      ? 'bg-slate-800/80 border-blue-500/60 shadow-sm'
-                      : 'bg-soc-bg/80 border-soc-border hover:border-slate-600'
+                      ? 'bg-emerald-500/10 border-emerald-500/60 shadow-sm'
+                      : 'bg-soc-surface border-soc-border hover:border-emerald-500/40'
                   }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-white truncate">{u.name}</span>
+                      <span className="text-xs font-semibold text-soc-foreground truncate">{u.name}</span>
                       <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase ${u.avatarColor}`}>
                         {u.role}
                       </span>
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono truncate">{u.email}</div>
-                    <div className="text-[9px] text-slate-400 truncate">{u.title}</div>
+                    <div className="text-[10px] text-soc-muted font-mono truncate">{u.email}</div>
+                    <div className="text-[9px] text-soc-muted truncate">{u.title}</div>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
                       onClick={() => handleSelectUser(u, false)}
-                      className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[10px] font-medium transition-colors"
+                      className="px-2 py-1 rounded bg-soc-card hover:bg-soc-surface text-soc-foreground border border-soc-border text-[10px] font-medium transition-colors"
                       title="Fill email and password into form"
                     >
                       Autofill
@@ -373,7 +373,7 @@ export const Login: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleSelectUser(u, true)}
-                      className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold flex items-center gap-1 transition-colors shadow-sm"
+                      className="px-2.5 py-1 rounded bg-[#1B5E20] hover:bg-[#144718] text-white text-[10px] font-bold flex items-center gap-1 transition-colors shadow-sm"
                       title="Sign in immediately"
                     >
                       <span>Login</span>

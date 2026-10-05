@@ -105,24 +105,24 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
       <div className="bg-soc-card border border-soc-border rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-900/50">
+        <div className="flex items-center justify-between p-5 border-b border-soc-border bg-soc-surface/50">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400">
               <FolderLock className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Create Investigation Case</h2>
-              <p className="text-xs text-slate-400">
+              <h2 className="text-base font-bold text-soc-foreground">Create Investigation Case</h2>
+              <p className="text-xs text-soc-muted">
                 Initialize a formal SOC case to aggregate related security alerts & transactions.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-soc-muted hover:text-soc-foreground hover:bg-soc-surface transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -131,16 +131,16 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {errorMsg && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 shrink-0 text-rose-400" />
+            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
-              Case Title <span className="text-rose-400">*</span>
+            <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
+              Case Title <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -148,36 +148,36 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
               placeholder="e.g. Rapid Cross-Border Transfers Anomalous IP Spike"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-sm"
             />
           </div>
 
           {/* Severity & Status */}
           <div className="grid grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Initial Severity
               </label>
               <select
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-sm"
               >
-                <option value="CRITICAL" className="text-rose-400">CRITICAL</option>
-                <option value="HIGH" className="text-amber-400">HIGH</option>
-                <option value="MEDIUM" className="text-blue-400">MEDIUM</option>
-                <option value="LOW" className="text-slate-400">LOW</option>
+                <option value="CRITICAL" className="text-rose-600">CRITICAL</option>
+                <option value="HIGH" className="text-amber-600">HIGH</option>
+                <option value="MEDIUM" className="text-emerald-700">MEDIUM</option>
+                <option value="LOW" className="text-slate-600">LOW</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Assigned Analyst
               </label>
               <select
                 value={assignedAnalyst}
                 onChange={(e) => setAssignedAnalyst(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 font-mono text-[11px]"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono text-[11px] shadow-sm"
               >
                 <option value="analyst@fraudshield.io">analyst@fraudshield.io</option>
                 <option value="admin@fraudshield.io">admin@fraudshield.io</option>
@@ -188,7 +188,7 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
 
           {/* Subject User ID */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
               Subject Customer / User ID (Optional)
             </label>
             <input
@@ -196,14 +196,14 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
               placeholder="e.g. USR-CUST-1001"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
+              className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono shadow-sm"
             />
           </div>
 
           {/* Linked Alert ID & Transaction ID */}
           <div className="grid grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Originating Alert ID (Optional)
               </label>
               <input
@@ -211,12 +211,12 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
                 placeholder="e.g. ALT-1004"
                 value={alertId}
                 onChange={(e) => setAlertId(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono shadow-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Originating Txn ID (Optional)
               </label>
               <input
@@ -224,14 +224,14 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
                 placeholder="e.g. TXN-10001"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono shadow-sm"
               />
             </div>
           </div>
 
           {/* Initial Investigation Note */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
               Initial Investigation Note (Optional)
             </label>
             <textarea
@@ -239,23 +239,23 @@ export const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
               placeholder="Record initial hypothesis, observed suspicious indicators, or escalation context..."
               value={initialNote}
               onChange={(e) => setInitialNote(e.target.value)}
-              className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+              className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none shadow-sm"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-soc-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-soc-surface hover:bg-soc-card text-soc-foreground border border-soc-border text-xs font-medium transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold shadow-lg shadow-indigo-600/20 transition-all"
+              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#1B5E20] hover:bg-[#144718] disabled:opacity-50 text-white text-xs font-semibold shadow-md shadow-emerald-900/15 transition-all"
             >
               {isSubmitting ? (
                 <>

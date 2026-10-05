@@ -116,13 +116,13 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Target Investigation Status
               </label>
               <select
                 value={targetStatus}
                 onChange={(e) => setTargetStatus(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 font-medium"
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-medium shadow-sm"
               >
                 <option value="INVESTIGATING">INVESTIGATING — Active Analyst Investigation</option>
                 <option value="PENDING">PENDING — Awaiting External Verification / Customer Info</option>
@@ -132,7 +132,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Transition Reason & Context Note
               </label>
               <textarea
@@ -140,7 +140,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                 placeholder="Explain the reason for this lifecycle state change..."
                 value={statusReason}
                 onChange={(e) => setStatusReason(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none shadow-sm"
               />
             </div>
           </div>
@@ -150,13 +150,13 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Assignee
               </label>
               <select
                 value={assignedAnalyst}
                 onChange={(e) => setAssignedAnalyst(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 font-mono text-[11px]"
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono text-[11px] shadow-sm"
               >
                 <option value="analyst@fraudshield.io">analyst@fraudshield.io (Senior Analyst)</option>
                 <option value="admin@fraudshield.io">admin@fraudshield.io (Lead Admin)</option>
@@ -164,7 +164,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 Handover / Assignment Note
               </label>
               <textarea
@@ -172,7 +172,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                 placeholder="Optional assignment instructions or handover details..."
                 value={assignNote}
                 onChange={(e) => setAssignNote(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none shadow-sm"
               />
             </div>
           </div>
@@ -182,13 +182,13 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Adjudication Outcome <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
+                Adjudication Outcome <span className="text-rose-500">*</span>
               </label>
               <select
                 value={resolutionOutcome}
                 onChange={(e) => setResolutionOutcome(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 font-medium"
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-medium shadow-sm"
               >
                 <option value="Confirmed Fraud">Confirmed Fraud (Malicious / Unauthorized)</option>
                 <option value="False Positive">False Positive (Benign User Activity)</option>
@@ -198,8 +198,8 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Final Investigation Findings & Summary <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
+                Final Investigation Findings & Summary <span className="text-rose-500">*</span>
               </label>
               <textarea
                 rows={4}
@@ -207,10 +207,10 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                 placeholder="Document conclusive findings, customer contact logs, merchant verification, or mitigation actions taken..."
                 value={resolutionNotes}
                 onChange={(e) => setResolutionNotes(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none shadow-sm"
               />
             </div>
-            <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-300">
+            <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-800 dark:text-amber-300">
               Resolving this case will automatically synchronize and resolve all associated security alerts and update user risk profiling.
             </div>
           </div>
@@ -220,8 +220,8 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Evidence Title <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
+                Evidence Title <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
@@ -229,18 +229,18 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                 placeholder="e.g. Device Fingerprint Anomaly Header"
                 value={evidenceTitle}
                 onChange={(e) => setEvidenceTitle(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-sm"
               />
             </div>
             <div className="grid grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                   Artifact Category
                 </label>
                 <select
                   value={evidenceType}
                   onChange={(e) => setEvidenceType(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-sm"
                 >
                   <option value="TRANSACTION_LOG">Transaction Log</option>
                   <option value="DEVICE_FINGERPRINT">Device Fingerprint</option>
@@ -250,7 +250,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                   Brief Description
                 </label>
                 <input
@@ -258,19 +258,19 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
                   placeholder="e.g. Observed proxy spoofing"
                   value={evidenceDescription}
                   onChange={(e) => setEvidenceDescription(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs text-soc-foreground placeholder:text-soc-muted focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 shadow-sm"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-soc-foreground mb-1.5">
                 JSON Metadata / Payload
               </label>
               <textarea
                 rows={5}
                 value={evidencePayloadText}
                 onChange={(e) => setEvidencePayloadText(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs font-mono text-emerald-300 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full px-3.5 py-2 bg-white dark:bg-slate-900 border border-soc-border rounded-xl text-xs font-mono text-emerald-800 dark:text-emerald-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none shadow-sm"
               />
             </div>
           </div>
@@ -286,7 +286,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
           desc: `Current state: ${caseData.status}`,
           icon: ShieldCheck,
           btnText: 'Update Status',
-          btnColor: 'bg-indigo-600 hover:bg-indigo-500',
+          btnColor: 'bg-[#1B5E20] hover:bg-[#144718]',
         };
       case 'ASSIGN':
         return {
@@ -294,7 +294,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
           desc: `Current owner: ${caseData.assigned_analyst || 'Unassigned'}`,
           icon: UserCheck,
           btnText: 'Confirm Assignment',
-          btnColor: 'bg-purple-600 hover:bg-purple-500',
+          btnColor: 'bg-[#1B5E20] hover:bg-[#144718]',
         };
       case 'RESOLVE':
         return {
@@ -302,7 +302,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
           desc: `Adjudicate and resolve case ${caseData.id}`,
           icon: CheckCircle2,
           btnText: 'Resolve & Close Case',
-          btnColor: 'bg-emerald-600 hover:bg-emerald-500',
+          btnColor: 'bg-[#1B5E20] hover:bg-[#144718]',
         };
       case 'EVIDENCE':
         return {
@@ -310,7 +310,7 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
           desc: `Add structured evidence binder item to ${caseData.id}`,
           icon: FilePlus2,
           btnText: 'Attach Evidence',
-          btnColor: 'bg-blue-600 hover:bg-blue-500',
+          btnColor: 'bg-[#1B5E20] hover:bg-[#144718]',
         };
     }
   };
@@ -319,22 +319,22 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
   const Icon = info.icon;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
       <div className="bg-soc-card border border-soc-border rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-900/60">
+        <div className="flex items-center justify-between p-5 border-b border-soc-border bg-soc-surface/50">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400">
               <Icon className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">{info.title}</h2>
-              <p className="text-xs text-slate-400">{info.desc}</p>
+              <h2 className="text-base font-bold text-soc-foreground">{info.title}</h2>
+              <p className="text-xs text-soc-muted">{info.desc}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-soc-muted hover:text-soc-foreground hover:bg-soc-surface transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -343,8 +343,8 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
         {/* Body */}
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {errorMsg && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -352,18 +352,18 @@ export const CaseActionModal: React.FC<CaseActionModalProps> = ({
           {renderModalContent()}
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-soc-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-soc-surface hover:bg-soc-card text-soc-foreground border border-soc-border text-xs font-medium transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-white text-xs font-semibold shadow-lg transition-all ${info.btnColor} disabled:opacity-50`}
+              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-white text-xs font-semibold shadow-md shadow-emerald-900/15 transition-all ${info.btnColor} disabled:opacity-50`}
             >
               {isSubmitting ? (
                 <>

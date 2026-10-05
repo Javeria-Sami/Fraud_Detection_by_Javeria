@@ -74,7 +74,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       <div>
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold text-soc-foreground tracking-tight flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-400" />
+            <Shield className="w-5 h-5 text-soc-deepGreen dark:text-emerald-400" />
             <span>Security Overview</span>
           </h1>
           {getConnectionStatusPill()}
@@ -94,8 +94,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               onClick={() => onTimeRangeChange(r.value)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 timeRange === r.value
-                  ? 'bg-blue-600 text-white shadow-sm font-semibold'
-                  : 'text-soc-muted hover:text-soc-foreground hover:bg-slate-800/50'
+                  ? 'bg-soc-deepGreen text-white shadow-sm font-semibold'
+                  : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-lightGreen dark:hover:bg-soc-cardHover'
               }`}
             >
               {r.label}
@@ -112,7 +112,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             disabled={isRefreshing}
             className="text-xs flex items-center gap-1.5"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-blue-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-soc-deepGreen dark:text-emerald-400' : ''}`} />
             <span>Refresh</span>
           </Button>
 

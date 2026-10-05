@@ -81,8 +81,8 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 font-semibold'
-                        : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-cardHover'
+                        ? 'bg-soc-lightGreen dark:bg-emerald-950/40 text-soc-deepGreen dark:text-emerald-300 border border-emerald-600/30 font-semibold'
+                        : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-surface'
                     }`
                   }
                 >
@@ -113,8 +113,8 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({ isOpen, onClos
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 font-semibold'
-                        : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-cardHover'
+                        ? 'bg-soc-lightGreen dark:bg-emerald-950/40 text-soc-deepGreen dark:text-emerald-300 border border-emerald-600/30 font-semibold'
+                        : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-surface'
                     }`
                   }
                 >

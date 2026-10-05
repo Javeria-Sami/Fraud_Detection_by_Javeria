@@ -78,12 +78,12 @@ export const ActivityTrendCard: React.FC<ActivityTrendCardProps> = ({
           </div>
           <div className="flex items-center gap-4 text-xs font-mono">
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-blue-500" />
-              <span className="text-slate-300 text-[11px]">Total Volume</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-700 dark:bg-emerald-400" />
+              <span className="text-soc-muted text-[11px]">Total Volume</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-rose-500" />
-              <span className="text-rose-400 text-[11px]">Flagged / Anomalies</span>
+              <span className="h-2 w-2 rounded-full bg-rose-600 dark:bg-rose-400" />
+              <span className="text-rose-600 dark:text-rose-400 text-[11px]">Flagged / Anomalies</span>
             </div>
           </div>
         </div>
@@ -104,26 +104,18 @@ export const ActivityTrendCard: React.FC<ActivityTrendCardProps> = ({
               <AreaChart data={trends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="volGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#1B5E20" stopOpacity={0.30} />
+                    <stop offset="95%" stopColor="#1B5E20" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="flagGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#EF4444" stopOpacity={0.5} />
-                    <stop offset="95%" stopColor="#EF4444" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#DC2626" stopOpacity={0.40} />
+                    <stop offset="95%" stopColor="#DC2626" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#D5E3D7" className="stroke-soc-border" vertical={false} />
+                <XAxis dataKey="time" stroke="#8D9F94" fontSize={11} tickLine={false} />
+                <YAxis stroke="#8D9F94" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#0f172a',
-                    borderColor: '#1e293b',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    color: '#f8fafc',
-                  }}
-                  labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
                   formatter={(val: number, name: string) => {
                     if (name === 'transaction_count') return [val, 'Total Transactions'];
                     if (name === 'flagged_count') return [val, 'Flagged Threats'];
@@ -135,7 +127,7 @@ export const ActivityTrendCard: React.FC<ActivityTrendCardProps> = ({
                   type="monotone"
                   dataKey="transaction_count"
                   name="transaction_count"
-                  stroke="#3B82F6"
+                  stroke="#1B5E20"
                   strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#volGradient)"
@@ -144,7 +136,7 @@ export const ActivityTrendCard: React.FC<ActivityTrendCardProps> = ({
                   type="monotone"
                   dataKey="flagged_count"
                   name="flagged_count"
-                  stroke="#EF4444"
+                  stroke="#DC2626"
                   strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#flagGradient)"

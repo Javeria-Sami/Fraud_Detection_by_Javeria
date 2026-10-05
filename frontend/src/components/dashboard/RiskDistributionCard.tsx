@@ -18,10 +18,10 @@ export interface RiskDistributionCardProps {
 }
 
 const TIER_COLORS = {
-  LOW: '#10B981',
-  MEDIUM: '#EAB308',
-  HIGH: '#F97316',
-  CRITICAL: '#EF4444',
+  LOW: '#1B5E20',
+  MEDIUM: '#B8860B',
+  HIGH: '#EA580C',
+  CRITICAL: '#DC2626',
 };
 
 export const RiskDistributionCard: React.FC<RiskDistributionCardProps> = ({

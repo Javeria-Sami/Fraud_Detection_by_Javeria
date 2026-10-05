@@ -64,7 +64,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   };
 
   return (
-    <Card className={`hover:border-slate-400 dark:hover:border-slate-700 transition-colors ${className}`}>
+    <Card className={`hover:border-emerald-600/40 dark:hover:border-emerald-700/60 transition-colors ${className}`}>
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-semibold text-soc-muted uppercase tracking-wider">
@@ -72,12 +72,12 @@ export const KPICard: React.FC<KPICardProps> = ({
           </span>
           <div className="flex items-center gap-1.5">
             {badge && (
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-400">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 text-soc-deepGreen dark:text-emerald-300 font-semibold">
                 {badge}
               </span>
             )}
             {Icon && (
-              <div className="p-2 rounded-lg bg-blue-600/10 border border-blue-500/20 text-blue-400">
+              <div className="p-2 rounded-lg bg-soc-lightGreen dark:bg-emerald-950/50 border border-emerald-600/30 text-soc-deepGreen dark:text-emerald-400">
                 <Icon className="w-4 h-4" />
               </div>
             )}

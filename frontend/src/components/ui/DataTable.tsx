@@ -91,9 +91,9 @@ export function DataTable<T>({
                         <span>{col.header}</span>
                         {isSorted ? (
                           sortOrder === 'asc' ? (
-                            <ArrowUp className="w-3 h-3 text-blue-400" />
+                            <ArrowUp className="w-3 h-3 text-soc-deepGreen dark:text-emerald-400" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-400" />
+                            <ArrowDown className="w-3 h-3 text-soc-deepGreen dark:text-emerald-400" />
                           )
                         ) : (
                           <ArrowUpDown className="w-3 h-3 text-soc-muted opacity-0 group-hover:opacity-100 transition-opacity" />

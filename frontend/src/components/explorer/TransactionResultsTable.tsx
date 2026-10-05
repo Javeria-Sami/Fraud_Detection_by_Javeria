@@ -30,12 +30,12 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
 }) => {
   const renderSortIcon = (column: string) => {
     if (sort !== column) {
-      return <ArrowUpDown className="w-3 h-3 text-slate-400 dark:text-slate-600 opacity-60" />;
+      return <ArrowUpDown className="w-3 h-3 text-soc-muted opacity-60" />;
     }
     return order.toLowerCase() === 'asc' ? (
-      <ArrowUp className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+      <ArrowUp className="w-3 h-3 text-soc-deepGreen dark:text-emerald-400" />
     ) : (
-      <ArrowDown className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+      <ArrowDown className="w-3 h-3 text-soc-deepGreen dark:text-emerald-400" />
     );
   };
 
@@ -44,22 +44,22 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
       case 'BLOCKED':
       case 'FAILED':
       case 'DECLINED':
-        return 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30';
+        return 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30';
       case 'REVIEW_REQUIRED':
       case 'FLAGGED':
-        return 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30';
+        return 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30';
       case 'PENDING':
-        return 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30';
+        return 'bg-soc-lightGreen text-soc-deepGreen dark:text-emerald-300 border-emerald-600/30';
       case 'APPROVED':
       case 'COMPLETED':
       default:
-        return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30';
+        return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30';
     }
   };
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-xl overflow-hidden p-5 space-y-3 shadow-md">
+      <div className="bg-white dark:bg-soc-card border border-soc-border rounded-xl overflow-hidden p-5 space-y-3 shadow-md">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <Skeleton key={i} className="h-12 w-full rounded-lg" />
         ))}
@@ -76,7 +76,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
         {onRetry && (
           <button
             onClick={onRetry}
-            className="mt-4 px-4 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 rounded-lg border border-slate-300 dark:border-slate-700 transition-colors"
+            className="mt-4 px-4 py-1.5 bg-soc-surface hover:bg-soc-lightGreen text-xs font-semibold text-soc-foreground rounded-lg border border-soc-border transition-colors"
           >
             Retry Query
           </button>
@@ -87,7 +87,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
 
   if (transactions.length === 0) {
     return (
-      <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-xl p-8 shadow-md">
+      <div className="bg-white dark:bg-soc-card border border-soc-border rounded-xl p-8 shadow-md">
         <EmptyState
           icon={Inbox}
           title="No Transactions Found"
@@ -98,14 +98,14 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
   }
 
   return (
-    <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-xl overflow-hidden shadow-xl">
+    <div className="bg-white dark:bg-soc-card border border-soc-border rounded-xl overflow-hidden shadow-sm">
       {/* Desktop / Tablet Table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 dark:bg-soc-bg text-slate-600 dark:text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 dark:border-soc-border select-none">
+          <thead className="bg-soc-bg text-soc-muted uppercase font-semibold text-[10px] tracking-wider border-b border-soc-border select-none">
             <tr>
               <th
-                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-soc-deepGreen dark:hover:text-emerald-400 transition-colors"
                 onClick={() => onSortChange('timestamp')}
               >
                 <div className="flex items-center gap-1.5">
@@ -117,7 +117,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
               <th className="py-3.5 px-4">User / Account</th>
               <th className="py-3.5 px-4">Merchant</th>
               <th
-                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-soc-deepGreen dark:hover:text-emerald-400 transition-colors"
                 onClick={() => onSortChange('amount')}
               >
                 <div className="flex items-center gap-1.5">
@@ -126,7 +126,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-soc-deepGreen dark:hover:text-emerald-400 transition-colors"
                 onClick={() => onSortChange('risk_score')}
               >
                 <div className="flex items-center gap-1.5">
@@ -135,7 +135,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                 </div>
               </th>
               <th
-                className="py-3.5 px-4 cursor-pointer hover:text-blue-600 dark:hover:text-soc-foreground transition-colors"
+                className="py-3.5 px-4 cursor-pointer hover:text-soc-deepGreen dark:hover:text-emerald-400 transition-colors"
                 onClick={() => onSortChange('status')}
               >
                 <div className="flex items-center gap-1.5">
@@ -146,7 +146,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
               <th className="py-3.5 px-4 text-right">Inspect</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200/80 dark:divide-soc-border/50 font-mono">
+          <tbody className="divide-y divide-soc-border/50 font-mono">
             {transactions.map((t) => {
               const isSelected = selectedId === t.id;
               return (
@@ -155,11 +155,11 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                   onClick={() => onSelectTransaction(t.id)}
                   className={`cursor-pointer transition-all duration-150 group ${
                     isSelected
-                      ? 'bg-blue-50/90 dark:bg-blue-600/15 border-l-4 border-l-blue-600 dark:border-l-blue-500 shadow-sm'
-                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                      ? 'bg-soc-lightGreen dark:bg-emerald-950/40 border-l-4 border-l-soc-deepGreen dark:border-l-emerald-500 shadow-sm'
+                      : 'hover:bg-soc-lightGreen/50 dark:hover:bg-soc-cardHover'
                   }`}
                 >
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-soc-muted font-sans text-[11px] whitespace-nowrap">
+                  <td className="py-3.5 px-4 text-soc-muted font-sans text-[11px] whitespace-nowrap">
                     {t.timestamp
                       ? new Date(t.timestamp).toLocaleString([], {
                           month: 'numeric',
@@ -171,7 +171,7 @@ export const TransactionResultsTable: React.FC<TransactionResultsTableProps> = (
                         })
                       : '-'}
                   </td>
-                  <td className="py-3.5 px-4 font-bold text-blue-600 dark:text-blue-400 font-mono tracking-tight group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                  <td className="py-3.5 px-4 font-bold text-soc-deepGreen dark:text-emerald-400 font-mono tracking-tight group-hover:underline">
                     {t.id}
                   </td>
                   <td className="py-3.5 px-4 font-sans">
