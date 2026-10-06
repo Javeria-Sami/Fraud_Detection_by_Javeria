@@ -23,10 +23,29 @@ except Exception:
         return 2 * p * r / (p + r) if (p + r) > 0 else zero_division
 
     def roc_auc_score(y_true, y_score):
-        return 0.85
+        y_true = np.asarray(y_true)
+        y_score = np.asarray(y_score)
+        pos = y_score[y_true == 1]
+        neg = y_score[y_true == 0]
+        if len(pos) == 0 or len(neg) == 0:
+            return 0.5
+        count = 0.0
+        for p in pos:
+            count += np.sum(p > neg) + 0.5 * np.sum(p == neg)
+        return float(count / (len(pos) * len(neg)))
 
     def average_precision_score(y_true, y_score):
-        return 0.80
+        y_true = np.asarray(y_true)
+        y_score = np.asarray(y_score)
+        order = np.argsort(-y_score)
+        y_true_sorted = y_true[order]
+        tp_cumsum = np.cumsum(y_true_sorted == 1)
+        ranks = np.arange(1, len(y_true) + 1)
+        precisions = tp_cumsum / ranks
+        pos_count = np.sum(y_true == 1)
+        if pos_count == 0:
+            return 0.0
+        return float(np.sum(precisions * (y_true_sorted == 1)) / pos_count)
 
     def confusion_matrix(y_true, y_pred):
         tp = int(np.sum((y_true == 1) & (y_pred == 1)))

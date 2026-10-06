@@ -1,0 +1,47 @@
+{
+  "model_version": "IF-API-5E9F",
+  "feature_version": "v1.0.0",
+  "algorithm": "Isolation Forest",
+  "hyperparameters": {
+    "n_estimators": 50,
+    "contamination": 0.07,
+    "random_state": 42
+  },
+  "features": [
+    "amount",
+    "amount_deviation",
+    "velocity_1m",
+    "velocity_5m",
+    "velocity_10m",
+    "velocity_1h",
+    "velocity_24h",
+    "volume_5m",
+    "volume_1h",
+    "volume_24h",
+    "failed_attempts",
+    "is_new_device",
+    "device_transaction_count",
+    "is_new_country",
+    "is_new_city",
+    "is_unusual_location",
+    "geo_hop_speed_kmh",
+    "distance_from_previous_location_km",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_night",
+    "is_weekend",
+    "is_unusual_transaction_hour",
+    "is_high_risk_category",
+    "is_new_merchant_for_user"
+  ],
+  "metrics": {
+    "val_anomaly_percentage": 100.0,
+    "score_p50": 0.84,
+    "score_p90": 0.9342,
+    "score_p99": 1.0
+  },
+  "threshold": 0.65,
+  "created_at": "2026-10-06T17:42:21.893507+00:00",
+  "training_samples": 912
+}

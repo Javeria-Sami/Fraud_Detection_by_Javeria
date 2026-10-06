@@ -36,12 +36,12 @@
     "is_new_merchant_for_user"
   ],
   "metrics": {
-    "val_anomaly_percentage": 100.0,
-    "score_p50": 0.7147,
-    "score_p90": 0.7545,
-    "score_p99": 0.8052
+    "val_anomaly_percentage": 15.56,
+    "score_p50": 0.6285,
+    "score_p90": 0.6714,
+    "score_p99": 0.9312
   },
   "threshold": 0.65,
-  "created_at": "2026-10-05T10:20:51.632904+00:00",
+  "created_at": "2026-10-06T17:42:17.195189+00:00",
   "training_samples": 210
 }

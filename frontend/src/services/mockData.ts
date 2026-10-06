@@ -1,4 +1,4 @@
-import { Transaction, Alert, Case, UserRiskProfile, FraudRule, SystemSetting } from '../types';
+import { Transaction, Alert, Case, UserRiskProfile, FraudRule, SystemSetting, AlertInvestigationDetail } from '../types';
 
 // Helper generator for rich mock transactions
 function generateMockTransactions(): Transaction[] {
@@ -621,3 +621,194 @@ export function extractSafeArray<T>(data: any, fallback: T[] = []): T[] {
   if (data && Array.isArray(data.results)) return data.results;
   return fallback;
 }
+
+export function getMockAlertInvestigation(id: string): AlertInvestigationDetail {
+  let mockAlert = MOCK_ALERTS.find((a) => a.id === id || a.alert_id === id);
+  if (!mockAlert) {
+    const isCrit = id.toUpperCase().includes('CRIT');
+    const isHigh = id.toUpperCase().includes('HIGH');
+    const isMed = id.toUpperCase().includes('MED');
+    const sev: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' = isCrit ? 'CRITICAL' : isHigh ? 'HIGH' : isMed ? 'MEDIUM' : 'LOW';
+    const score = isCrit ? 92 : isHigh ? 78 : isMed ? 52 : 24;
+
+    mockAlert = {
+      id,
+      alert_id: id,
+      title: 'Operational Risk Anomaly Signal',
+      severity: sev,
+      status: 'OPEN',
+      alert_reason: `Automated detection trigger on transaction telemetry with risk score ${score}.`,
+      transaction_id: 'TXN-98001-X1',
+      risk_score: score,
+      triggered_rules: sev === 'CRITICAL' ? ['RULE-001', 'RULE-004'] : sev === 'HIGH' ? ['RULE-002'] : ['RULE-005'],
+      model_version: 'v2.4.1',
+      created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
+      assigned_to: 'analyst@fraudshield.io',
+    };
+  }
+
+  const txnId = mockAlert.transaction_id;
+  let mockTxn = MOCK_TRANSACTIONS.find((t) => t.id === txnId || t.transaction_id === txnId);
+  if (!mockTxn) {
+    mockTxn = {
+      id: txnId || 'TXN-98001-X1',
+      transaction_id: txnId || 'TXN-98001-X1',
+      user_id: mockAlert.user_id || 'USR-CUST-1001',
+      user_name: 'John Doe',
+      merchant_id: 'MERCH-AMAZON',
+      merchant_name: 'Amazon Web Retail',
+      merchant_category: 'Electronics & Retail',
+      payment_method: 'CREDIT_CARD',
+      transaction_type: 'PURCHASE',
+      amount: 450.0,
+      currency: 'USD',
+      device_id: 'DEV-MACBOOK-01',
+      ip_address: '198.51.100.45',
+      city: 'London',
+      country: 'GB',
+      failed_attempts: 0,
+      source: 'WEB_PORTAL',
+      risk_score: mockAlert.risk_score,
+      risk_level: mockAlert.severity,
+      ml_anomaly_score: Number((mockAlert.risk_score / 100).toFixed(3)),
+      rules_triggered: [
+        {
+          rule_id: 'RULE-VEL-001',
+          rule_name: 'High Frequency Velocity Surge',
+          severity: 'HIGH',
+          category: 'VELOCITY',
+          points: 35,
+          version: 'v2.1',
+        },
+        {
+          rule_id: 'RULE-GEO-002',
+          rule_name: 'Geographical Impossible Travel Hop',
+          severity: 'CRITICAL',
+          category: 'LOCATION',
+          points: 45,
+          version: 'v1.8',
+        },
+      ],
+      risk_factors: [
+        {
+          factor_name: 'Velocity Deviation',
+          weight: 0.45,
+          score: mockAlert.risk_score,
+          contribution: Math.round(mockAlert.risk_score * 0.45),
+          description: 'Authorizations cluster exceeds nominal 30-day baseline frequency.',
+        },
+      ],
+      status: 'APPROVED',
+      timestamp: mockAlert.created_at || new Date().toISOString(),
+      created_at: mockAlert.created_at || new Date().toISOString(),
+    };
+  }
+
+  const safeScore = mockAlert.risk_score || 72;
+
+  const rules = [
+    {
+      rule_id: 'RULE-VEL-001',
+      rule_name: 'High Frequency Velocity Surge',
+      category: 'VELOCITY',
+      severity: mockAlert.severity === 'CRITICAL' ? 'CRITICAL' : 'HIGH',
+      score: 35,
+      triggered: true,
+      reason: 'Multiple rapid authorization attempts detected within 10-minute sliding window.',
+      evidence: {
+        window_minutes: 10,
+        transaction_count: 4,
+        threshold: 2,
+        velocity_delta: '+75%',
+      },
+      version: 'v2.1',
+    },
+    {
+      rule_id: 'RULE-GEO-002',
+      rule_name: 'Geographical Impossible Travel Hop',
+      category: 'LOCATION',
+      severity: 'CRITICAL',
+      score: 45,
+      triggered: safeScore >= 70,
+      reason: 'Physical coordinate jump deviates >1200km from previous session within 15 minutes.',
+      evidence: {
+        origin_city: 'London, GB',
+        destination_city: 'Zurich, CH',
+        distance_km: 780,
+        elapsed_seconds: 420,
+      },
+      version: 'v1.8',
+    },
+    {
+      rule_id: 'RULE-DEV-003',
+      rule_name: 'Unrecognized Device Canvas Fingerprint',
+      category: 'DEVICE',
+      severity: 'MEDIUM',
+      score: 20,
+      triggered: safeScore >= 40,
+      reason: 'Hardware WebGL fingerprint hash has no prior baseline association with customer.',
+      evidence: {
+        device_id: mockTxn.device_id,
+        user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        is_emulator: false,
+      },
+      version: 'v1.2',
+    },
+  ];
+
+  const lifecycle_history = [
+    {
+      id: `LOG-${id}-1`,
+      actor_email: 'engine@fraudshield.io',
+      actor_role: 'system',
+      action: 'ALERT_GENERATED',
+      details: `Alert generated by Real-Time Decision Pipeline with composite score ${safeScore}/100.`,
+      timestamp: mockAlert.created_at || new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: `LOG-${id}-2`,
+      actor_email: 'analyst@fraudshield.io',
+      actor_role: 'analyst',
+      action: 'STATUS_TRANSITION',
+      details: `Alert assigned to triage queue with severity tier ${mockAlert.severity}.`,
+      timestamp: new Date(Date.now() - 1800000).toISOString(),
+    },
+  ];
+
+  return {
+    alert: mockAlert,
+    transaction: mockTxn,
+    risk: {
+      risk_score: safeScore,
+      risk_level: mockAlert.severity,
+      rule_score: Math.round(safeScore * 0.55),
+      ml_score: Math.round(safeScore * 0.45),
+      behavior_score: Math.round(safeScore * 0.35),
+      explanation: [
+        'Rapid sequence of high-value transactions detected',
+        'Device fingerprint mismatch from typical customer profile',
+        'Unusual cross-border merchant routing',
+      ],
+      scoring_version: 'v2.4.1-ensemble',
+      calculated_at: mockAlert.created_at || new Date().toISOString(),
+    },
+    rules,
+    ml_prediction: {
+      model_name: 'IsolationForest_LightGBM_Ensemble',
+      model_version: 'v3.2.0',
+      algorithm: 'Ensemble Isolation Forest + XGBoost Risk Classifier',
+      anomaly_score: Number((safeScore / 100).toFixed(3)),
+      is_anomaly: safeScore >= 60,
+      threshold: 0.65,
+      inference_time_ms: 14.8,
+      contextual_indicators: [
+        `Velocity factor deviation: ${(safeScore * 0.12).toFixed(1)}σ above user 30-day baseline`,
+        `Geographic dispersion: High confidence coordinate discrepancy`,
+        `Device trust level: Low (First appearance in 90 days)`,
+      ],
+      prediction_timestamp: mockAlert.created_at || new Date().toISOString(),
+    },
+    lifecycle_history,
+  };
+}
+

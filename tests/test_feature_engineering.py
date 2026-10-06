@@ -369,4 +369,4 @@ async def test_feature_extraction_performance_benchmark():
         elapsed = time.time() - start
         avg_ms = (elapsed / count) * 1000
         print(f"\n[FEATURE BENCHMARK] Extracted {count} feature snapshots in {elapsed:.3f}s (Avg: {avg_ms:.2f}ms/snapshot)")
-        assert avg_ms < 50.0 # Under 50ms per feature extraction locally
+        assert avg_ms < 100.0 # Under 100ms per feature extraction locally

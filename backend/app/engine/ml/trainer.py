@@ -22,14 +22,16 @@ try:
     from sklearn.ensemble import IsolationForest
 except Exception:
     class IsolationForest:
-        def __init__(self, n_estimators=100, max_samples="auto", contamination="auto", random_state=None, n_jobs=-1):
-            self.n_estimators = n_estimators
-            self.random_state = random_state
+        def __init__(self, *args, **kwargs):
+            self.n_estimators = kwargs.get("n_estimators", 100)
+            self.random_state = kwargs.get("random_state", None)
         def fit(self, X):
             return self
         def score_samples(self, X):
             X_arr = np.asarray(X, dtype=float)
             return -np.mean(np.abs(X_arr), axis=1)
+        def decision_function(self, X):
+            return self.score_samples(X)
         def predict(self, X):
             scores = self.score_samples(X)
             return np.where(scores < -0.5, -1, 1)
