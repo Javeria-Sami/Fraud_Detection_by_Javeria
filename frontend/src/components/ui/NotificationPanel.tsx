@@ -177,7 +177,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
       ref={panelRef}
       role="region"
       aria-label="Centralized Security Notifications Panel"
-      className="absolute right-0 top-12 mt-2 w-84 sm:w-96 rounded-2xl border border-soc-border bg-soc-card shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
+      className="fixed inset-x-2 top-16 sm:inset-x-auto sm:absolute sm:right-0 sm:top-12 mt-2 w-auto sm:w-96 max-w-[calc(100vw-1rem)] rounded-2xl border border-soc-border bg-soc-card shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
     >
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-soc-border mb-3">

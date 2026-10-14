@@ -191,7 +191,7 @@ export const Login: React.FC = () => {
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-lg bg-soc-card border border-soc-border rounded-2xl shadow-xl p-6 sm:p-8 relative z-10">
+      <div className="w-full max-w-lg bg-soc-card border border-soc-border rounded-2xl shadow-xl p-5 sm:p-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-6">
           <div className="inline-flex p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-400 mb-3 shadow-sm">
@@ -276,55 +276,55 @@ export const Login: React.FC = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={() => handleSelectUser(DEMO_USERS[0], true)}
-              className={`p-2.5 rounded-xl border text-left transition-all ${
+              className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'admin-01'
                   ? 'bg-emerald-500/15 border-emerald-600 text-emerald-900 dark:text-emerald-300 shadow-sm'
                   : 'bg-soc-surface border-soc-border hover:border-emerald-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Admin</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Admin</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               </div>
-              <div className="text-[9px] text-soc-muted leading-tight font-medium">Alex Mercer</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium truncate">Alex Mercer</div>
               <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">admin@...</div>
             </button>
 
             <button
               type="button"
               onClick={() => handleSelectUser(DEMO_USERS[1], true)}
-              className={`p-2.5 rounded-xl border text-left transition-all ${
+              className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'analyst-01'
                   ? 'bg-amber-500/15 border-amber-600 text-amber-900 dark:text-amber-300 shadow-sm'
                   : 'bg-soc-surface border-soc-border hover:border-amber-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-amber-800 dark:text-amber-400">Analyst</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-amber-800 dark:text-amber-400">Analyst</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
               </div>
-              <div className="text-[9px] text-soc-muted leading-tight font-medium">Elena Rostova</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium truncate">Elena Rostova</div>
               <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">analyst@...</div>
             </button>
 
             <button
               type="button"
               onClick={() => handleSelectUser(DEMO_USERS[2], true)}
-              className={`p-2.5 rounded-xl border text-left transition-all ${
+              className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all ${
                 selectedUser.id === 'viewer-01'
                   ? 'bg-emerald-500/15 border-emerald-600 text-emerald-900 dark:text-emerald-300 shadow-sm'
                   : 'bg-soc-surface border-soc-border hover:border-emerald-500/40 text-soc-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Viewer</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 dark:text-emerald-400">Viewer</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               </div>
-              <div className="text-[9px] text-soc-muted leading-tight font-medium">David Vance</div>
+              <div className="text-[9px] text-soc-muted leading-tight font-medium truncate">David Vance</div>
               <div className="text-[8px] text-soc-muted font-mono mt-0.5 truncate">viewer@...</div>
             </button>
           </div>

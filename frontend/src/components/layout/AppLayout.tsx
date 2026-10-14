@@ -34,7 +34,7 @@ export const AppLayout: React.FC = () => {
         <main
           id="main-content"
           role="main"
-          className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-gradient-to-b from-soc-bg to-soc-surface/30"
+          className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden p-3 sm:p-6 md:p-8 bg-gradient-to-b from-soc-bg to-soc-surface/30"
         >
           <div className="max-w-7xl mx-auto pb-16">
             <ErrorBoundary fallbackTitle="View Rendering Error">

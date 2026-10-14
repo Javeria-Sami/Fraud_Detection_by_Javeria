@@ -139,13 +139,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Right Section: Global Search + Simulator + Notifications + Theme + User Menu */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Global Search Button */}
           <button
             type="button"
             onClick={() => setShowSearchModal(true)}
             aria-label="Open global search"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:border-emerald-600/40 text-soc-muted hover:text-soc-foreground text-xs transition-colors"
+            className="flex items-center gap-2 p-2 sm:px-3 sm:py-1.5 rounded-lg bg-soc-surface border border-soc-border hover:border-emerald-600/40 text-soc-muted hover:text-soc-foreground text-xs transition-colors shrink-0"
           >
             <Search className="w-3.5 h-3.5 text-soc-muted" />
             <span className="hidden sm:inline">Search...</span>
@@ -228,7 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dropdown Menu */}
             {showRoleDropdown && (
               <div
-                className="absolute right-0 mt-2 w-64 bg-soc-card border border-soc-border rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] bg-soc-card border border-soc-border rounded-xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-150"
                 role="menu"
               >
                 {/* Active User Identity */}

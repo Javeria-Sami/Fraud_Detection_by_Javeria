@@ -86,13 +86,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-3">
         {/* Time Range Selector */}
-        <div className="flex items-center rounded-lg bg-soc-bg border border-soc-border p-0.5">
+        <div className="flex items-center rounded-lg bg-soc-bg border border-soc-border p-0.5 overflow-x-auto max-w-full custom-scrollbar">
           {TIME_RANGES.map((r) => (
             <button
               key={r.value}
               type="button"
               onClick={() => onTimeRangeChange(r.value)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+              className={`whitespace-nowrap px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 timeRange === r.value
                   ? 'bg-soc-deepGreen text-white shadow-sm font-semibold'
                   : 'text-soc-muted hover:text-soc-foreground hover:bg-soc-lightGreen dark:hover:bg-soc-cardHover'

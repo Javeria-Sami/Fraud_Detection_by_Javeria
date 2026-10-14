@@ -55,7 +55,7 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm transition-opacity"
@@ -68,11 +68,11 @@ export const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
-        className={`relative w-full ${sizeClasses[size]} rounded-2xl border border-soc-border bg-soc-card text-soc-foreground shadow-2xl transition-all z-10 my-8 overflow-hidden`}
+        className={`relative w-full ${sizeClasses[size]} rounded-2xl border border-soc-border bg-soc-card text-soc-foreground shadow-2xl transition-all z-10 my-4 sm:my-8 overflow-hidden`}
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between p-5 border-b border-soc-border">
+          <div className="flex items-start justify-between p-4 sm:p-5 border-b border-soc-border">
             <div>
               {title && (
                 <h3 id="modal-title" className="text-base font-semibold leading-6 text-soc-foreground">
@@ -97,13 +97,13 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Body */}
-        <div className="p-6 max-h-[calc(100vh-16rem)] overflow-y-auto">
+        <div className="p-4 sm:p-6 max-h-[calc(100dvh-10rem)] sm:max-h-[calc(100dvh-14rem)] overflow-y-auto">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-3 px-6 py-4 bg-soc-surface/50 border-t border-soc-border">
+          <div className="flex items-center justify-end gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-soc-surface/50 border-t border-soc-border">
             {footer}
           </div>
         )}

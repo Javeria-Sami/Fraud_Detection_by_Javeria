@@ -68,7 +68,7 @@ export const SimulatorDock: React.FC<SimulatorDockProps> = ({ isOpen, onClose })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 bg-soc-card border border-blue-500/40 rounded-2xl shadow-2xl p-5 z-50 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-200">
+    <div className="fixed bottom-0 inset-x-0 sm:bottom-6 sm:right-6 sm:inset-x-auto w-full sm:w-96 max-h-[85vh] sm:max-h-[90vh] overflow-y-auto bg-soc-card border border-blue-500/40 rounded-t-2xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 z-50 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-5 duration-200">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-soc-border pb-3 mb-4">
         <div className="flex items-center gap-2.5">

@@ -634,8 +634,9 @@ export const CaseDetail: React.FC = () => {
               No security alerts are currently associated with this case.
             </div>
           ) : (
-            <div className="bg-soc-card border border-soc-border rounded-xl overflow-hidden">
-              <table className="w-full text-left text-xs">
+            <div className="bg-soc-card border border-soc-border rounded-xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-semibold">
                     <th className="py-3 px-4">Alert ID</th>
@@ -691,6 +692,7 @@ export const CaseDetail: React.FC = () => {
                 </tbody>
               </table>
             </div>
+          </div>
           )}
         </div>
       )}
@@ -717,8 +719,9 @@ export const CaseDetail: React.FC = () => {
               No financial transactions are currently attached to this case.
             </div>
           ) : (
-            <div className="bg-soc-card border border-soc-border rounded-xl overflow-hidden">
-              <table className="w-full text-left text-xs">
+            <div className="bg-soc-card border border-soc-border rounded-xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-semibold">
                     <th className="py-3 px-4">Transaction ID</th>
@@ -780,6 +783,7 @@ export const CaseDetail: React.FC = () => {
                 </tbody>
               </table>
             </div>
+          </div>
           )}
         </div>
       )}
